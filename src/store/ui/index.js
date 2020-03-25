@@ -1,5 +1,5 @@
-const { UiClient } = require('./proto/ui_grpc_web_pb')
-const { GetConfigReq, GetEventsReq, GetVideoEventsReq, SetConfigReq, Config, CameraConfig, StorageConfig } = require('./proto/ui_pb')
+const { UiClient } = require('proto-tracker-ui-web/Tracker-uiServiceClientPb')
+const { GetConfigReq, GetEventsReq, GetVideoEventsReq, SetConfigReq, Config, CameraConfig, StorageConfig } = require('proto-tracker-ui-web/tracker-ui_pb')
 
 var client = new UiClient("http://localhost:8088")
 

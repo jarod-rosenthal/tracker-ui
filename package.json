@@ -12,6 +12,7 @@
     "core-js": "^3.6.4",
     "google-protobuf": "^3.11.4",
     "grpc-web": "^1.0.7",
+    "proto-tracker-ui-web": "gitlab:uaptn/proto-tracker-ui-web",
     "video.js": "^7.7.4",
     "videojs-font": "^3.2.0",
     "vue": "^2.6.11",
