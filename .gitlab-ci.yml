@@ -1,12 +1,12 @@
 stages:
-    - buid
-    # - deploy
+    - build
+    - deploy
 
 variables:
     HOSTNAME: "tracker"
 
 build-dev-image:
-    stage: buid
+    stage: build
     before_script:
         - docker info
     script: 
@@ -20,7 +20,7 @@ build-dev-image:
         - develop
 
 build-master-image:
-    stage: buid
+    stage: build
     before_script:
         - docker info
     script: 
