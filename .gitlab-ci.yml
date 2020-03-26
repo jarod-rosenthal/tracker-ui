@@ -1,0 +1,101 @@
+stages:
+    - buid
+    - deploy
+
+variables:
+    HOSTNAME: "tracker"
+
+build-dev-image:
+    stage: buid
+    before_script:
+        - docker info
+    script: 
+        - docker build -t $CI_REGISTRY/$CI_PROJECT_PATH:$CI_COMMIT_REF_NAME .
+        - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+        - docker push $CI_REGISTRY/$CI_PROJECT_PATH:$CI_COMMIT_REF_NAME
+    artifacts:
+        paths:
+        - build
+    tags:
+        - cgaspard-runner
+    only:
+        - develop
+
+build-master-image:
+    stage: buid
+    before_script:
+        - docker info
+    script: 
+        - docker build -t $CI_REGISTRY/$CI_PROJECT_PATH:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA -t $CI_REGISTRY/$CI_PROJECT_PATH:latest .
+        - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+        - docker push $CI_REGISTRY/$CI_PROJECT_PATH:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA
+        - docker push $CI_REGISTRY/$CI_PROJECT_PATH:latest
+    artifacts:
+        paths:
+        - build
+    tags:
+        - cgaspard-runner
+    only:
+        - master
+
+deploy-dev:
+    stage: deploy
+    before_script:
+        - docker info
+    script: 
+        - echo "Step 1, login to registry"
+        - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+        - echo "Step 2, deploy into the swarm"
+        - docker service rm $CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-dev || true
+        - |
+          docker service create --name $CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-dev \
+            --with-registry-auth \
+            --constraint 'node.labels.env==prod' \
+            --label "traefik.enable=true" \
+            --label "traefik.http.middlewares.$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-dev-redirect-web-secure.redirectscheme.scheme=https" \
+            --label "traefik.http.routers.$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-dev-web.middlewares=$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-dev-redirect-web-secure" \
+            --label "traefik.http.routers.$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-dev-web.rule=Host(\`$HOSTNAME-dev.uaptn.com\`)" \
+            --label "traefik.http.routers.$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-dev-web.entrypoints=web" \
+            --label "traefik.http.routers.$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-dev-web-secure.rule=Host(\`$HOSTNAME-dev.uaptn.com\`)" \
+            --label "traefik.http.routers.$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-dev-web-secure.tls.certresolver=uaptnresolver" \
+            --label "traefik.http.routers.$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-dev-web-secure.tls=true" \
+            --label "traefik.http.routers.$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-dev-web-secure.entrypoints=websecure" \
+            --label "traefik.http.services.$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-dev-web-secure.loadbalancer.server.port=80" \
+            --network traefik-net \
+            $CI_REGISTRY/$CI_PROJECT_PATH:$CI_COMMIT_REF_NAME
+    tags:
+        - cgaspard-runner
+    only:
+        - develop
+    when: always
+
+deploy-master:
+    stage: deploy
+    before_script:
+        - docker info
+    script: 
+        - echo "Step 1, login to registry"
+        - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+        - echo "Step 2, deploy into the swarm"
+        - docker service rm $CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME || true
+        - |
+          docker service create --name $CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME  \
+            --with-registry-auth \
+            --constraint 'node.labels.env==prod' \
+            --label "traefik.enable=true" \
+            --label "traefik.http.middlewares.$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-redirect-web-secure.redirectscheme.scheme=https" \
+            --label "traefik.http.routers.$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-web.middlewares=$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-redirect-web-secure" \
+            --label "traefik.http.routers.$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-web.rule=Host(\`$HOSTNAME.uaptn.com\`)" \
+            --label "traefik.http.routers.$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-web.entrypoints=web" \
+            --label "traefik.http.routers.$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-web-secure.rule=Host(\`$HOSTNAME.uaptn.com\`)" \
+            --label "traefik.http.routers.$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-web-secure.tls.certresolver=uaptnresolver" \
+            --label "traefik.http.routers.$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-web-secure.tls=true" \
+            --label "traefik.http.routers.$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-web-secure.entrypoints=websecure" \
+            --label "traefik.http.services.$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME-web-secure.loadbalancer.server.port=80" \
+            --network traefik-net \
+            $CI_REGISTRY/$CI_PROJECT_PATH:latest
+    tags:
+        - cgaspard-runner
+    only:
+        - master
+    when: manual
