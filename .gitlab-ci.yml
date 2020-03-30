@@ -45,6 +45,9 @@ deploy-dev:
     only:
         - develop
     when: always
+    dependencies:
+        - build-dev-image
+
 
 deploy-master:
     stage: deploy
@@ -59,3 +62,5 @@ deploy-master:
     only:
         - master
     when: manual
+    dependencies:
+        - build-master-image
