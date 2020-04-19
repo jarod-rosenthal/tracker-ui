@@ -84,7 +84,7 @@ export default {
   },
   computed: {
    Videos: function () {
-     var v = this.$store.state.ui.GetVideoEventsResp.videoList
+     var v = this.$store.state.controller.GetVideoEventsResp.videoList
      return v 
    }
   }

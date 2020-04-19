@@ -1,7 +1,7 @@
-const { UiClient } = require('proto-tracker-ui-web/Tracker-uiServiceClientPb')
-const { GetConfigReq, GetEventsReq, GetVideoEventsReq, SetConfigReq, Config, CameraConfig, StorageConfig } = require('proto-tracker-ui-web/tracker-ui_pb')
+const { ControllerClient } = require('proto-tracker-controller-web/Tracker-controllerServiceClientPb')
+const { GetConfigReq, GetEventsReq, GetVideoEventsReq, SetConfigReq, Config, CameraConfig, StorageConfig } = require('proto-tracker-controller-web/tracker-controller_pb')
 
-var client = new UiClient("http://" + location.hostname + ":8088")
+var client = new ControllerClient("http://" + location.hostname + ":9090")
 
 /* eslint-disable */
 export default {

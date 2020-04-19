@@ -100,7 +100,7 @@ export default {
   /* eslint-disable */
   computed: {
    IsConfigured: function () {
-     var isConfigured = this.$store.state.ui.IsConfigured
+     var isConfigured = this.$store.state.controller.IsConfigured
      return isConfigured
    },
   },

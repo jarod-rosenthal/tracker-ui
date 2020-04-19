@@ -86,7 +86,7 @@ export default {
     },
   computed: {
    Events: function () {
-     var r = this.$store.state.ui.GetEventsResp
+     var r = this.$store.state.controller.GetEventsResp
      if (r && r.eventList) {
         return r.eventList
      }

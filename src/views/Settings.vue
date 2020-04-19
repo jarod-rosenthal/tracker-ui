@@ -93,7 +93,7 @@ export default {
   },
   computed: {
    ConfigResp: function () {
-     var config = this.$store.state.ui.GetConfigResp
+     var config = this.$store.state.controller.GetConfigResp
      return config
    }
   }
