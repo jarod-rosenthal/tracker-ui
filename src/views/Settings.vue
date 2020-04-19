@@ -78,7 +78,7 @@ export default {
    }
   },
   mounted() {
-    this.$store.dispatch('ui/GetConfig')
+    this.$store.dispatch('controller/GetConfig')
   },
   watch: {
     ConfigResp(oldObj, o) {

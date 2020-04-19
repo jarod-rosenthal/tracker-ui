@@ -201,7 +201,7 @@ export default {
     }
   },
   created() {
-     this.$store.dispatch('ui/GetConfig')
+     this.$store.dispatch('controller/GetConfig')
   },
   computed: {
    ConfigResp: function () {
@@ -220,12 +220,12 @@ export default {
    },
    saveConfig() {
      /* eslint-disable */
-     this.$store.dispatch('ui/SetConfig', this.config)
+     this.$store.dispatch('controller/SetConfig', this.config)
      console.log(this.config)
      this.saving = true
 	 self = this
      setTimeout(function() {
-        self.$store.dispatch('ui/GetConfig')
+        self.$store.dispatch('controller/GetConfig')
      }, 3000)
    },
    addCameraRow() {

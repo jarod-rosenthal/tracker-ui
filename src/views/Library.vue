@@ -49,11 +49,11 @@ export default {
      components: {
     },
     mounted() {
-       this.$store.dispatch('ui/GetVideoEvents', {page:this.page, limit:9})
+       this.$store.dispatch('controller/GetVideoEvents', {page:this.page, limit:9})
     },
     watch: {
        page: function() {
-          this.$store.dispatch("ui/GetVideoEvents", {page:this.page, limit:9})
+          this.$store.dispatch("controller/GetVideoEvents", {page:this.page, limit:9})
           window.scrollTo(0,0);
        },
        $route(to, from) {
@@ -63,7 +63,7 @@ export default {
              return
           }
           if (to == "/library") {
-             this.$store.dispatch('ui/GetVideoEvents', {page:this.page, limit:9})
+             this.$store.dispatch('controller/GetVideoEvents', {page:this.page, limit:9})
           }
        }
     },

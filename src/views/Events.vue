@@ -44,7 +44,7 @@
 export default {
   type: 'Events',
     mounted() {
-       this.$store.dispatch('ui/GetEvents', {page:this.page, limit:50})
+       this.$store.dispatch('controller/GetEvents', {page:this.page, limit:50})
     },
     methods: {
       getEventUrl: function(id) {
@@ -70,7 +70,7 @@ export default {
           }
        },
        page: function() {
-          this.$store.dispatch("ui/GetEvents", {page:this.page, limit:50})
+          this.$store.dispatch("controller/GetEvents", {page:this.page, limit:50})
           window.scrollTo(0,0);
        },
        $route(to, from) {
@@ -80,7 +80,7 @@ export default {
              return
           }
           if (to == "/events") {
-             this.$store.dispatch('ui/GetEvents', {page:this.page, limit:50})
+             this.$store.dispatch('controller/GetEvents', {page:this.page, limit:50})
           }
        }
     },

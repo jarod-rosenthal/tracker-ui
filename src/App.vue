@@ -9,8 +9,9 @@
     </v-dialog>
     <v-navigation-drawer
       v-model="drawer"
-     app
-     inset
+      app
+      mini-variant
+      inset
      clipped>
       <v-list>
         <v-list-item link to="/dashboard">
@@ -53,16 +54,17 @@
       </v-list>
 	</v-navigation-drawer>
     <v-app-bar clipped-left
+        dense
+        flat
         app
     >
-    <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <div class="d-flex align-center">
         <router-link to="/">
 	<v-img
           alt="UAPTN Logo"
-          src="./assets/uaptn_logo.png"
+          src="./assets/uaptn_mini_logo.png"
           transition="scale-transition"
-          width="200"
+          width="32"
 	/>
         </router-link>
       </div>
@@ -95,7 +97,7 @@ export default {
   watch: {
   },
   created() {
-    this.$store.dispatch('ui/GetConfig')
+    this.$store.dispatch('controller/GetConfig')
   },
   /* eslint-disable */
   computed: {
