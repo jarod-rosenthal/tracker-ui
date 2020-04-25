@@ -23,7 +23,7 @@
          </v-row>
          <v-row  justify="center" align="center">
             <v-col  align="center" justify="center" cols="6">
-            <v-img width="350" src="../assets/uaptn_logo.png"></v-img>
+            <v-img width="350" src="../assets/skyhub_logo.png"></v-img>
             </v-col>
          </v-row>
          <v-col class="mt-5">

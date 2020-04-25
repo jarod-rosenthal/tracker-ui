@@ -1,4 +1,4 @@
-# uaptn-node-ui
+# skyhub-node-ui
 
 ## Project setup
 ```

@@ -62,7 +62,7 @@
         <router-link to="/">
 	<v-img
           alt="UAPTN Logo"
-          src="./assets/uaptn_mini_logo.png"
+          src="./assets/skyhub_mini_logo.png"
           transition="scale-transition"
           width="32"
 	/>
