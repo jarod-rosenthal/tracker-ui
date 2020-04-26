@@ -17,8 +17,8 @@
                 "-data-path", "${workspaceFolder}/data",
                 "-config-file", "${workspaceFolder}/data/etc/tracker.yml",
                 // "-video-device", "0",
-                "-upload-server-addr", "trackerd-dev.uaptn.com:443",
-                "-trackerd-server-addr", "trackerapi-dev.uaptn.com:443"
+                "-upload-server-addr", "trackerd-dev.skyhub.org:443",
+                "-trackerd-server-addr", "trackerapi-dev.skyhub.org:443"
             ]
         }
     ]
