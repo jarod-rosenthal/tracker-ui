@@ -27,7 +27,7 @@
             </v-col>
          </v-row>
          <v-col class="mt-5">
-<p class="title">You're nodes unique identifier is {{config.uuid}}</p>
+<p class="title">Your Tracker's unique identifier is {{config.uuid}}</p>
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vitae magna purus. Curabitur leo dolor, rhoncus finibus sem eu, dignissim tristique purus. Morbi placerat eros ultricies ligula tristique pulvinar. Interdum et malesuada fames ac ante ipsum primis in faucibus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In mattis imperdiet viverra. Mauris nec libero eu libero imperdiet laoreet. Ut ac est quis enim vulputate consequat a vel mauris. Aenean tincidunt, purus in imperdiet condimentum, nulla dolor placerat augue, at consequat magna purus sit amet sapien. Aliquam pulvinar purus nisi, a pulvinar leo gravida in. Nunc euismod sed orci quis ornare. In vel diam imperdiet, condimentum sem ut, elementum nulla.</p>
          </v-col>
         </v-col>
@@ -48,7 +48,7 @@
        <v-card-text>
       <v-col cols="4">
        <v-form>
-        <v-subheader>Your node name is your public ID for UAPTN</v-subheader>
+        <v-subheader>Your node name is your public ID for Sky Hub</v-subheader>
         <v-text-field v-model="config.node_name" outlined label="Node Name"></v-text-field>
         <v-subheader>Set hostname for your node.</v-subheader>
         <v-text-field v-model="config.hostname" outlined label="Hostname"></v-text-field>

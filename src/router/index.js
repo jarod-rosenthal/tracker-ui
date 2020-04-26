@@ -15,7 +15,7 @@ const routes = [
     name: 'home',
     component: Dashboard,
     meta: {
-		title: "UAPTN: Home"
+		title: "Sky Hub: Home"
     },
   },
   {
@@ -23,7 +23,7 @@ const routes = [
     name: 'dashboard',
     component: Dashboard,
     meta: {
-		title: "UAPTN: Dashboard"
+		title: "Sky Hub: Dashboard"
     },
   },
   /*
@@ -32,7 +32,7 @@ const routes = [
     name: 'live',
     component: LiveView,
     meta: {
-		title: "UAPTN: Live View"
+		title: "Sky Hub: Live View"
     },
   },
   */
@@ -41,7 +41,7 @@ const routes = [
     name: 'events',
     component: Events,
     meta: {
-		title: "UAPTN: Events"
+		title: "Sky Hub: Events"
     },
   },
   {
@@ -49,7 +49,7 @@ const routes = [
     name: 'library',
     component: Library,
     meta: {
-		title: "UAPTN: Video Library"
+		title: "Sky Hub: Video Library"
     },
   },
   {
@@ -57,7 +57,7 @@ const routes = [
     name: 'settings',
     component: Settings,
     meta: {
-		title: "UAPTN: Settings"
+		title: "Sky Hub: Settings"
     },
   },
   {
@@ -66,7 +66,7 @@ const routes = [
     component: EventView,
     props: true,
     meta: {
-		title: "UAPTN: Event"
+		title: "Sky Hub: Event"
     },
   },
 ]

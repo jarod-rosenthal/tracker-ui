@@ -61,7 +61,7 @@
       <div class="d-flex align-center">
         <router-link to="/">
 	<v-img
-          alt="UAPTN Logo"
+          alt="Sky Hub Logo"
           src="./assets/skyhub_mini_logo.png"
           transition="scale-transition"
           width="32"
@@ -74,7 +74,7 @@
       </v-content>
     <v-footer>
        <v-spacer></v-spacer>
-       <div class="font-weight-thin caption">&copy; {{ new Date().getFullYear() }} UAPTN. All Rights Reserved</div>
+       <div class="font-weight-thin caption">&copy; {{ new Date().getFullYear() }} Sky Hub. All Rights Reserved</div>
     </v-footer>
   </v-app>
 </template>

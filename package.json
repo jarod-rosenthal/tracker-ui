@@ -1,5 +1,5 @@
 {
-  "name": "skyhub-node-ui",
+  "name": "skyhub-tracker-ui",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,7 +12,7 @@
     "core-js": "^3.6.4",
     "google-protobuf": "^3.11.4",
     "grpc-web": "^1.0.7",
-    "proto-tracker-controller-web": "gitlab:skyhub/proto-tracker-controller-web",
+    "proto-tracker-controller-web": "gitlab:skyhuborg/proto-tracker-controller-web",
     "video.js": "^7.7.4",
     "videojs-font": "^3.2.0",
     "vue": "^2.6.11",
