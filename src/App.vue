@@ -64,7 +64,7 @@
           alt="Sky Hub Logo"
           src="./assets/skyhub_mini_logo.png"
           transition="scale-transition"
-          width="32"
+          width="64"
 	/>
         </router-link>
       </div>
