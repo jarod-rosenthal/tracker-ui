@@ -38,7 +38,8 @@
     </v-card-text>
             <v-pagination
               v-model="page"
-              :length="6"
+              :length="NPages"
+              total-visible="6"
             ></v-pagination>
    </v-card>
   </v-container>
@@ -46,8 +47,6 @@
 <script>
 export default {
    name: 'Library',
-     components: {
-    },
     mounted() {
        this.$store.dispatch('controller/GetVideoEvents', {page:this.page, limit:9})
     },
@@ -74,20 +73,27 @@ export default {
       playOpts: {
         options: {
           controls: true,
-          // autoplay: true,
           preload: 'auto',
           techOrder: ["html5"]
-          // aspectRatio: "16:9"
         }
       }
    }
+  },
+  methods: {
+     GetVideos() {
+     	return this.$store.state.controller.GetVideoEventsResp.videoList[10]
+     }
   },
   computed: {
    Videos: function () {
      var v = this.$store.state.controller.GetVideoEventsResp.videoList
      return v 
+   },
+   NPages: function() {
+     var nPages = this.$store.state.controller.GetVideoEventsResp.npages
+     return nPages
    }
-  }
+ }
 }
 
 </script>
