@@ -12,7 +12,7 @@ build-dev-image:
     script: 
         - docker build -t $DOCKER_REGISTRY/$CI_PROJECT_PATH:$CI_COMMIT_REF_NAME .
     tags:
-        - crunch
+        - xavier
     only:
         - develop
 
@@ -23,7 +23,7 @@ build-master-image:
     script: 
         - docker build -t $DOCKER_REGISTRY/$CI_PROJECT_PATH:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA -t $DOCKER_REGISTRY/$CI_PROJECT_PATH:latest .
     tags:
-        - crunch
+        - xavier
     only:
         - master
 
@@ -35,7 +35,7 @@ deploy-dev:
         - docker login $DOCKER_REGISTRY -u $DOCKER_USER -p $DOCKER_PASSWORD
         - docker push $DOCKER_REGISTRY/$CI_PROJECT_PATH:$CI_COMMIT_REF_NAME
     tags:
-        - crunch
+        - xavier
     only:
         - develop
     when: always
@@ -51,7 +51,7 @@ deploy-master:
         - docker push $DOCKER_REGISTRY/$CI_PROJECT_PATH:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA
         - docker push $DOCKER_REGISTRY/$CI_PROJECT_PATH:latest
     tags:
-        - crunch
+        - xavier
     only:
         - master
     when: manual
