@@ -5,20 +5,27 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Tracker",
-            "type": "go",
+            "type": "chrome",
             "request": "launch",
-            "mode": "debug",
-            "program": "${workspaceRoot}/cmd/tracker/main.go",
-            "env": {
-            },
-            "args": [
-                "-db-path","${workspaceFolder}/data/tracker.db",
-                "-data-path", "${workspaceFolder}/data",
-                "-config-file", "${workspaceFolder}/data/etc/tracker.yml",
-                // "-video-device", "0",
-                "-upload-server-addr", "trackerd-dev.skyhub.org:443",
-                "-trackerd-server-addr", "trackerapi-dev.skyhub.org:443"
+            "name": "vuejs: chrome",
+            "url": "http://localhost:8080",
+            "webRoot": "${workspaceFolder}/src",
+            "breakOnLoad": true,
+            "sourceMapPathOverrides": {
+                "webpack:///src/*": "${webRoot}/*"
+            }
+        },
+        {
+            "type": "firefox",
+            "request": "launch",
+            "name": "vuejs: firefox",
+            "url": "http://localhost:8080",
+            "webRoot": "${workspaceFolder}/src",
+            "pathMappings": [
+                {
+                    "url": "webpack:///src/",
+                    "path": "${webRoot}/"
+                }
             ]
         }
     ]

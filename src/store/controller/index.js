@@ -2,6 +2,7 @@ const { ControllerClient } = require('proto-tracker-controller-web/Tracker-contr
 const { GetConfigReq, GetEventsReq, GetVideoEventsReq, SetConfigReq, Config, CameraConfig, StorageConfig } = require('proto-tracker-controller-web/tracker-controller_pb')
 
 var client = new ControllerClient("http://" + location.hostname + ":9090")
+// var client = new ControllerClient("http://192.168.1.195:9090")
 
 /* eslint-disable */
 export default {

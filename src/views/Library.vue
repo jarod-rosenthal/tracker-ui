@@ -23,7 +23,7 @@
       <v-col v-for="v in Videos" :key="v">
        <v-card width="300" height="200">
    <v-video ref="video" width="300" height="200"
-         :poster="v.thumb"
+         :poster="v.fullThumbPath"
          class="video-js"
          webkit-playsinline
          playsinline
@@ -31,7 +31,7 @@
          x5-video-player-type="h5"
          x5-video-player-fullscreen="true"
          x5-video-orientation="portraint"
-         controls :sources="[v.uri]" :options="playOpts.options" @ready="videoReady" @ended="videoEnd"></v-video>
+         controls :sources="[v.fullPath]" :options="playOpts.options" @ready="videoReady" @ended="videoEnd"></v-video>
        </v-card>
        </v-col>
         </v-row>
@@ -81,13 +81,26 @@ export default {
   },
   methods: {
      GetVideos() {
-     	return this.$store.state.controller.GetVideoEventsResp.videoList[10]
+     	var videos = this.$store.state.controller.GetVideoEventsResp.videoList[10]
+      videos.forEach(function(v) {
+         var host = location.hostname;
+         // var host = "192.168.1.195";
+         v.fullPath = "http://" + host + ":3000/video/" + v.uri;
+         v.fullThumbPath = "http://" + host + ":3000/thumbnail/" + v.thumb;
+      });
+      return videos;
      }
   },
   computed: {
    Videos: function () {
-     var v = this.$store.state.controller.GetVideoEventsResp.videoList
-     return v 
+     var videos = this.$store.state.controller.GetVideoEventsResp.videoList
+      videos.forEach(function(v) {
+         var host = location.hostname;
+         // var host = "192.168.1.195";
+         v.fullPath = "http://" + host + ":3000/video/" + v.uri;
+         v.fullThumbPath = "http://" + host + ":3000/thumbnail/" + v.thumb;
+      });
+     return videos; 
    },
    NPages: function() {
      var nPages = this.$store.state.controller.GetVideoEventsResp.npages
