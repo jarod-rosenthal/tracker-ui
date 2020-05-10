@@ -48,9 +48,10 @@ export default {
 
 				cameraConfig.setName(c.name)
 				cameraConfig.setLocation(c.location)
-				cameraConfig.setProtocol(c.protocol)
-				cameraConfig.setIp(c.ip)
-
+                cameraConfig.setUri(c.uri)
+                cameraConfig.setUsername(c.username)
+                cameraConfig.setPassword(c.password)
+                cameraConfig.setEnabled(c.enabled)
 				config.addCamera(cameraConfig)
 			}
 

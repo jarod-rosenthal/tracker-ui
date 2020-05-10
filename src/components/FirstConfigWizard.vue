@@ -76,23 +76,33 @@
       <v-col cols="12">
        <v-form>
         <v-row v-for="(i,v) in cameras" :key="v" row="1">
+         <!--
          <v-col justify="start" align="center" cols="1">
          <v-btn v-if="v && selectedProtocol.length > 0" @click="delCameraRow(v)" icon><v-icon large>mdi-delete</v-icon></v-btn>
          </v-col>
-          <v-col cols="3">
+         -->
+          <v-col cols="2">
           <v-text-field v-model="config.camera[v].name" outlined label="Name"></v-text-field>
          </v-col>
          <v-col cols="3">
+          <v-text-field v-model="config.camera[v].uri" outlined label="URI"></v-text-field>
+         </v-col>
+         <v-col cols="2">
           <v-text-field v-model="config.camera[v].location" outlined label="Location"></v-text-field>
          </v-col>
          <v-col cols="2">
-          <v-combobox v-model="config.camera[v].protocol" :items="protocols" outlined></v-combobox>
+          <v-text-field v-model="config.camera[v].username" outlined label="Username"></v-text-field>
          </v-col>
          <v-col cols="2">
-          <v-text-field v-model="config.camera[v].ip" outlined label="IP Address"></v-text-field>
+          <v-text-field v-model="config.camera[v].password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="show1 ? 'text' : 'password'"
+            name="input-10-1"
+            hint="At least 8 characters"
+            counter
+            @click:append="show1 = !show1" outlined label="Password"></v-text-field>
          </v-col>
          <v-col justify="end" align="center" cols="1">
-          <v-btn v-if="v == selectedProtocol.length -1" @click="addCameraRow" icon><v-icon large>mdi-plus</v-icon></v-btn>
+          <v-btn @click="addCameraRow" icon><v-icon large>mdi-plus</v-icon></v-btn>
          </v-col>
         </v-row>
        </v-form>
@@ -174,13 +184,14 @@ export default {
   data () {
     return {
       saving: false,
+      show1: false,
       config: {
         password: "",
         password_again: "",
         hostname: "",
         node_name: "",
         camera: [
-         { name: "", location: "", protocol: "RTSP", ip: "" },
+         { name: "", location: "", uri: "", username: "", password: "", enabled: true },
         ],
         storage: [
          { name: "", location: ""},
@@ -188,8 +199,6 @@ export default {
       }, 
       cameras: [1],
       storage: [1],
-      selectedProtocol: ["RTSP"],
-      protocols: [ "RTSP", "RTP", "TCP", "UDP" ],
       e1:1,
     }
   },
@@ -229,8 +238,7 @@ export default {
      }, 3000)
    },
    addCameraRow() {
-     this.selectedProtocol.push("RTSP")
-     this.config.camera.push({ name: "", location: "", protocol: "RTSP", ip: "" })
+     this.config.camera.push({ name: "", location: "", uri: "", username: "", password: "", enabled: false })
      this.cameras.push(0)
    },
    delCameraRow(i) {
