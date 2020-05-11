@@ -11,7 +11,7 @@ Vue.config.productionTip = false
 
 
 Vue.use(VVideo);
-Vue.use(lineClamp, { })
+Vue.use(lineClamp, {})
 
 new Vue({
     vuetify,
