@@ -1,17 +1,6 @@
 <template>
     <v-container fluid>
     
-        <v-card dark fluid class="mx-auto" max-width="344" outlined>
-            <v-card-title>
-                General
-            </v-card-title>
-            <v-divider class="ma-5"></v-divider>
-            <v-card-text>
-                <v-text-field outlined v-model="config.nodename" label="Node Name"></v-text-field>
-                <v-text-field outlined v-model="config.hostname" label="Hostname"></v-text-field>
-                <v-btn class="primary">Change Password</v-btn>
-            </v-card-text>
-        </v-card>
         <v-card flat>
             <v-card-title>
                 Settings

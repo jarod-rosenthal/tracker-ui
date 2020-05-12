@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+// import Blank from '../views/Blank.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Settings from '../views/Settings.vue'
 import Library from '../views/Library.vue'
@@ -15,7 +16,7 @@ const routes = [
     name: 'home',
     component: Dashboard,
     meta: {
-		title: "Sky Hub: Home"
+      title: "Sky Hub: Home"
     },
   },
   {
@@ -23,7 +24,7 @@ const routes = [
     name: 'dashboard',
     component: Dashboard,
     meta: {
-		title: "Sky Hub: Dashboard"
+      title: "Sky Hub: Dashboard"
     },
   },
   /*
@@ -41,7 +42,7 @@ const routes = [
     name: 'events',
     component: Events,
     meta: {
-		title: "Sky Hub: Events"
+      title: "Sky Hub: Events"
     },
   },
   {
@@ -49,7 +50,7 @@ const routes = [
     name: 'library',
     component: Library,
     meta: {
-		title: "Sky Hub: Video Library"
+      title: "Sky Hub: Video Library"
     },
   },
   {
@@ -57,7 +58,7 @@ const routes = [
     name: 'settings',
     component: Settings,
     meta: {
-		title: "Sky Hub: Settings"
+      title: "Sky Hub: Settings"
     },
   },
   {
@@ -66,7 +67,7 @@ const routes = [
     component: EventView,
     props: true,
     meta: {
-		title: "Sky Hub: Event"
+      title: "Sky Hub: Event"
     },
   },
 ]

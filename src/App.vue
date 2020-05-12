@@ -1,70 +1,81 @@
 /* eslint-disable */
 <template>
     <v-app>
+        
         <v-dialog :value="!IsConfigured" hide-overlay fullscreen>
             <v-card flat>
                 <FirstConfigWizard>
                 </FirstConfigWizard>
             </v-card>
         </v-dialog>
-
-            <v-navigation-drawer elevation="12"  v-model="drawer" app inset clipped fixed :color="color" :expand-on-hover="expandOnHover" :mini-variant="miniVariant" :right="right" :permanent="permanent" :src="bg">
-                <v-list-item class="px-2">
-                    <v-list-item-avatar>
-                        <v-img alt="Sky Hub Logo" src="./assets/icon.png" max-width="" />
-                    </v-list-item-avatar>
-                    <v-list-item-title>
-                        <v-img alt="Sky Hub Logo" src="./assets/vector-letters.svg" style="margin:20px" />
-                    </v-list-item-title>
-                    <v-btn icon @click.stop="miniVariant = !miniVariant">
-                        <v-icon>mdi-chevron-left</v-icon>
-                    </v-btn>
-                </v-list-item>
-                <v-divider></v-divider>
-                <v-list>
-                    <v-list-item link to="/dashboard">
-                        <v-list-item-action>
-                            <v-icon color="darken-1">mdi-view-dashboard</v-icon>
-                        </v-list-item-action>
-                        <v-list-item-title class="text--darken-1">Dashboard</v-list-item-title>
-                    </v-list-item>
-    
-                    <v-list-item link to="/events">
-                        <v-list-item-action>
-                            <v-icon color="darken-1">mdi-alert-circle</v-icon>
-                        </v-list-item-action>
-                        <v-list-item-title class="text--darken-1">Events</v-list-item-title>
-                    </v-list-item>
-    
-                    <v-list-item link to="/library">
-                        <v-list-item-action>
-                            <v-icon color="darken-1">mdi-library-video</v-icon>
-                        </v-list-item-action>
-                        <v-list-item-title class="text--darken-1">Video Library</v-list-item-title>
-                    </v-list-item>
-    
-                    <v-list-item link to="/settings">
-                        <v-list-item-action>
-                            <v-icon color="darken-1">mdi-settings</v-icon>
-                        </v-list-item-action>
-                        <v-list-item-title class="text--darken-1">Settings</v-list-item-title>
-                    </v-list-item>
-    
-                </v-list>
-            </v-navigation-drawer>
-        
-        <v-app-bar clipped-left dense flat app color="#333" dark>
+        <v-dialog :value="IsConfigured && !IsAuthenticated" hide-overlay fullscreen>
+            <v-card flat>
+                <Login>
+                </Login>
+            </v-card>
+        </v-dialog>
+        <v-app-bar elevation="5" fixed dense app dark v-show="IsAuthenticated">
+            <div class="d-flex">
+                <router-link to="/">
+                    <v-img alt="Sky Hub Logo" src="./assets/vector-letters-white.svg" transition="scale-transition" width="140" />
+                </router-link>
+            </div>
+            <!--
             <v-app-bar-nav-icon @click="miniVariant = !miniVariant" align-right></v-app-bar-nav-icon>
+            -->
             <v-spacer></v-spacer>
             <v-btn icon>
                 <v-icon>mdi-magnify</v-icon>
             </v-btn>
-            <div class="d-flex align-right">
-                <router-link to="/">
-                    <v-img alt="Sky Hub Logo" src="./assets/vector-file-white.svg" transition="scale-transition" width="64" />
-                </router-link>
-            </div>
+    
+    
         </v-app-bar>
+        <v-navigation-drawer v-show="IsAuthenticated" v-model="drawer" dark app inset fixed :color="color" :expand-on-hover="expandOnHover" :mini-variant="miniVariant" :right="right" :permanent="permanent" :src="bg">
+            <v-list-item class="px-2">
+                <v-list-item-avatar>
+                    <v-img alt="Sky Hub Logo" src="./assets/logo-dark-01.svg" />
+                </v-list-item-avatar>
+                <v-list-item-title>
+                    <v-img alt="Sky Hub Logo" src="./assets/vector-letters.svg" />
+                </v-list-item-title>
+                <v-btn icon @click.stop="miniVariant = !miniVariant">
+                    <v-icon>mdi-chevron-left</v-icon>
+                </v-btn>
+            </v-list-item>
+            <v-divider></v-divider>
+            <v-list>
+                <v-list-item link to="/dashboard">
+                    <v-list-item-action>
+                        <v-icon color="darken-1">mdi-view-dashboard</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-title class="text--darken-1">Dashboard</v-list-item-title>
+                </v-list-item>
+    
+                <v-list-item link to="/events">
+                    <v-list-item-action>
+                        <v-icon color="darken-1">mdi-alert-circle</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-title class="text--darken-1">Events</v-list-item-title>
+                </v-list-item>
+    
+                <v-list-item link to="/library">
+                    <v-list-item-action>
+                        <v-icon color="darken-1">mdi-library-video</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-title class="text--darken-1">Video Library</v-list-item-title>
+                </v-list-item>
+    
+                <v-list-item link to="/settings">
+                    <v-list-item-action>
+                        <v-icon color="darken-1">mdi-settings</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-title class="text--darken-1">Settings</v-list-item-title>
+                </v-list-item>
+    
+            </v-list>
+        </v-navigation-drawer>
+    
+    
         <v-content>
             <router-view />
         </v-content>
@@ -82,11 +93,13 @@
 </style>
 
 <script>
+import Login from './components/Login.vue';
 import FirstConfigWizard from './components/FirstConfigWizard.vue';
 
 export default {
     name: 'App',
     components: {
+        Login,
         FirstConfigWizard
     },
     methods: {},
@@ -98,13 +111,17 @@ export default {
     computed: {
         IsConfigured: function() {
             var isConfigured = this.$store.state.controller.IsConfigured
+            // return false;
             return isConfigured
         },
+        IsAuthenticated: function() {
+            return true;
+        }
     },
     data: () => ({
         drawer: true,
         dialog: true,
-        color: '#EEE',
+        color: '#2b68a8',
         colors: [
             'primary',
             'blue',
