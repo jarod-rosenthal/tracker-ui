@@ -2,7 +2,7 @@
 <template>
     <v-app>
         
-        <v-dialog :value="!IsConfigured" hide-overlay fullscreen>
+        <v-dialog :value="!IsConfigured && !IsAuthenticated" hide-overlay fullscreen>
             <v-card flat>
                 <FirstConfigWizard>
                 </FirstConfigWizard>
@@ -24,13 +24,22 @@
             <v-app-bar-nav-icon @click="miniVariant = !miniVariant" align-right></v-app-bar-nav-icon>
             -->
             <v-spacer></v-spacer>
-            <v-btn icon>
-                <v-icon>mdi-magnify</v-icon>
-            </v-btn>
-    
+
+            <v-menu right bottom>
+                <template v-slot:activator="{ on }">
+                    <v-btn icon v-on="on">
+                        <v-icon dark>mdi-account-circle</v-icon>
+                    </v-btn>
+                </template>
+                <v-list>
+                <v-list-item @click="logout()">
+                    <v-list-item-title>Logout</v-list-item-title>
+                </v-list-item>
+                </v-list>
+            </v-menu>    
     
         </v-app-bar>
-        <v-navigation-drawer v-show="IsAuthenticated" v-model="drawer" dark app inset fixed :color="color" :expand-on-hover="expandOnHover" :mini-variant="miniVariant" :right="right" :permanent="permanent" :src="bg">
+        <v-navigation-drawer v-show="IsAuthenticated" v-model="drawer" dark app inset fixed :color="color" :expand-on-hover="expandOnHover" :mini-variant="miniVariant" :right="right" :permanent="permanent">
             <v-list-item class="px-2">
                 <v-list-item-avatar>
                     <v-img alt="Sky Hub Logo" src="./assets/logo-dark-01.svg" />
@@ -44,6 +53,15 @@
             </v-list-item>
             <v-divider></v-divider>
             <v-list>
+                <!--
+                // <v-list-item link to="/live">
+                //     <v-list-item-action>
+                //         <v-icon color="darken-1">mdi-view-dashboard</v-icon>
+                //     </v-list-item-action>
+                //     <v-list-item-title class="text--darken-1">Live View</v-list-item-title>
+                // </v-list-item>
+                -->
+
                 <v-list-item link to="/dashboard">
                     <v-list-item-action>
                         <v-icon color="darken-1">mdi-view-dashboard</v-icon>
@@ -102,7 +120,11 @@ export default {
         Login,
         FirstConfigWizard
     },
-    methods: {},
+    methods: {
+        logout: function() {
+            this.$store.dispatch('controller/Logout');
+        }
+    },
     watch: {},
     created() {
         this.$store.dispatch('controller/GetConfig')
@@ -110,17 +132,16 @@ export default {
     /* eslint-disable */
     computed: {
         IsConfigured: function() {
-            var isConfigured = this.$store.state.controller.IsConfigured
-            // return false;
-            return isConfigured
+            return this.$store.state.controller.IsConfigured
         },
         IsAuthenticated: function() {
-            return true;
+            return this.$store.state.controller.IsAuthenticated
         }
     },
     data: () => ({
         drawer: true,
         dialog: true,
+        // color: '#2b68a8',
         color: '#2b68a8',
         colors: [
             'primary',
@@ -130,11 +151,11 @@ export default {
             'teal',
         ],
         right: false,
-        permanent: false,
+        permanent: true,
         miniVariant: true,
         expandOnHover: false,
         background: false,
-        mini: true
+        mini: false
     }),
 };
 </script>

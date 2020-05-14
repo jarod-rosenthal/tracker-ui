@@ -9,8 +9,10 @@
                     <v-card-text>
                         <v-form>
                             <v-text-field v-model="username" label="Login" name="login" prepend-icon="mdi-account" type="text" />
-    
                             <v-text-field v-model="password" id="password" label="Password" name="password" prepend-icon="mdi-lock" type="password" v-on:keyup.enter="loginClicked" />
+                            <v-alert type="error" v-if="hasloginerror">
+                                {{ loginmessage }}
+                            </v-alert>
                         </v-form>
                     </v-card-text>
                     <v-card-actions>
@@ -20,10 +22,6 @@
                 </v-card>
             </v-col>
         </v-row>
-        <v-snackbar v-model="show" :color="color">
-            {{ message }}
-            <v-btn text @click="show = false">Close</v-btn>
-        </v-snackbar>
     </v-container>
 </template>
 
@@ -50,7 +48,15 @@ export default {
     },
     computed: {
         authenticated() {
-            return this.$store.state.ui.authenticated
+            return this.$store.state.controller.IsAuthenticated
+        },
+        loginmessage() {
+            if(!this.$store.state.controller.LoginResp) { return ""; }
+            return this.$store.state.controller.LoginResp.message;
+        },
+        hasloginerror() {
+            if(!this.$store.state.controller.LoginResp || !this.$store.state.controller.LoginResp.message) { return false; }
+            return this.$store.state.controller.LoginResp.message.length > 0
         },
         status() {
             return this.$store.state.ui.status
@@ -58,18 +64,10 @@ export default {
     },
     methods: {
         loginClicked() {
-            this.$store.dispatch('ui/login', {
+            this.$store.dispatch('controller/Login', {
                 username: this.username,
-                password: this.password,
+                password: this.password
             })
-            this.loginPressed = true
-            this.password = null
-        },
-        checkClicked() {
-            this.$store.dispatch('ui/loginCheck')
-        },
-        logoutClicked() {
-            this.$store.dispatch('ui/logout')
         }
     }
 }

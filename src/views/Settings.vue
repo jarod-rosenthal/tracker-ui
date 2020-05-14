@@ -1,5 +1,31 @@
 <template>
     <v-container fluid>
+        <v-row>
+            <v-col cols="12">
+                <v-row :align="alignment">
+                    <v-card cols="3"  width="256" height="300" :elevation="hover ? 16 : 2">
+                        <v-subheader>
+                            General
+                        </v-subheader>
+                        <v-col>
+                            <v-text-field outlined v-model="config.nodename" label="Node Name"></v-text-field>
+                            <v-text-field outlined v-model="config.hostname" label="Hostname"></v-text-field>
+                            <v-btn class="primary">Change Password</v-btn>
+                        </v-col>
+                    </v-card>
+                    <v-card cols="3"  width="256" height="300" :elevation="hover ? 16 : 2">
+                        <v-subheader>
+                            Utilities
+                        </v-subheader>
+                        <v-col>
+                            <v-btn color="error">Reboot Tracker</v-btn>
+                        </v-col>
+                    </v-card>
+                </v-row>
+            </v-col>
+        </v-row>
+        <v-row>
+        </v-row>
     
         <v-card flat>
             <v-card-title>
@@ -7,14 +33,6 @@
             </v-card-title>
             <v-card-text>
                 <v-divider></v-divider>
-                <v-subheader>
-                    General
-                </v-subheader>
-                <v-col cols="3">
-                    <v-text-field outlined v-model="config.nodename" label="Node Name"></v-text-field>
-                    <v-text-field outlined v-model="config.hostname" label="Hostname"></v-text-field>
-                    <v-btn class="primary">Change Password</v-btn>
-                </v-col>
                 <v-divider class="ma-5"></v-divider>
                 <v-subheader>
                     Cameras
@@ -79,7 +97,7 @@ export default {
         return {
             config: {
                 password: "",
-                password_again: "",
+                passwordagain: "",
                 hostname: "",
                 nodename: "",
                 camera: [],

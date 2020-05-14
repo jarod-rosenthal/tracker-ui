@@ -1,5 +1,5 @@
 const { ControllerClient } = require('proto-tracker-controller-web/Tracker-controllerServiceClientPb')
-const { GetConfigReq, GetEventsReq, GetVideoEventsReq, SetConfigReq, Config, CameraConfig, StorageConfig } = require('proto-tracker-controller-web/tracker-controller_pb')
+const { GetConfigReq, GetEventsReq, GetVideoEventsReq, SetConfigReq, LoginReq, Config, CameraConfig, StorageConfig } = require('proto-tracker-controller-web/tracker-controller_pb')
 import settings from '../../plugins/settings'
 
 // var client = new ControllerClient("http://" + location.hostname + ":9090")
@@ -11,9 +11,11 @@ export default {
     state: {
 		SetConfigResp: {},
 		GetConfigResp: {},
-		IsConfigured: false,
+        IsConfigured: false,
+        IsAuthenticated: false,
 		GetEventsResp: {},
-		GetVideoEventsResp: {},
+        GetVideoEventsResp: {},
+        LoginResp: {},
     },
     mutations: {
         SetConfigResp(store, SetConfigResp) {
@@ -30,18 +32,25 @@ export default {
         },
 		IsConfigured(store, IsConfigured) {
 			store.IsConfigured = IsConfigured
-		}
+        },
+        LoginResp(store, LoginResp) {
+            store.LoginResp = LoginResp;
+        },
+        IsAuthenticated(store, IsAuthenticated) {
+            store.IsAuthenticated = IsAuthenticated;
+        }
     },
     actions: {
         SetConfig(store, obj) {
             var request = new SetConfigReq()
 			var config = new Config()
 			config.setConfigured(true)
-			config.setUuid(obj.uuid)
+            config.setUuid(obj.uuid)
+            config.setUsername(obj.username);
 			config.setHostname(obj.hostname)
-			config.setNodename(obj.node_name)
+			config.setNodename(obj.nodename)
 			config.setPassword(obj.password)
-			config.setPasswordagain(obj.password_again)
+			config.setPasswordagain(obj.passwordagain)
 
 			for (var i = 0; i < obj.camera.length; i++) {
 				var cameraConfig = new CameraConfig();
@@ -78,6 +87,28 @@ export default {
                 }
             })
         },
+        Login(store, obj) {
+            var request = new LoginReq();
+            request.setUsername(obj.username);
+            request.setPassword(obj.password);
+            var metadata = {};
+            client.login(request, metadata, function(err, response) {
+                
+                if(err) {
+                    store.commit('LoginResp', null);
+                } else {
+                    var res = response.toObject()
+                    store.commit('LoginResp', res);
+                    store.commit('IsAuthenticated', res.success)
+                    console.log(res);
+                }
+            });
+        },
+        Logout(store) {
+            store.commit('LoginResp', null);
+            store.commit('IsAuthenticated', false)
+            this.$router.push('home')
+        },        
         GetConfig(store) {
             var request = new GetConfigReq()
             var metadata = {}
@@ -87,6 +118,7 @@ export default {
                     store.commit('GetConfigResp', null)
                 } else {
                     var res = response.toObject()
+                    console.log(res);
                     store.commit('GetConfigResp', res)
 					store.commit('IsConfigured', res.config.configured)
                 }

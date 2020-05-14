@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
 import Settings from '../views/Settings.vue'
 import Library from '../views/Library.vue'
-//import LiveView from '../views/LiveView.vue'
+import LiveView from '../views/LiveView.vue'
 import Events from '../views/Events.vue'
 import EventView from '../views/EventView.vue'
 
@@ -16,7 +16,7 @@ const routes = [
     name: 'home',
     component: Dashboard,
     meta: {
-      title: "Sky Hub: Home"
+      title: "Sky Hub: Dashboard"
     },
   },
   {
@@ -27,7 +27,7 @@ const routes = [
       title: "Sky Hub: Dashboard"
     },
   },
-  /*
+  
   {
     path: '/live',
     name: 'live',
@@ -36,7 +36,6 @@ const routes = [
 		title: "Sky Hub: Live View"
     },
   },
-  */
   {
     path: '/events',
     name: 'events',

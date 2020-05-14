@@ -66,6 +66,7 @@ export default {
     methods: {
         GetVideos() {
             var videos = this.$store.state.controller.GetVideoEventsResp.videoList[10]
+            if(videos === undefined) videos = [];
             videos.forEach(function(v) {
                 v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.uri;
                 v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumb;
@@ -76,6 +77,7 @@ export default {
     computed: {
         Videos: function() {
             var videos = this.$store.state.controller.GetVideoEventsResp.videoList
+            if(videos === undefined) videos = [];
             videos.forEach(function(v) {
                 v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.uri;
                 v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumb;
