@@ -10,8 +10,8 @@
                     Video Streams
                 </v-subheader>
                 <video id="test_video" controls autoplay>
-                      <source src="rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov" />
-                    </video>
+                          <source src="rtsp://skyhub:skyhub123@192.168.1.64:554" />
+                        </video>
             </v-card-text>
         </v-card>
     </v-container>

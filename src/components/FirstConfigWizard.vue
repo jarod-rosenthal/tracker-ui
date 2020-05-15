@@ -45,26 +45,28 @@
                         Let's configure the general settings for your device.
                     </v-card-title>
                     <v-card-text>
-                                                
+    
 
-                        <v-col cols="5">
-                        <v-form>
-                                <v-subheader>Your node name is your public ID for Sky Hub</v-subheader>
-                                <v-text-field v-model="config.node_name" outlined label="Node Name"></v-text-field>
-                                <v-subheader>Set hostname for your node.</v-subheader>
-                                <v-text-field v-model="config.hostname" outlined label="Hostname"></v-text-field>
-                        </v-form>
+                        <v-col cols="12">
+                            <v-card class="ma-3 pa-6" outlined tile>
+                                <v-form>
+                                    <v-subheader>Your node name is your public ID for Sky Hub</v-subheader>
+                                    <v-text-field v-model="config.nodename" outlined label="Node Name"></v-text-field>
+                                    <v-subheader>Set hostname for your node.</v-subheader>
+                                    <v-text-field v-model="config.hostname" outlined label="Hostname"></v-text-field>
+                                </v-form>
+                            </v-card>
+                            <v-card class="ma-3 pa-6" outlined tile>
+                                <v-form>
+                                    <v-subheader>Set your email address.</v-subheader>
+                                    <v-text-field v-model="config.username" outlined label="Email Address"></v-text-field>
+                                    <v-subheader>Set password for your node.</v-subheader>
+                                    <v-text-field type="password" v-model="config.password" outlined label="Password"></v-text-field>
+                                    <v-text-field type="password" v-model="config.passwordagain" outlined label="Password Again"></v-text-field>
+                                </v-form>
+                            </v-card>
                         </v-col>
-                        <v-col cols="5">
-                        <v-form>
-                                <v-subheader>Set your email address.</v-subheader>
-                                <v-text-field v-model="config.email" outlined label="Email Address"></v-text-field>
-                                <v-subheader>Set password for your node.</v-subheader>
-                                <v-text-field type="password" v-model="config.password" outlined label="Password"></v-text-field>
-                                <v-text-field type="password" v-model="config.password_again" outlined label="Password Again"></v-text-field>
-</v-form>
-                        </v-col>
-                            
+    
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
@@ -191,11 +193,11 @@ export default {
             saving: false,
             show1: false,
             config: {
-                email: "",
+                username: "",
                 password: "",
-                password_again: "",
+                passwordagain: "",
                 hostname: "",
-                node_name: "",
+                nodename: "",
                 camera: [
                     { name: "", location: "", uri: "", username: "", password: "", enabled: true },
                 ],
@@ -211,7 +213,7 @@ export default {
     /* eslint-disable */
     watch: {
         ConfigResp(oldObj, o) {
-            this.config.node_name = o.config.nodename
+            this.config.nodename = o.config.nodename
             this.config.uuid = o.config.uuid
         }
     },

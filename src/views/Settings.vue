@@ -1,20 +1,51 @@
 <template>
     <v-container fluid>
-    
+        <v-row block>
+            <v-col cols="12">
+                <v-row :align="alignment">
+                    <v-card cols="4" class="ma-3 pa-6" width="256" :elevation="hover ? 16 : 2">
+                    <div class="my-2">
+                        <v-card-title>
+                            General
+                        </v-card-title>
+                        <v-col>
+                            <v-text-field outlined v-model="config.nodename" label="Node Name"></v-text-field>
+                            <v-text-field outlined v-model="config.hostname" label="Hostname"></v-text-field>
+                            <v-btn class="primary">Save Changes</v-btn>
+                        </v-col>
+                        </div>
+                    </v-card>
+                    <v-card cols="4" class="ma-3 pa-6" width="256" :elevation="hover ? 16 : 2">
+                        <v-card-title>
+                            Utilities
+                        </v-card-title>
+                        <v-col alignment="center">
+                            <div class="my-2">
+                                <v-btn class="primary">Change Password</v-btn>
+                            </div>
+                            <div class="my-2">
+                                <v-btn color="primary">Reset Config</v-btn>
+                            </div>
+                            <div class="my-2">
+                                <v-btn color="primary">Run Setup Wizard</v-btn>
+                            </div>
+                            <div class="my-2">
+                                <v-btn color="error">Reboot Tracker</v-btn>
+                            </div>
+                        </v-col>
+                    </v-card>
+                </v-row>
+            </v-col>
+        </v-row>
+        <v-row>
+        </v-row>
+        <!--
         <v-card flat>
             <v-card-title>
                 Settings
             </v-card-title>
             <v-card-text>
                 <v-divider></v-divider>
-                <v-subheader>
-                    General
-                </v-subheader>
-                <v-col cols="3">
-                    <v-text-field outlined v-model="config.nodename" label="Node Name"></v-text-field>
-                    <v-text-field outlined v-model="config.hostname" label="Hostname"></v-text-field>
-                    <v-btn class="primary">Change Password</v-btn>
-                </v-col>
                 <v-divider class="ma-5"></v-divider>
                 <v-subheader>
                     Cameras
@@ -69,6 +100,7 @@
                 <v-btn class="primary">Add Storage</v-btn>
             </v-card-text>
         </v-card>
+        -->
     </v-container>
 </template>
 
@@ -79,7 +111,7 @@ export default {
         return {
             config: {
                 password: "",
-                password_again: "",
+                passwordagain: "",
                 hostname: "",
                 nodename: "",
                 camera: [],
