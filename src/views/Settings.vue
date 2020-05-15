@@ -1,24 +1,37 @@
 <template>
     <v-container fluid>
-        <v-row>
+        <v-row block>
             <v-col cols="12">
                 <v-row :align="alignment">
-                    <v-card cols="3"  width="256" height="300" :elevation="hover ? 16 : 2">
-                        <v-subheader>
+                    <v-card cols="4" class="ma-3 pa-6" width="256" :elevation="hover ? 16 : 2">
+                    <div class="my-2">
+                        <v-card-title>
                             General
-                        </v-subheader>
+                        </v-card-title>
                         <v-col>
                             <v-text-field outlined v-model="config.nodename" label="Node Name"></v-text-field>
                             <v-text-field outlined v-model="config.hostname" label="Hostname"></v-text-field>
-                            <v-btn class="primary">Change Password</v-btn>
+                            <v-btn class="primary">Save Changes</v-btn>
                         </v-col>
+                        </div>
                     </v-card>
-                    <v-card cols="3"  width="256" height="300" :elevation="hover ? 16 : 2">
-                        <v-subheader>
+                    <v-card cols="4" class="ma-3 pa-6" width="256" :elevation="hover ? 16 : 2">
+                        <v-card-title>
                             Utilities
-                        </v-subheader>
-                        <v-col>
-                            <v-btn color="error">Reboot Tracker</v-btn>
+                        </v-card-title>
+                        <v-col alignment="center">
+                            <div class="my-2">
+                                <v-btn class="primary">Change Password</v-btn>
+                            </div>
+                            <div class="my-2">
+                                <v-btn color="primary">Reset Config</v-btn>
+                            </div>
+                            <div class="my-2">
+                                <v-btn color="primary">Run Setup Wizard</v-btn>
+                            </div>
+                            <div class="my-2">
+                                <v-btn color="error">Reboot Tracker</v-btn>
+                            </div>
                         </v-col>
                     </v-card>
                 </v-row>
@@ -26,7 +39,7 @@
         </v-row>
         <v-row>
         </v-row>
-    
+        <!--
         <v-card flat>
             <v-card-title>
                 Settings
@@ -87,6 +100,7 @@
                 <v-btn class="primary">Add Storage</v-btn>
             </v-card-text>
         </v-card>
+        -->
     </v-container>
 </template>
 
