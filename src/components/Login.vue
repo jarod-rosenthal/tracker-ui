@@ -66,7 +66,8 @@ export default {
         loginClicked() {
             this.$store.dispatch('controller/Login', {
                 username: this.username,
-                password: this.password
+                password: this.password,
+                authtoken: ""
             })
         }
     }

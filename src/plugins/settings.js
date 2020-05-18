@@ -1,6 +1,6 @@
 module.exports = {
     videoServer : location.hostname,
-    // videoServer: "192.168.1.195",
+    // videoServer: "skyhub-nano.local",
     controllerServer: "http://" + location.hostname + ":9090"
-    // controllerServer: 'http://192.168.1.195:9090'
+    // controllerServer: 'http://skyhub-nano.local:9090'
 }

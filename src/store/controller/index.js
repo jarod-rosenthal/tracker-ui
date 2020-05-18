@@ -87,10 +87,33 @@ export default {
                 }
             })
         },
+        AutoLogin(store) {
+            var authToken = localStorage.getItem("authtoken");
+            if(authToken === undefined || authToken === "") {
+                store.dispatch("GetConfig");
+                return;
+            }
+
+            var request = new LoginReq();
+            request.setAuthtoken(authToken);
+            var metadata = {};
+            client.login(request, metadata, function(err, response) {
+                if(err) {
+                    store.commit('LoginResp', null);
+                    return;
+                } else {
+                    var res = response.toObject()
+                    store.commit('LoginResp', res);
+                    store.commit('IsAuthenticated', res.success);
+                    store.dispatch("GetConfig");
+                }
+            });
+        },
         Login(store, obj) {
             var request = new LoginReq();
             request.setUsername(obj.username);
             request.setPassword(obj.password);
+            request.setAuthtoken("");
             var metadata = {};
             client.login(request, metadata, function(err, response) {
                 
@@ -99,7 +122,9 @@ export default {
                 } else {
                     var res = response.toObject()
                     store.commit('LoginResp', res);
-                    store.commit('IsAuthenticated', res.success)
+                    store.commit('IsAuthenticated', res.success);
+                    localStorage.setItem("authtoken", res.authtoken);
+                    store.dispatch("GetConfig");
                     console.log(res);
                 }
             });

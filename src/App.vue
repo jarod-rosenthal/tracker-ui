@@ -127,7 +127,7 @@ export default {
     },
     watch: {},
     created() {
-        this.$store.dispatch('controller/GetConfig')
+        this.$store.dispatch('controller/AutoLogin')
     },
     /* eslint-disable */
     computed: {
