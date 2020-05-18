@@ -2,8 +2,8 @@
     <v-container fluid>
         <v-row block>
             <v-col cols="12">
-                <v-row :align="alignment">
-                    <v-card cols="4" class="ma-3 pa-6" width="256" :elevation="hover ? 16 : 2">
+                <v-row>
+                    <v-card cols="4" class="ma-3 pa-6" width="256" :elevation="2">
                     <div class="my-2">
                         <v-card-title>
                             General
@@ -15,7 +15,7 @@
                         </v-col>
                         </div>
                     </v-card>
-                    <v-card cols="4" class="ma-3 pa-6" width="256" :elevation="hover ? 16 : 2">
+                    <v-card cols="4" class="ma-3 pa-6" width="256" :elevation="2">
                         <v-card-title>
                             Utilities
                         </v-card-title>
@@ -120,24 +120,27 @@ export default {
         }
     },
     mounted() {
-        //this.$store.dispatch('controller/GetConfig')
+        this.$store.dispatch('controller/GetConfig')
     },
     watch: {
         ConfigResp(oldObj, o) {
             /* eslint-disable */
-            console.log(o)
-            this.config.nodename = o.config.nodename
-            this.config.hostname = o.config.hostname
-            this.config.uuid = o.config.uuid
-            this.config.camera = o.config.cameraList
-            this.config.storage = o.config.storageList
+
+            if(o && o.config) {
+                console.log(o)
+                this.config.nodename = o.config.nodename
+                this.config.hostname = o.config.hostname
+                this.config.uuid = o.config.uuid
+                this.config.camera = o.config.cameraList
+                this.config.storage = o.config.storageList
+            }
         }
     },
     computed: {
-        // ConfigResp: function() {
-        //     var config = this.$store.state.controller.GetConfigResp
-        //     return config
-        // }
+        ConfigResp: function() {
+            var config = this.$store.state.controller.GetConfigResp
+            return config
+        }
     }
 }
 </script>

@@ -11,7 +11,7 @@ export default {
     state: {
 		SetConfigResp: {},
 		GetConfigResp: {},
-        IsConfigured: false,
+        IsConfigured: true,
         IsAuthenticated: false,
 		GetEventsResp: {},
         GetVideoEventsResp: {},
@@ -132,6 +132,7 @@ export default {
         Logout(store) {
             store.commit('LoginResp', null);
             store.commit('IsAuthenticated', false)
+            localStorage.removeItem("authtoken");
             this.$router.push('home')
         },        
         GetConfig(store) {
