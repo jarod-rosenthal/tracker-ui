@@ -5,6 +5,13 @@ import settings from '../../plugins/settings'
 // var client = new ControllerClient("http://" + location.hostname + ":9090")
 var client = new ControllerClient(settings.controllerServer)
 
+const enableDevTools = window.__GRPCWEB_DEVTOOLS__ || (() => { });
+if (settings.environment == "DEV") {
+  enableDevTools([
+    client,
+  ])
+}
+
 /* eslint-disable */
 export default {
     namespaced: true,
@@ -89,7 +96,7 @@ export default {
         },
         AutoLogin(store) {
             var authToken = localStorage.getItem("authtoken");
-            if(authToken === undefined || authToken === "") {
+            if(authToken === undefined  || authToken === null || authToken === "") {
                 store.dispatch("GetConfig");
                 return;
             }
