@@ -120,7 +120,7 @@ export default {
         }
     },
     mounted() {
-        this.$store.dispatch('controller/GetConfig')
+        //this.$store.dispatch('controller/GetConfig')
     },
     watch: {
         ConfigResp(oldObj, o) {
@@ -134,10 +134,10 @@ export default {
         }
     },
     computed: {
-        ConfigResp: function() {
-            var config = this.$store.state.controller.GetConfigResp
-            return config
-        }
+        // ConfigResp: function() {
+        //     var config = this.$store.state.controller.GetConfigResp
+        //     return config
+        // }
     }
 }
 </script>

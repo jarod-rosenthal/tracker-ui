@@ -1,5 +1,5 @@
 <template>
-    <v-stepper class="elevation-0" v-model="e1" value="2" alt-labels>
+    <v-stepper class="elevation-0" v-model="e1" alt-labels>
         <v-stepper-header>
             <v-stepper-step editable step="1">Welcome!</v-stepper-step>
             <v-divider></v-divider>
@@ -27,7 +27,8 @@
                                 </v-col>
                             </v-row>
                             <v-col class="mt-5">
-                                <p class="title">Your Tracker's unique identifier is {{config.uuid}}</p>
+                                We will now help you configure your Sky Hub Tracker device.
+                                <!--<p class="title">Your Tracker's unique identifier is {{config.uuid}}</p>-->
                             </v-col>
                         </v-col>
                     </v-card-text>
@@ -45,27 +46,24 @@
                         Let's configure the general settings for your device.
                     </v-card-title>
                     <v-card-text>
-    
 
-                        <v-col cols="12">
-                            <v-card class="ma-3 pa-6" outlined tile>
-                                <v-form>
+                        <v-form>
+                            <v-row>
+                                <v-col cols="6">
                                     <v-subheader>Your node name is your public ID for Sky Hub</v-subheader>
                                     <v-text-field v-model="config.nodename" outlined label="Node Name"></v-text-field>
                                     <v-subheader>Set hostname for your node.</v-subheader>
                                     <v-text-field v-model="config.hostname" outlined label="Hostname"></v-text-field>
-                                </v-form>
-                            </v-card>
-                            <v-card class="ma-3 pa-6" outlined tile>
-                                <v-form>
+                                </v-col>
+                                <v-col cols="6">
                                     <v-subheader>Set your email address.</v-subheader>
                                     <v-text-field v-model="config.username" outlined label="Email Address"></v-text-field>
                                     <v-subheader>Set password for your node.</v-subheader>
                                     <v-text-field type="password" v-model="config.password" outlined label="Password"></v-text-field>
                                     <v-text-field type="password" v-model="config.passwordagain" outlined label="Password Again"></v-text-field>
-                                </v-form>
-                            </v-card>
-                        </v-col>
+                                </v-col>
+                            </v-row>
+                        </v-form>
     
                     </v-card-text>
                     <v-card-actions>
@@ -212,19 +210,19 @@ export default {
     },
     /* eslint-disable */
     watch: {
-        ConfigResp(oldObj, o) {
-            this.config.nodename = o.config.nodename
-            this.config.uuid = o.config.uuid
+        GConfigResp(oldObj, o) {
+            this.config.nodename = o.config.nodename;
+            this.config.uuid = o.config.uuid;
         }
     },
     created() {
-        this.$store.dispatch('controller/GetConfig')
+        // this.$store.dispatch('controller/GetConfig')
     },
     computed: {
-        ConfigResp: function() {
-            var config = this.$store.state.controller.GetConfigResp
-            return config
-        }
+        // ConfigResp: function() {
+        //     var config = this.$store.state.controller.GetConfigResp
+        //     return config
+        // }
     },
     methods: {
         next() {
