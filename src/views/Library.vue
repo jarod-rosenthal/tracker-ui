@@ -32,23 +32,23 @@ import settings from '../plugins/settings.js'
 export default {
     name: 'Library',
     mounted() {
-        this.$store.dispatch('controller/GetVideoEvents', { page: this.page, limit: 9 })
+         this.$store.dispatch('controller/GetVideoEvents', { page: this.page, limit: 9 })
     },
     watch: {
         page: function() {
             this.$store.dispatch("controller/GetVideoEvents", { page: this.page, limit: 9 })
             window.scrollTo(0, 0);
         },
-        $route(to, from) {
+        //$route(to, from) {
             /* eslint-disable */
-            console.log(to)
-            if (to == from) {
-                return
-            }
-            if (to == "/library") {
-                this.$store.dispatch('controller/GetVideoEvents', { page: this.page, limit: 9 })
-            }
-        }
+            // console.log(to)
+            // if (to == from) {
+            //     return
+            // }
+            // if (to == "/library") {
+            //     this.$store.dispatch('controller/GetVideoEvents', { page: this.page, limit: 9 })
+            // }
+        //}
     },
     data() {
         return {
