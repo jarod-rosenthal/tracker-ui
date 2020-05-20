@@ -255,22 +255,21 @@ export default {
         },
         addCameraRow() {
             this.config.cameraList.push({ name: "", location: "", uri: "", username: "", password: "", enabled: false })
-            this.cameras.push(0)
+            this.config.cameraList.push(0)
         },
         delCameraRow(i) {
             var c = null
-            this.cameras.splice(i, 1)
-            this.selectedProtocol.splice(i, 1)
+            this.config.cameraList.splice(i, 1)
             this.config.cameraList.splice(i, 1)
             this.$forceUpdate();
 
         },
         addStorageRow() {
             this.config.storageList.push({ name: "", location: "" })
-            this.storage.push(0)
+            this.config.storageList.push(0)
         },
         delStorageRow(i) {
-            this.storage.splice(i, 1)
+            this.config.storageList.splice(i, 1)
             this.config.storageList.splice(i, 1)
         },
     }
