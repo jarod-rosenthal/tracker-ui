@@ -1,5 +1,5 @@
 const { ControllerClient } = require('proto-tracker-controller-web/Tracker-controllerServiceClientPb')
-const { GetConfigReq, GetEventsReq, GetVideoEventsReq, SetConfigReq, LoginReq, Config, CameraConfig, StorageConfig } = require('proto-tracker-controller-web/tracker-controller_pb')
+const { GetConfigReq, GetEventsReq, GetVideoEventsReq, SetConfigReq, LoginReq, Config, CameraConfig, StorageConfig, IssueCommandReq } = require('proto-tracker-controller-web/tracker-controller_pb')
 import settings from '../../plugins/settings'
 
 // var client = new ControllerClient("http://" + location.hostname + ":9090")
@@ -23,6 +23,7 @@ export default {
 		GetEventsResp: {},
         GetVideoEventsResp: {},
         LoginResp: {},
+        IssueCommandResp: {}
     },
     mutations: {
         SetConfigResp(store, SetConfigResp) {
@@ -48,10 +49,26 @@ export default {
         }
     },
     actions: {
+        IssueCommand(store, obj) {
+            var request = new IssueCommandReq();
+            var authToken = localStorage.getItem("authtoken");
+            request.setCommand(obj.command);
+            request.setAuthtoken(authToken);
+            var metadata = {};
+            client.issueCommand(request, metadata, function(err, response) {
+                if (err) {
+                    
+                } else {
+                    var res = response.toObject();
+                    store.commit('IssueCommandResp', res);
+                }
+            })
+
+        },
         SetConfig(store, obj) {
             var request = new SetConfigReq()
 			var config = new Config()
-			config.setConfigured(true)
+			config.setConfigured(obj.configured ?? true)
             config.setUuid(obj.uuid)
             config.setUsername(obj.username);
 			config.setHostname(obj.hostname)

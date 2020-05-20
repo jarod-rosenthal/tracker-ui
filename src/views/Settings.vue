@@ -3,7 +3,7 @@
         <v-row block>
             <v-col cols="12">
                 <v-row>
-                    <v-card cols="4" class="ma-3 pa-6" width="256" :elevation="2">
+                    <v-card cols="4" class="ma-3 pa-6" width="256" elevation="2">
                     <div class="my-2">
                         <v-card-title>
                             General
@@ -15,7 +15,7 @@
                         </v-col>
                         </div>
                     </v-card>
-                    <v-card cols="4" class="ma-3 pa-6" width="256" :elevation="2">
+                    <v-card cols="4" class="ma-3 pa-6" width="256" elevation="2">
                         <v-card-title>
                             Utilities
                         </v-card-title>
@@ -24,13 +24,13 @@
                                 <v-btn class="primary">Change Password</v-btn>
                             </div>
                             <div class="my-2">
-                                <v-btn color="primary">Reset Config</v-btn>
+                                <v-btn color="primary" @click="resetConfig()">Reset Config</v-btn>
                             </div>
                             <div class="my-2">
-                                <v-btn color="primary">Run Setup Wizard</v-btn>
+                                <v-btn color="primary" @click="restartTracker()">Restart Tracker Service</v-btn>
                             </div>
                             <div class="my-2">
-                                <v-btn color="error">Reboot Tracker</v-btn>
+                                <v-btn color="error" @click="reboot()">Reboot Tracker</v-btn>
                             </div>
                         </v-col>
                     </v-card>
@@ -135,6 +135,34 @@ export default {
                 this.config.storage = o.config.storageList
             }
         }
+    },
+    methods: {
+        restartTracker () {
+            this.$store.dispatch('controller/IssueCommand', { command:"RESTART-TRACKER" });
+        },
+        reboot() {
+            this.$store.dispatch('controller/IssueCommand', { command:"REBOOT" });
+        },
+        resetConfig() {
+            var newConfig =  {
+                uuid: this.config.uuid,
+                configured: false,
+                username: "",
+                password: "",
+                passwordagain: "",
+                hostname: "",
+                nodename: "",
+                camera: [],
+                storage: [],
+            }
+            var self = this;
+            this.$store.dispatch('controller/SetConfig', newConfig).then(function() {
+                // self.$store.commit('LoginResp', {});
+                // self.$store.commit('IsAuthenticated', false);
+                self.$store.dispatch('controller/GetConfig')
+            })
+        }
+
     },
     computed: {
         ConfigResp: function() {
