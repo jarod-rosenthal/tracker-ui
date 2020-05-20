@@ -217,6 +217,9 @@ export default {
     watch: {
         ConfigResp(val) {
             this.config = JSON.parse(JSON.stringify(val.config));
+            if(this.config.cameraList.length === 0) {
+                this.config.cameraList.push({ name: "", location: "", uri: "", username: "", password: "", enabled: false });
+            }
             this.config.nodename = val.config.nodename;
             this.config.uuid = val.config.uuid;
         }
