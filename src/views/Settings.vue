@@ -30,9 +30,11 @@
                                     Utilities
                                 </v-card-title>
                                 <v-col alignment="center">
+                                    <!--
                                     <div class="my-2">
                                         <v-btn class="primary">Change Password</v-btn>
                                     </div>
+                                    -->
                                     <div class="my-2">
                                         <v-btn color="primary" @click="resetConfig()">Reset Config</v-btn>
                                     </div>
