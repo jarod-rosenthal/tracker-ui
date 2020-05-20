@@ -47,7 +47,6 @@
             <div class="ma-3 mb-0 title">Latest Video</div>
             <v-divider></v-divider>
             <v-row>
-                <!--
                 <v-col col="1">
                     <v-card width="300" height="200">
                         <v-video ref="video" width="300" height="200" poster="http://localhost:3000/thumb/ddd2c40e-4e1b-11ea-aeb2-507b9d666ab9.png" class="video-js" webkit-playsinline playsinline x-webkit-airplay="allow" x5-video-player-type="h5" x5-video-player-fullscreen="true"
@@ -72,9 +71,7 @@
                             x5-video-orientation="portraint" controls sources="[http://localhost:3000/video/30458f6a-4d51-11ea-a80f-507b9d666ab9.mp4]"></v-video>
                     </v-card>
                 </v-col>
-                -->
             </v-row>
-    
         </v-col>
     </v-container>
 </template>

@@ -2,7 +2,7 @@
 <template>
     <v-app>
         
-        <v-dialog :value="!IsConfigured && !IsAuthenticated" hide-overlay fullscreen>
+        <v-dialog :value="!IsConfigured" hide-overlay fullscreen>
             <v-card flat>
                 <FirstConfigWizard>
                 </FirstConfigWizard>

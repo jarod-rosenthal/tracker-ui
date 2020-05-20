@@ -18,7 +18,7 @@ export default {
     state: {
 		SetConfigResp: {},
 		GetConfigResp: {},
-        IsConfigured: true,
+        IsConfigured: false,
         IsAuthenticated: false,
 		GetEventsResp: {},
         GetVideoEventsResp: {},
@@ -76,9 +76,9 @@ export default {
 			config.setPassword(obj.password)
 			config.setPasswordagain(obj.passwordagain)
 
-			for (var i = 0; i < obj.camera.length; i++) {
+			for (var i = 0; i < obj.cameraList.length; i++) {
 				var cameraConfig = new CameraConfig();
-				var c = obj.camera[i]
+				var c = obj.cameraList[i]
 
 				cameraConfig.setName(c.name)
 				cameraConfig.setLocation(c.location)
@@ -89,9 +89,9 @@ export default {
 				config.addCamera(cameraConfig)
 			}
 
-			for (var i = 0; i < obj.storage.length; i++) {
+			for (var i = 0; i < obj.storageList.length; i++) {
 				var storageConfig = new StorageConfig();
-				var s = obj.storage[i]
+				var s = obj.storageList[i]
 
 				storageConfig.setName(s.name)
 				storageConfig.setLocation(s.location)

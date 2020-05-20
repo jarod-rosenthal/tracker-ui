@@ -7,9 +7,11 @@
             <v-divider></v-divider>
             <v-stepper-step editable step="3">Add Cameras</v-stepper-step>
             <v-divider></v-divider>
+            <!--
             <v-stepper-step editable step="4">Add Storage</v-stepper-step>
             <v-divider></v-divider>
-            <v-stepper-step editable step="5">Finished!</v-stepper-step>
+            -->
+            <v-stepper-step editable step="4">Finished!</v-stepper-step>
         </v-stepper-header>
         <v-stepper-items>
     
@@ -83,21 +85,21 @@
                     <v-card-text>
                         <v-col cols="12">
                             <v-form>
-                                <v-row v-for="(i,v) in cameras" :key="v" row="1">
+                                <v-row v-for="(i,v) in config.cameraList" :key="v" row="1">
                                     <v-col cols="2">
-                                        <v-text-field v-model="config.camera[v].name" outlined label="Name"></v-text-field>
+                                        <v-text-field v-model="config.cameraList[v].name" outlined label="Name"></v-text-field>
                                     </v-col>
                                     <v-col cols="3">
-                                        <v-text-field v-model="config.camera[v].uri" outlined label="URI"></v-text-field>
+                                        <v-text-field v-model="config.cameraList[v].uri" outlined label="URI"></v-text-field>
                                     </v-col>
                                     <v-col cols="2">
-                                        <v-text-field v-model="config.camera[v].location" outlined label="Location"></v-text-field>
+                                        <v-text-field v-model="config.cameraList[v].location" outlined label="Location"></v-text-field>
                                     </v-col>
                                     <v-col cols="2">
-                                        <v-text-field v-model="config.camera[v].username" outlined label="Username"></v-text-field>
+                                        <v-text-field v-model="config.cameraList[v].username" outlined label="Username"></v-text-field>
                                     </v-col>
                                     <v-col cols="2">
-                                        <v-text-field v-model="config.camera[v].password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :type="show1 ? 'text' : 'password'" name="input-10-1" hint="At least 8 characters" counter @click:append="show1 = !show1" outlined label="Password"></v-text-field>
+                                        <v-text-field v-model="config.cameraList[v].password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :type="show1 ? 'text' : 'password'" name="input-10-1" hint="At least 8 characters" counter @click:append="show1 = !show1" outlined label="Password"></v-text-field>
                                     </v-col>
                                     <v-col justify="end" align="center" cols="1">
                                         <v-btn @click="addCameraRow" icon>
@@ -117,6 +119,7 @@
             </v-stepper-content>
     
             <!-- Storage Configuration -->
+            <!--
             <v-stepper-content step="4">
                 <v-card flat>
                     <v-card-title>
@@ -155,9 +158,10 @@
                     </v-card-actions>
                 </v-card>
             </v-stepper-content>
+            -->
     
             <!-- Finished -->
-            <v-stepper-content step="5">
+            <v-stepper-content step="4">
                 <v-card>
                     <v-card-text class="text-center">
                         <v-col offset="3" align="center" justify="center" cols="6">
@@ -165,7 +169,7 @@
                                 <div class="display-2">Setup Complete</div>
                             </v-row>
                             <v-col class="mt-5">
-                                <p>Your tracker is now operational.</p>
+                                <p>Click done to save your setting and start using your tracker.</p>
                             </v-col>
                         </v-col>
                         <v-row justify="center" v-if="saving" align="center">
@@ -191,15 +195,16 @@ export default {
             saving: false,
             show1: false,
             config: {
+                uuid: "",
                 username: "",
                 password: "",
                 passwordagain: "",
                 hostname: "",
                 nodename: "",
-                camera: [
+                cameraList: [
                     { name: "", location: "", uri: "", username: "", password: "", enabled: true },
                 ],
-                storage: [
+                storageList: [
                     { name: "", location: "" },
                 ],
             },
@@ -210,19 +215,20 @@ export default {
     },
     /* eslint-disable */
     watch: {
-        GConfigResp(oldObj, o) {
-            this.config.nodename = o.config.nodename;
-            this.config.uuid = o.config.uuid;
+        ConfigResp(val) {
+            this.config = JSON.parse(JSON.stringify(val.config));
+            this.config.nodename = val.config.nodename;
+            this.config.uuid = val.config.uuid;
         }
     },
     created() {
         // this.$store.dispatch('controller/GetConfig')
     },
     computed: {
-        // ConfigResp: function() {
-        //     var config = this.$store.state.controller.GetConfigResp
-        //     return config
-        // }
+        ConfigResp() {
+            var config = this.$store.state.controller.GetConfigResp
+            return config
+        }
     },
     methods: {
         next() {
@@ -235,6 +241,7 @@ export default {
         },
         saveConfig() {
             /* eslint-disable */
+            this.config.configured = true;
             this.$store.dispatch('controller/SetConfig', this.config)
             console.log(this.config)
             this.saving = true
@@ -244,24 +251,24 @@ export default {
             }, 3000)
         },
         addCameraRow() {
-            this.config.camera.push({ name: "", location: "", uri: "", username: "", password: "", enabled: false })
+            this.config.cameraList.push({ name: "", location: "", uri: "", username: "", password: "", enabled: false })
             this.cameras.push(0)
         },
         delCameraRow(i) {
             var c = null
             this.cameras.splice(i, 1)
             this.selectedProtocol.splice(i, 1)
-            this.config.camera.splice(i, 1)
+            this.config.cameraList.splice(i, 1)
             this.$forceUpdate();
 
         },
         addStorageRow() {
-            this.config.storage.push({ name: "", location: "" })
+            this.config.storageList.push({ name: "", location: "" })
             this.storage.push(0)
         },
         delStorageRow(i) {
             this.storage.splice(i, 1)
-            this.config.storage.splice(i, 1)
+            this.config.storageList.splice(i, 1)
         },
     }
 }

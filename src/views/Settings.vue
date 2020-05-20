@@ -1,51 +1,52 @@
 <template>
     <v-container fluid>
-        <v-row block>
-            <v-col cols="12">
-                <v-row>
-                    <v-card cols="4" class="ma-3 pa-6" width="256" elevation="2">
-                    <div class="my-2">
-                        <v-card-title>
-                            General
-                        </v-card-title>
-                        <v-col>
-                            <v-text-field outlined v-model="config.nodename" label="Node Name"></v-text-field>
-                            <v-text-field outlined v-model="config.hostname" label="Hostname"></v-text-field>
-                            <v-btn class="primary">Save Changes</v-btn>
-                        </v-col>
-                        </div>
-                    </v-card>
-                    <v-card cols="4" class="ma-3 pa-6" width="256" elevation="2">
-                        <v-card-title>
-                            Utilities
-                        </v-card-title>
-                        <v-col alignment="center">
-                            <div class="my-2">
-                                <v-btn class="primary">Change Password</v-btn>
-                            </div>
-                            <div class="my-2">
-                                <v-btn color="primary" @click="resetConfig()">Reset Config</v-btn>
-                            </div>
-                            <div class="my-2">
-                                <v-btn color="primary" @click="restartTracker()">Restart Tracker Service</v-btn>
-                            </div>
-                            <div class="my-2">
-                                <v-btn color="error" @click="reboot()">Reboot Tracker</v-btn>
-                            </div>
-                        </v-col>
-                    </v-card>
-                </v-row>
-            </v-col>
-        </v-row>
-        <v-row>
-        </v-row>
-        <!--
         <v-card flat>
             <v-card-title>
                 Settings
             </v-card-title>
             <v-card-text>
-                <v-divider></v-divider>
+                <v-subheader>
+                    General
+                </v-subheader>
+                <v-row wrap>
+                    <v-col cols="4">
+                        <v-hover>
+                            <v-card width="100%" height="300px" elevation="2">
+                                <v-card-title>
+                                    General
+                                </v-card-title>
+                                <v-col>
+                                    <v-text-field outlined v-model="config.nodename" label="Node Name"></v-text-field>
+                                    <v-text-field outlined v-model="config.hostname" label="Hostname"></v-text-field>
+                                    <v-btn class="primary">Save Changes</v-btn>
+                                </v-col>
+                            </v-card>
+                        </v-hover>
+                    </v-col>
+                    <v-col cols="4">
+                        <v-hover>
+                            <v-card width="100%" height="300px" elevation="2">
+                                <v-card-title>
+                                    Utilities
+                                </v-card-title>
+                                <v-col alignment="center">
+                                    <div class="my-2">
+                                        <v-btn class="primary">Change Password</v-btn>
+                                    </div>
+                                    <div class="my-2">
+                                        <v-btn color="primary" @click="resetConfig()">Reset Config</v-btn>
+                                    </div>
+                                    <div class="my-2">
+                                        <v-btn color="primary" @click="restartTracker()">Restart Tracker Service</v-btn>
+                                    </div>
+                                    <div class="my-2">
+                                        <v-btn color="error" @click="reboot()">Reboot Tracker</v-btn>
+                                    </div>
+                                </v-col>
+                            </v-card>
+                        </v-hover>
+                    </v-col>
+                </v-row>        
                 <v-divider class="ma-5"></v-divider>
                 <v-subheader>
                     Cameras
@@ -100,7 +101,7 @@
                 <v-btn class="primary">Add Storage</v-btn>
             </v-card-text>
         </v-card>
-        -->
+        
     </v-container>
 </template>
 
@@ -144,22 +145,15 @@ export default {
             this.$store.dispatch('controller/IssueCommand', { command:"REBOOT" });
         },
         resetConfig() {
-            var newConfig =  {
-                uuid: this.config.uuid,
-                configured: false,
-                username: "",
-                password: "",
-                passwordagain: "",
-                hostname: "",
-                nodename: "",
-                camera: [],
-                storage: [],
-            }
+            var newConfig = JSON.parse(JSON.stringify(this.$store.state.controller.GetConfigResp.config));
+            newConfig.configured = false;
             var self = this;
             this.$store.dispatch('controller/SetConfig', newConfig).then(function() {
                 // self.$store.commit('LoginResp', {});
                 // self.$store.commit('IsAuthenticated', false);
-                self.$store.dispatch('controller/GetConfig')
+                setTimeout(function() {
+                    self.$store.dispatch('controller/GetConfig')
+                }, 500);
             })
         }
 
