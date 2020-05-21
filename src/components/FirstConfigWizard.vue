@@ -84,34 +84,39 @@
                     </v-card-title>
                     <v-card-text>
                         <v-col cols="12">
-                            <v-form>
-                                <v-row v-for="(i,v) in config.cameraList" :key="v" row="1">
-                                    <v-col cols="2">
+                            <v-form v-for="(i,v) in config.cameraList" :key="v" row="1">
+                                <v-row row="1">
+                                    <v-col cols="4">
                                         <v-text-field v-model="config.cameraList[v].name" outlined label="Name"></v-text-field>
                                     </v-col>
-                                    <v-col cols="3">
+                                    <v-col cols="5">
                                         <v-text-field v-model="config.cameraList[v].uri" outlined label="URI"></v-text-field>
                                     </v-col>
-                                    <v-col cols="2">
+                                    <v-col cols="3">
                                         <v-text-field v-model="config.cameraList[v].location" outlined label="Location"></v-text-field>
                                     </v-col>
-                                    <v-col cols="2">
+                                </v-row>
+                                <v-row>
+                                    <v-col cols="4">
                                         <v-text-field v-model="config.cameraList[v].username" outlined label="Username"></v-text-field>
                                     </v-col>
-                                    <v-col cols="2">
+                                    <v-col cols="5">
                                         <v-text-field v-model="config.cameraList[v].password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :type="show1 ? 'text' : 'password'" name="input-10-1" hint="At least 8 characters" counter @click:append="show1 = !show1" outlined label="Password"></v-text-field>
                                     </v-col>
-                                    <v-col justify="end" align="center" cols="1">
-                                        <v-btn @click="addCameraRow" icon>
-                                            <v-icon large>mdi-plus</v-icon>
-                                        </v-btn>
+                                    <v-col cols="2">
+                                        <v-checkbox v-model="config.cameraList[v].enabled" @click="setCameraEnabled(v)" outlined :label="`Enabled: ${config.cameraList[v].enabled.toString()}`"></v-checkbox>
+                                    </v-col>
+                                    <v-col cols="1">
+                                        <v-btn class="ma-5" color="error" @click="delCameraRow(v)">Remove</v-btn>
                                     </v-col>
                                 </v-row>
+                                <v-divider class="ma-5"></v-divider>
                             </v-form>
                         </v-col>
                     </v-card-text>
-                    <v-card-actions>
+                    <v-card-actions fixed bottom>
                         <v-spacer></v-spacer>
+                        <v-btn class="ma-5" color="" @click="addCameraRow()">Add Camera</v-btn>
                         <v-btn class="ma-5" dark color="primary" @click="prev()">Back</v-btn>
                         <v-btn class="ma-5" dark color="primary" @click="next()">Next</v-btn>
                     </v-card-actions>
@@ -210,6 +215,7 @@ export default {
             },
             cameras: [1],
             storage: [1],
+            step:1,
             e1: 1,
         }
     },
@@ -218,7 +224,7 @@ export default {
         ConfigResp(val) {
             this.config = JSON.parse(JSON.stringify(val.config));
             if(this.config.cameraList.length === 0) {
-                this.config.cameraList.push({ name: "", location: "", uri: "", username: "", password: "", enabled: false });
+                this.config.cameraList.push({ name: "", location: "", uri: "", username: "", password: "", enabled: true });
             }
             this.config.nodename = val.config.nodename;
             this.config.uuid = val.config.uuid;
@@ -257,14 +263,26 @@ export default {
         },
         addCameraRow() {
             this.config.cameraList.push({ name: "", location: "", uri: "", username: "", password: "", enabled: false })
-            this.config.cameraList.push(0)
+            //this.config.cameraList.push(0)
+        },
+        setCameraEnabled(id) {
+            for(var i = 0; i < this.config.cameraList.length; i++) {
+                var camera = this.config.cameraList[i];
+                if(id == i) {
+                    camera.enabled = true;
+                } else {
+                    camera.enabled = false;
+                }
+            }
         },
         delCameraRow(i) {
             var c = null
-            this.config.cameraList.splice(i, 1)
+            if(this.config.cameraList[i].enabled) {
+                if(i > 0) this.config.cameraList[i - 1].enabled = true;
+                if(i == 0 && this.config.cameraList.length > 0) this.config.cameraList[i + 1].enabled = true;
+            }
             this.config.cameraList.splice(i, 1)
             this.$forceUpdate();
-
         },
         addStorageRow() {
             this.config.storageList.push({ name: "", location: "" })
