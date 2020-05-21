@@ -46,6 +46,9 @@ export default {
         },
         IsAuthenticated(store, IsAuthenticated) {
             store.IsAuthenticated = IsAuthenticated;
+        },
+        IssueCommandResp(store, IssueCommandResp) {
+            store.IssueCommandResp = IssueCommandResp;
         }
     },
     actions: {

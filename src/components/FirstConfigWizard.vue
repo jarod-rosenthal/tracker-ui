@@ -244,14 +244,16 @@ export default {
         },
         saveConfig() {
             /* eslint-disable */
+            self = this;
             this.config.configured = true;
-            this.$store.dispatch('controller/SetConfig', this.config)
-            console.log(this.config)
-            this.saving = true
-            self = this
-            setTimeout(function() {
-                self.$store.dispatch('controller/GetConfig')
-            }, 3000)
+            this.saving = true;
+
+            this.$store.dispatch('controller/SetConfig', this.config).then(function() {
+                self.saving = false;
+                setTimeout(function() {
+                    self.$store.dispatch('controller/GetConfig');
+                }, 3000);
+            })
         },
         addCameraRow() {
             this.config.cameraList.push({ name: "", location: "", uri: "", username: "", password: "", enabled: false })
