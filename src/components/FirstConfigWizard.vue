@@ -104,7 +104,7 @@
                                         <v-text-field v-model="config.cameraList[v].password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :type="show1 ? 'text' : 'password'" name="input-10-1" hint="At least 8 characters" counter @click:append="show1 = !show1" outlined label="Password"></v-text-field>
                                     </v-col>
                                     <v-col cols="3">
-                                            <v-select v-mode="config.cameraList[v].type" :items="cameraTypes" label="Standard"></v-select>
+                                            <v-select v-model="config.cameraList[v].type" :items="cameraTypes" label="Standard"></v-select>
                                     </v-col>
                                     <v-col cols="2">
                                         <v-checkbox v-model="config.cameraList[v].enabled" @click="setCameraEnabled(v)" outlined :label="`Enabled: ${config.cameraList[v].enabled.toString()}`"></v-checkbox>

@@ -1,13 +1,16 @@
 <template>
     <v-container fluid>
-        <v-card flat>
+        <v-card>
             <v-card-title>
                 Settings
             </v-card-title>
             <v-card-text>
-                <v-subheader>
-                    General
-                </v-subheader>
+            <v-expand-transition>
+                <v-card-actions flat v-show="HasChanges" fixed top right>
+                    <v-btn style="margin-bottom:40px;" color="primary"  @click="resetConfigChanges()">Cancel Changes</v-btn>
+                    <v-btn style="margin-bottom:40px;" :readonly="saving" color="red" dark @click="saveConfig()">Save Change</v-btn>
+                </v-card-actions>
+            </v-expand-transition>
                 <v-row wrap>
                     <v-col cols="4">
                         <v-hover>
@@ -18,8 +21,6 @@
                                 <v-col>
                                     <v-text-field outlined v-model="config.nodename" label="Node Name"></v-text-field>
                                     <v-text-field outlined v-model="config.hostname" label="Hostname"></v-text-field>
-                                    
-                                    <v-btn class="primary" @click="saveConfig()">Save Changes</v-btn>
                                 </v-col>
                             </v-card>
                         </v-hover>
@@ -58,15 +59,19 @@
                     Cameras
                 </v-subheader>
                 <v-row wrap>
-                    <v-col cols="3" v-for="(c,i) in config.cameraList" :key="i" row="1">
+                    <v-col cols="2" v-for="(c,i) in config.cameraList" :key="i" row="1">
                         <v-hover v-slot:default="{ hover }">
-                            <v-card width="256" height="256" :elevation="hover ? 16 : 2">
+                            <v-card width="220 " height="220" :elevation="hover ? 16 : 2">
                                 <v-card-title class="justify-center">{{c.name}}</v-card-title>
                                 <v-card-text class="text-center">
-                                    <v-img height="125" contain src="../assets/ptz.png"></v-img>
+                                    <v-img height="80" contain src="../assets/ptz.png"></v-img>
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
+                                    <!--<v-card-text>Enabled: {{c.enabled.toString()}}</v-card-text>-->
+                                    <v-btn icon v-show="c.enabled">
+                                        <v-icon>mdi-check</v-icon>
+                                    </v-btn>                                    
                                     <v-btn icon @click="editCamera(i)">
                                         <v-icon>mdi-pencil</v-icon>
                                     </v-btn>
@@ -79,6 +84,7 @@
                     </v-col>
                 </v-row>
                 <v-btn class="primary" @click="addCameraRow()">Add Camera</v-btn>
+                <!--
                 <v-divider class="ma-5"></v-divider>
                 <v-subheader>
                     Storage
@@ -105,6 +111,7 @@
                     </v-col>
                 </v-row>
                 <v-btn class="primary">Add Storage</v-btn>
+                -->
             </v-card-text>
         </v-card>
         <v-dialog v-model="cameraDialog" persistent max-width="600px">
@@ -136,7 +143,7 @@
                                     <v-select v-model="cameraEdit.type" :items="cameraTypes" label="Standard"></v-select>
                                 </v-col>
                                 <v-col cols="2">
-                                    <v-checkbox v-model="cameraEdit.enabled" @click="setCameraEnabled(cameraEditId)" outlined :label="`Enabled: ${cameraEdit.enabled.toString()}`"></v-checkbox>
+                                    <v-checkbox v-model="cameraEdit.enabled" outlined :label="`Enabled: ${cameraEdit.enabled.toString()}`"></v-checkbox>
                                 </v-col>
                             </v-row>                
                         </v-form>                        
@@ -145,19 +152,26 @@
                 </v-card-text>
                 <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="cameraDialog = false">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="saveCameraEdit()">Save</v-btn>
+                    <v-btn color="blue darken-1" text @click="cancelCameraEdit()">Cancel</v-btn>
+                    <v-btn color="blue darken-1" text @click="saveCameraEdit()">Save</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
     </v-container>
 </template>
 
+<style>
+    .scroll {
+      overflow-y: auto;
+    }
+</style>
+
 <script>
 export default {
     name: 'Settings',
     data() {
         return {
+            configLoaded: false,
             config: {
                 password: "",
                 passwordagain: "",
@@ -166,11 +180,13 @@ export default {
                 cameraList: [],
                 storageList: [],
             },
+            originalConfig: {},
             cameraDialog: false,
             cameraEdit: { name: "", location: "", uri: "", username: "", password: "", type:"PTX", enabled: true },
             cameraEditId: 0,
             show1: false,
-            cameraTypes: ['PTZ', 'Fisheye'],
+            saving: false,
+            cameraTypes: ['Standard', 'PTZ', 'Fisheye'],
         }
     },
     mounted() {
@@ -179,12 +195,13 @@ export default {
     watch: {
         ConfigResp(val) {
             this.config = JSON.parse(JSON.stringify(val.config));
+            this.originalConfig = JSON.parse(JSON.stringify(val.config));
             if (this.config.cameraList.length === 0) {
-                this.config.cameraList.push({ name: "", location: "", uri: "", username: "", password: "", type:"PTX", enabled: true });
+                this.config.cameraList.push({ name: "", location: "", uri: "", username: "", password: "", type:"Standard", enabled: true });
             }
             this.config.nodename = val.config.nodename;
             this.config.uuid = val.config.uuid;
-        }
+        },
     },
     methods: {
         editCamera(id) {
@@ -193,9 +210,20 @@ export default {
             this.cameraEditId = id;
         },
         saveCameraEdit() {
-            this.config.cameraList[this.cameraEditId] = JSON.parse(JSON.stringify(this.cameraEdit));
-            this.saveConfig();
+            if(this.cameraEditId == null) {
+                this.config.cameraList.push(this.cameraEdit);
+                if(this.cameraEdit.enabled) { this.setCameraEnabled(this.config.cameraList.length - 1); }
+            } else {
+                this.$set(this.config.cameraList, this.cameraEditId, this.cameraEdit);
+                if(this.cameraEdit.enabled) { this.setCameraEnabled(this.cameraEditId); }
+            }
+
             this.cameraDialog = false;
+            // this.$forceUpdate();
+        },
+        cancelCameraEdit() {
+            this.cameraDialog = false;
+            this.$forceUpdate();
         },
         restartTracker() {
             this.$store.dispatch('controller/IssueCommand', { command: "RESTART-TRACKER" });
@@ -218,6 +246,10 @@ export default {
                 }, 500);
             })
         },
+        resetConfigChanges() {
+            this.config = JSON.parse(JSON.stringify(this.originalConfig));
+            this.$forceUpdate();
+        },
         saveConfig() {
             /* eslint-disable */
             self = this;
@@ -225,16 +257,16 @@ export default {
             this.saving = true;
 
             this.$store.dispatch('controller/SetConfig', this.config).then(function() {
-                self.saving = false;
                 setTimeout(function() {
-                    self.$store.dispatch('controller/GetConfig');
-                }, 2000);
+                    self.$store.dispatch('controller/GetConfig').then(function(){ self.saving = false; });
+                }, 800);
             })
         },
         addCameraRow() {
-            this.config.cameraList.push({ name: "", location: "", uri: "", username: "", password: "", type:"PTZ", enabled: false });
-            this.editCamera(this.config.cameraList.length - 1);
-            //this.config.cameraList.push(0)
+            this.cameraEdit = { name: "NEW CAMERA", location: "", uri: "", username: "", password: "", type:"PTZ", enabled: false, new:true };
+            this.cameraDialog = true;
+            this.cameraEditId = null;
+            this.$forceUpdate();
         },
         setCameraEnabled(id) {
             for (var i = 0; i < this.config.cameraList.length; i++) {
@@ -266,9 +298,17 @@ export default {
     },
     computed: {
         ConfigResp: function() {
+            this.configLoaded = true;
             var config = this.$store.state.controller.GetConfigResp
             return config
+        },
+        HasChanges: function() {
+            if(JSON.stringify(this.originalConfig) != JSON.stringify(this.config)) {
+                return true;
+            }
+            return false;
         }
+
     }
 }
 </script>
