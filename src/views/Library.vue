@@ -52,7 +52,7 @@ export default {
     },
     data() {
         return {
-            page: 1,
+            page: 0,
             search_limits: [9, 12, 20, 50],
             playOpts: {
                 options: {
