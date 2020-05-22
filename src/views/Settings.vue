@@ -36,6 +36,9 @@
                                     </div>
                                     -->
                                     <div class="my-2">
+                                        <v-btn color="primary" @click="updateTracker()">Upate Software</v-btn>
+                                    </div>
+                                    <div class="my-2">
                                         <v-btn color="primary" @click="resetConfig()">Reset Config</v-btn>
                                     </div>
                                     <div class="my-2">
@@ -145,6 +148,9 @@ export default {
         },
         reboot() {
             this.$store.dispatch('controller/IssueCommand', { command:"REBOOT" });
+        },
+        updateTracker() {
+            this.$store.dispatch('controller/IssueCommand', { command:"UPDATE" });
         },
         resetConfig() {
             var newConfig = JSON.parse(JSON.stringify(this.$store.state.controller.GetConfigResp.config));
