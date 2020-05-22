@@ -83,13 +83,14 @@ export default {
 				var cameraConfig = new CameraConfig();
 				var c = obj.cameraList[i]
 
-				cameraConfig.setName(c.name)
-				cameraConfig.setLocation(c.location)
-                cameraConfig.setUri(c.uri)
-                cameraConfig.setUsername(c.username)
-                cameraConfig.setPassword(c.password)
-                cameraConfig.setEnabled(c.enabled)
-				config.addCamera(cameraConfig)
+				cameraConfig.setName(c.name);
+				cameraConfig.setLocation(c.location);
+                cameraConfig.setUri(c.uri);
+                cameraConfig.setUsername(c.username);
+                cameraConfig.setPassword(c.password);
+                cameraConfig.setEnabled(c.enabled);
+                cameraConfig.setType(c.type);
+				config.addCamera(cameraConfig);
 			}
 
 			for (var i = 0; i < obj.storageList.length; i++) {

@@ -97,11 +97,14 @@
                                     </v-col>
                                 </v-row>
                                 <v-row>
-                                    <v-col cols="4">
+                                    <v-col cols="3">
                                         <v-text-field v-model="config.cameraList[v].username" outlined label="Username"></v-text-field>
                                     </v-col>
-                                    <v-col cols="5">
+                                    <v-col cols="3">
                                         <v-text-field v-model="config.cameraList[v].password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :type="show1 ? 'text' : 'password'" name="input-10-1" hint="At least 8 characters" counter @click:append="show1 = !show1" outlined label="Password"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="3">
+                                            <v-select v-mode="config.cameraList[v].type" :items="cameraTypes" label="Standard"></v-select>
                                     </v-col>
                                     <v-col cols="2">
                                         <v-checkbox v-model="config.cameraList[v].enabled" @click="setCameraEnabled(v)" outlined :label="`Enabled: ${config.cameraList[v].enabled.toString()}`"></v-checkbox>
@@ -207,7 +210,7 @@ export default {
                 hostname: "",
                 nodename: "",
                 cameraList: [
-                    { name: "", location: "", uri: "", username: "", password: "", enabled: true },
+                    { name: "", location: "", uri: "", username: "", password: "", type:"PTX", enabled: true },
                 ],
                 storageList: [
                     { name: "", location: "" },
@@ -217,6 +220,7 @@ export default {
             storage: [1],
             step:1,
             e1: 1,
+            cameraTypes: ['PTZ', 'Fisheye'],
         }
     },
     /* eslint-disable */
@@ -224,7 +228,7 @@ export default {
         ConfigResp(val) {
             this.config = JSON.parse(JSON.stringify(val.config));
             if(this.config.cameraList.length === 0) {
-                this.config.cameraList.push({ name: "", location: "", uri: "", username: "", password: "", enabled: true });
+                this.config.cameraList.push({ name: "", location: "", uri: "", username: "", password: "", type:"PTX", enabled: true });
             }
             this.config.nodename = val.config.nodename;
             this.config.uuid = val.config.uuid;
@@ -262,7 +266,7 @@ export default {
             })
         },
         addCameraRow() {
-            this.config.cameraList.push({ name: "", location: "", uri: "", username: "", password: "", enabled: false })
+            this.config.cameraList.push({ name: "", location: "", uri: "", username: "", password: "", type:"PTX", enabled: false })
             //this.config.cameraList.push(0)
         },
         setCameraEnabled(id) {
