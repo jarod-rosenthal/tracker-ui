@@ -23,7 +23,13 @@ export default {
 		GetEventsResp: {},
         GetVideoEventsResp: {},
         LoginResp: {},
-        IssueCommandResp: {}
+        IssueCommandResp: {},
+        PackageVersion: process.env.VUE_APP_VERSION || '0'
+    },
+    getters: {
+        appVersion: (state) => {
+            return state.packageVersion
+        }
     },
     mutations: {
         SetConfigResp(store, SetConfigResp) {

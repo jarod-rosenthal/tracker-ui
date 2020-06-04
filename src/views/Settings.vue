@@ -303,6 +303,8 @@ export default {
             return config
         },
         HasChanges: function() {
+            if(this.originalConfig === {}) return false;
+            if(this.config === {}) return false;
             if(JSON.stringify(this.originalConfig) != JSON.stringify(this.config)) {
                 return true;
             }
