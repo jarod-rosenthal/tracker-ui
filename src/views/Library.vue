@@ -15,7 +15,7 @@
                     <v-col v-for="v in Videos" :key="v">
                         <v-card width="300" height="200">
                             <v-video ref="video" width="300" height="200" :poster="v.fullThumbPath" class="video-js" webkit-playsinline playsinline x-webkit-airplay="allow" x5-video-player-type="h5" x5-video-player-fullscreen="true" x5-video-orientation="portraint" controls :sources="[v.fullPath]"
-                                :options="playOpts.options" @ready="videoReady" @ended="videoEnd"></v-video>
+                                :options="playOpts.options"></v-video>
                         </v-card>
                     </v-col>
                 </v-row>
