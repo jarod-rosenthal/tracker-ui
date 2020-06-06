@@ -105,25 +105,25 @@ export default {
         this.$store.dispatch('controller/GetEvents', { page: 1, limit: 15 })
         this.status.push({ status: "mdi-checkbox-blank-circle", status_color: "green", text: `UI Version: ${this.$store.getters.appVersion}`, icon: '' });
     },
-    // watch: {
-    //     Events: function() {
-    //         if (!this.Events) {
-    //             return
-    //         }
-    //         for (var i = 0; i < this.Events.length; i++) {
-    //             var e = this.Events[i]
-    //             var d = new Date(e.createdAt.seconds * 1000)
-    //             this.events.push({
-    //                 id: e.id,
-    //                 time: d.toLocaleDateString() + ' ' + d.toLocaleTimeString(),
-    //                 type: e.type,
-    //                 source: e.source,
-    //                 sensor: e.sensor,
-    //                 duration: (e.duration / 1000).toFixed(2),
-    //             })
-    //         }
-    //     }        
-    // },
+    watch: {
+        Events: function() {
+            if (!this.Events) {
+                return
+            }
+            for (var i = 0; i < this.Events.length; i++) {
+                var e = this.Events[i]
+                var d = new Date(e.createdAt.seconds * 1000)
+                this.events.push({
+                    id: e.id,
+                    time: d.toLocaleDateString() + ' ' + d.toLocaleTimeString(),
+                    type: e.type,
+                    source: e.source,
+                    sensor: e.sensor,
+                    duration: (e.duration / 1000).toFixed(2),
+                })
+            }
+        }        
+    },
     methods: {
         GetVideos() {
             var videos = this.$store.state.controller.GetVideoEventsResp.videoList[10]
@@ -158,13 +158,13 @@ export default {
             });
             return videos;
         },
-        // Events: function() {
-        //     var r = this.$store.state.controller.GetEventsResp
-        //     if (r && r.eventList) {
-        //         return r.eventList
-        //     }
-        //     return null
-        // }        
+        Events: function() {
+            var r = this.$store.state.controller.GetEventsResp
+            if (r && r.eventList) {
+                return r.eventList
+            }
+            return null
+        }        
     },
     components: {},
 }
