@@ -3,7 +3,7 @@
         <v-stepper-header>
             <v-stepper-step editable step="1">Welcome!</v-stepper-step>
             <v-divider></v-divider>
-            <v-stepper-step editable step="2">Setup Node</v-stepper-step>
+            <v-stepper-step editable step="2">Setup Tracker</v-stepper-step>
             <v-divider></v-divider>
             <v-stepper-step editable step="3">Add Cameras</v-stepper-step>
             <v-divider></v-divider>
