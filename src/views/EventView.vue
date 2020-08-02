@@ -6,12 +6,16 @@
 			<v-row>
 				<v-col col="6">
 					<v-card width="600" height="400">
-            <v-video ref="video" width="600" height="400" 
-              :poster="video.thumb" class="video-js" 
-              webkit-playsinline playsinline x-webkit-airplay="allow" 
-              x5-video-player-type="h5" x5-video-player-fullscreen="true" 
-              x5-video-orientation="portrait" controls :sources="[video.url]"
-                            :options="playOpts.options" ></v-video>            
+                        <video-player ref="video"
+                            class="video-js video-player-box"
+                            webkit-playsinline
+                            playsinline
+                            x-webkit-airplay="allow"
+                            x5-video-player-type="h5"
+                            x5-video-player-fullscreen="true"
+                            x5-video-orientation="portrait"
+                            controls 
+                            :options="options" />   					
 					</v-card>
 				</v-col>
 			</v-row>
@@ -31,14 +35,21 @@ export default {
 	data() {
 		return {
 			checking: false,
-      playOpts: {
-          options: {
-              controls: true,
-              preload: 'auto',
-              techOrder: ["html5"]
-          }
-      },      
+			options: {
+				controls: true,
+				preload: 'auto',
+				techOrder: ["html5"],
+				poster: "http://" + settings.videoServer + ":3000/thumbnail/" + this.$route.params.id + ".png",
+				height: '400',
+				width: '600',
+				language: 'en',
+				playbackRates: [0.1, 0.25, 0.5, 0.75, 1],
+				sources: [{
+					src: "http://" + settings.videoServer + ":3000/video/" + this.$route.params.id + ".mp4",
+				}]			  
+			},
 			video: {
+
 				url:  "http://" + settings.videoServer + ":3000/video/" + this.$route.params.id + ".mp4",
 				thumb:  "http://" + settings.videoServer + ":3000/thumbnail/" + this.$route.params.id + ".png"
 			}

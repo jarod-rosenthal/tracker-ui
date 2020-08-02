@@ -59,10 +59,19 @@
             <div class="ma-3 mb-0 title">Latest Video</div>
             <v-divider></v-divider>
             <v-row>
-                <v-col v-for="v in Videos" :key="v">
+                <v-col v-for="v in videos" :key="v">
                     <v-card width="300" height="200">
-                        <v-video ref="video" width="300" height="200" :poster="v.fullThumbPath" class="video-js" webkit-playsinline playsinline x-webkit-airplay="allow" x5-video-player-type="h5" x5-video-player-fullscreen="true" x5-video-orientation="portrait" controls :sources="[v.fullPath]"
-                            :options="playOpts.options" ></v-video>
+                        <v-card-text>{{v.time}}</v-card-text>
+                        <video-player ref="video"
+                            class="video-js video-player-box"
+                            webkit-playsinline
+                            playsinline
+                            x-webkit-airplay="allow"
+                            x5-video-player-type="h5"
+                            x5-video-player-fullscreen="true"
+                            x5-video-orientation="portrait"
+                            controls 
+                            :options="v.options" />                    
                     </v-card>
                 </v-col>
             </v-row>
@@ -92,8 +101,10 @@ export default {
             }
         },
         events: [],
+        videos: [],
         status_item: 1,
         status: [
+            { status: "mdi-alert", status_color: "yellow", text: 'Tracking Event: No', icon: 'mdi-crosshairs-gps' },
             { status: "mdi-alert", status_color: "red", text: 'GPS', icon: 'mdi-crosshairs-gps' },
             { status: "mdi-checkbox-blank-circle", status_color: "green", text: 'Network', icon: 'mdi-wan' },
             { status: "mdi-checkbox-blank-circle", status_color: "green", text: 'Camera - PTZ', icon: 'mdi-video' },
@@ -104,6 +115,20 @@ export default {
         this.$store.dispatch('controller/GetVideoEvents', { page: this.page, limit: 4 })
         this.$store.dispatch('controller/GetEvents', { page: 1, limit: 15 })
         this.status.push({ status: "mdi-checkbox-blank-circle", status_color: "green", text: `UI Version: ${this.$store.getters.appVersion}`, icon: '' });
+        window.setTimeOut(function() {
+            this.$store.dispatch('controller/GetEvents', { page: 1, limit: 15 }).then(function() {
+                var r = this.$store.state.controller.GetEventsResp
+                if (r && r.eventList && r.eventList.length > 0) {
+                    var lastEvent = r.eventList[0];
+                    this.$data.status[0].status_color = lastEvent.EndedAt ? 'yellow' : 'green';
+                    this.$data.status[0].text = lastEvent.EndedAt ? 'Tracking Event: No' : 'Tracking Event: Yes';
+                } else {
+                    this.$data.status[0].status_color = 'yellow';
+                    this.$data.status[0].text = 'Tracking Event: No';
+                }
+            });
+        }, 5000);
+
     },
     watch: {
         Events: function() {
@@ -122,15 +147,78 @@ export default {
                     duration: (e.duration / 1000).toFixed(2),
                 })
             }
-        }        
+        },
+        Videos: function() {
+            /* eslint-disable */
+            if (!this.Videos) {
+                return
+            }
+            for (var i = 0; i < this.Videos.length; i++) {
+                var v = this.Videos[i];
+                var d = new Date(v.createdAt.seconds * 1000)
+                if(this.videos[i] === undefined) {
+                    this.videos.push({
+                        createdAt: v.createdAt,
+                        eventId: v.eventId,
+                        fullPath: v.fullPath,
+                        fullThumbPath: v.fullThumbPath,
+                        thumb: v.thumb,
+                        time: d.toLocaleDateString() + ' ' + d.toLocaleTimeString(),
+                        uri: v.uri,
+                        options: {
+                            poster: v.fullThumbPath,
+                            controls: true,
+                            preload: 'auto',
+                            height: '200',
+                            width: '300',
+                            language: 'en',
+                            techOrder: ['html5', 'flvjs'],                        
+                            plugins: {
+
+                            },
+                            playbackRates: [0.1, 0.25, 0.5, 0.75, 1],
+                            sources: [{
+                                src: v.fullPath
+                            }]
+                        }
+                    })
+                } else {
+                    this.videos[i].createdAt = v.createdAt;
+                    this.videos[i].eventId = v.eventId;
+                    this.videos[i].fullPath = v.fullPath;
+                    this.videos[i].fullThumbPath = v.fullThumbPath;
+                    this.videos[i].thumb = v.thumb;
+                    this.videos[i].time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
+                    this.videos[i].uri = v.uri;
+                    this.videos[i].options = {
+                        poster: v.fullThumbPath,
+                        controls: true,
+                        preload: 'auto',
+                        height: '200',
+                        width: '300',
+                        language: 'en',
+                        techOrder: ['html5', 'flvjs'],                        
+                        plugins: {
+
+                        },
+                        playbackRates: [0.1, 0.25, 0.5, 0.75, 1],
+                        sources: [{
+                            src: v.fullPath
+                        }]
+                    };
+                }
+            }  
+        }                   
     },
     methods: {
         GetVideos() {
             var videos = this.$store.state.controller.GetVideoEventsResp.videoList[10]
             if (videos === undefined) videos = [];
             videos.forEach(function(v) {
+                var d = new Date(v.createdAt.seconds * 1000)
                 v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.uri;
                 v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumb;
+                v.time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
             });
             return videos;
         },
@@ -153,8 +241,10 @@ export default {
             var videos = this.$store.state.controller.GetVideoEventsResp.videoList
             if (videos === undefined) videos = [];
             videos.forEach(function(v) {
+                var d = new Date(v.createdAt.seconds * 1000)
                 v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.uri;
                 v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumb;
+                v.time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
             });
             return videos;
         },
@@ -164,7 +254,7 @@ export default {
                 return r.eventList
             }
             return null
-        }        
+        }
     },
     components: {},
 }

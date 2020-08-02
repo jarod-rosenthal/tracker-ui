@@ -94,9 +94,9 @@
         </v-navigation-drawer>
     
     
-        <v-content>
+        <v-main>
             <router-view />
-        </v-content>
+        </v-main>
         <v-footer>
             <v-spacer></v-spacer>
             <div class="font-weight-thin caption">&copy; {{ new Date().getFullYear() }} Sky Hub. All Rights Reserved</div>
