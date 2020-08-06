@@ -5,7 +5,7 @@
                 Video Library
             </v-card-title>
             <v-divider></v-divider>
-            <v-pagination v-model="page" :length="NPages"></v-pagination>
+            <v-pagination v-model="page" :length="NPages"  total-visible="6" :value="0"></v-pagination>
             <v-row>
                 <v-col v-for="(v, idx) in videos" :key="idx">
                     <v-card width="300" height="250" >
