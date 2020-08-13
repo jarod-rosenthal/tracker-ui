@@ -115,7 +115,7 @@ export default {
         this.$store.dispatch('controller/GetVideoEvents', { page: this.page, limit: 4 })
         this.$store.dispatch('controller/GetEvents', { page: 1, limit: 15 })
         this.status.push({ status: "mdi-checkbox-blank-circle", status_color: "green", text: `UI Version: ${this.$store.getters.appVersion}`, icon: '' });
-        window.setTimeOut(function() {
+        window.setTimeout(function() {
             this.$store.dispatch('controller/GetEvents', { page: 1, limit: 15 }).then(function() {
                 var r = this.$store.state.controller.GetEventsResp
                 if (r && r.eventList && r.eventList.length > 0) {
