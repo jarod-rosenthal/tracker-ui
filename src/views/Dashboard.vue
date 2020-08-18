@@ -115,19 +115,19 @@ export default {
         this.$store.dispatch('controller/GetVideoEvents', { page: this.page, limit: 4 })
         this.$store.dispatch('controller/GetEvents', { page: 1, limit: 15 })
         this.status.push({ status: "mdi-checkbox-blank-circle", status_color: "green", text: `UI Version: ${this.$store.getters.appVersion}`, icon: '' });
-        window.setTimeout(function() {
-            this.$store.dispatch('controller/GetEvents', { page: 1, limit: 15 }).then(function() {
-                var r = this.$store.state.controller.GetEventsResp
-                if (r && r.eventList && r.eventList.length > 0) {
-                    var lastEvent = r.eventList[0];
-                    this.$data.status[0].status_color = lastEvent.EndedAt ? 'yellow' : 'green';
-                    this.$data.status[0].text = lastEvent.EndedAt ? 'Tracking Event: No' : 'Tracking Event: Yes';
-                } else {
-                    this.$data.status[0].status_color = 'yellow';
-                    this.$data.status[0].text = 'Tracking Event: No';
-                }
-            });
-        }, 5000);
+        // window.setTimeout(function() {
+        //     this.$store.dispatch('controller/GetEvents', { page: 1, limit: 15 }).then(function() {
+        //         var r = this.$store.state.controller.GetEventsResp
+        //         if (r && r.eventList && r.eventList.length > 0) {
+        //             var lastEvent = r.eventList[0];
+        //             this.$data.status[0].status_color = lastEvent.EndedAt ? 'yellow' : 'green';
+        //             this.$data.status[0].text = lastEvent.EndedAt ? 'Tracking Event: No' : 'Tracking Event: Yes';
+        //         } else {
+        //             this.$data.status[0].status_color = 'yellow';
+        //             this.$data.status[0].text = 'Tracking Event: No';
+        //         }
+        //     });
+        // }, 5000);
 
     },
     watch: {
@@ -198,7 +198,7 @@ export default {
                         height: '200',
                         width: '300',
                         language: 'en',
-                        techOrder: ['html5', 'flvjs'],                        
+                        techOrder: ['html5'],                        
                         plugins: {
 
                         },
