@@ -59,7 +59,7 @@
             <div class="ma-3 mb-0 title">Latest Video</div>
             <v-divider></v-divider>
             <v-row>
-                <v-col v-for="v in videos" :key="v">
+                <v-col v-for="v in videos" :key="v.id">
                     <v-card width="300" height="200">
                         <v-card-text>{{v.time}}</v-card-text>
                         <video-player ref="video"
@@ -71,7 +71,7 @@
                             x5-video-player-fullscreen="true"
                             x5-video-orientation="portrait"
                             controls 
-                            :options="v.options" />                    
+                            :options="v.options" />
                     </v-card>
                 </v-col>
             </v-row>
@@ -172,11 +172,12 @@ export default {
                             height: '200',
                             width: '300',
                             language: 'en',
-                            techOrder: ['html5', 'flvjs'],                        
+                            techOrder: ['html5'],                        
                             plugins: {
 
                             },
                             playbackRates: [0.1, 0.25, 0.5, 0.75, 1],
+                            source: v.fullPath,
                             sources: [{
                                 src: v.fullPath
                             }]

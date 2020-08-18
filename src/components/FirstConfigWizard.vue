@@ -90,7 +90,7 @@
                                         <v-text-field v-model="config.cameraList[v].name" outlined label="Name"></v-text-field>
                                     </v-col>
                                     <v-col cols="5">
-                                        <v-text-field v-model="config.cameraList[v].uri" outlined label="URI"></v-text-field>
+                                        <v-text-field v-model="config.cameraList[v].uri" outlined label="URI" placeholder="Example: rtsp://ipaddress:port"></v-text-field>
                                     </v-col>
                                     <v-col cols="3">
                                         <v-text-field v-model="config.cameraList[v].location" outlined label="Location"></v-text-field>

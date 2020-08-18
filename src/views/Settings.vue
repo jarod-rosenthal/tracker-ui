@@ -128,7 +128,7 @@
                                     <v-text-field v-model="cameraEdit.name" outlined label="Name"></v-text-field>
                                 </v-col>
                                 <v-col cols="12">
-                                    <v-text-field v-model="cameraEdit.uri" outlined label="URI"></v-text-field>
+                                    <v-text-field v-model="cameraEdit.uri" outlined label="URI" placeholder="Example: rtsp://ipaddress:port"></v-text-field>
                                 </v-col>
                                 <v-col cols="6">
                                     <v-text-field v-model="cameraEdit.username" outlined label="Username"></v-text-field>
