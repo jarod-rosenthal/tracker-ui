@@ -68,7 +68,7 @@ export default {
                             height: '200',
                             width: '300',
                             language: 'en',
-                            techOrder: ['html5', 'flvjs'],                        
+                            techOrder: ['html5'],
                             plugins: {
 
                             },
