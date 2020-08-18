@@ -7,13 +7,12 @@
             <v-divider></v-divider>
             <v-pagination v-model="page" :length="NPages"  total-visible="6" :value="0"></v-pagination>
             <v-row>
-                <v-col v-for="(v, idx) in videos" :key="idx">
+                <v-col v-for="v in videos" :key="v.id">
                     <v-card width="300" height="250" >
                         <v-card-text>{{v.time}}</v-card-text>
                         <video-player ref="video"
                             class="video-js video-player-box"
-                            webkit-playsinline
-                            playsinline
+                             playsinline
                             x-webkit-airplay="allow"
                             x5-video-player-type="h5"
                             x5-video-player-fullscreen="true"
@@ -94,7 +93,7 @@ export default {
                         height: '200',
                         width: '300',
                         language: 'en',
-                        techOrder: ['html5', 'flvjs'],                        
+                        techOrder: ['html5'],                        
                         plugins: {
 
                         },
@@ -137,8 +136,13 @@ export default {
             return null            
         },
         NPages: function() {
-            var nPages = this.$store.state.controller.GetVideoEventsResp.npages
-            return nPages - 1;
+            try {
+                var nPages = this.$store.state.controller.GetVideoEventsResp.npages
+                if(nPages - 1 < 0) return 0;
+                return nPages - 1;
+            }catch(e) {
+                return 0;
+            }
         }
     }
 }
