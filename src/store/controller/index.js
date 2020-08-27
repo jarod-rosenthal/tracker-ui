@@ -24,6 +24,7 @@ export default {
         GetVideoEventsResp: {},
         LoginResp: {},
         IssueCommandResp: {},
+        SensorReport: {},
         PackageVersion: process.env.VUE_APP_VERSION || '0'
     },
     getters: {
@@ -55,6 +56,9 @@ export default {
         },
         IssueCommandResp(store, IssueCommandResp) {
             store.IssueCommandResp = IssueCommandResp;
+        },
+        GetSensorReport(store, SensorReport) {
+            store.SensorReport = SensorReport;
         }
     },
     actions: {
@@ -203,7 +207,20 @@ export default {
                     store.commit('GetEventsResp', res)
                 }
             })
-		},
+        },
+        GetSensorReport(store) {
+            var request = new this.GetSensorReportReq();
+            client.getSensorReport(request, function(err, response) {
+                if (err) {
+                    store.commit('SensorReport', null)
+                } else {
+                    var res = response.toObject()
+                    /* eslint-disable */
+                    console.log(res)
+                    store.commit('SensorReport', res)
+                }
+            });
+        },
         GetVideoEvents(store, obj) {
             var request = new GetVideoEventsReq()
             var metadata = {}

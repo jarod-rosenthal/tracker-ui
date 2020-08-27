@@ -3,7 +3,7 @@
         <v-row>
             <v-col cols="6">
                 <v-card outlined>
-                    <div class="ma-3 mb-0 title">System Status</div>
+                    <div class="ma-3 mb-0 title">System Status {{lat}},{{long}}</div>
                     <v-divider></v-divider>
                     <v-list>
                         <v-list-item-group v-model="item" color="primary">
@@ -103,6 +103,8 @@ export default {
         events: [],
         videos: [],
         status_item: 1,
+        lat: 0,
+        long: 0,
         status: [
             { status: "mdi-alert", status_color: "yellow", text: 'Tracking Event: No', icon: 'mdi-crosshairs-gps' },
             { status: "mdi-alert", status_color: "red", text: 'GPS', icon: 'mdi-crosshairs-gps' },
