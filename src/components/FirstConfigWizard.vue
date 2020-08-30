@@ -1,13 +1,3 @@
-<style scoped>
- .eluabox {
-     overflow: auto;
-     height: 350px;
-     width:100%;
-     border: solid #ddd 1px;
-     border-radius: 4px;
- }
-</style>
-
 <template>
     <v-stepper class="elevation-0" v-model="e1" alt-labels>
         <v-stepper-header>
