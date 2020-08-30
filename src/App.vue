@@ -1,7 +1,6 @@
 /* eslint-disable */
 <template>
     <v-app>
-        
         <v-dialog :value="!IsConfigured" hide-overlay fullscreen>
             <v-card flat>
                 <FirstConfigWizard>
@@ -101,6 +100,12 @@
             <v-spacer></v-spacer>
             <div class="font-weight-thin caption">&copy; {{ new Date().getFullYear() }} Sky Hub. All Rights Reserved</div>
         </v-footer>
+        <v-dialog
+            v-model="dialog"
+            max-width="290">
+            <v-card>
+            </v-card>
+        </v-dialog>
     </v-app>
 </template>
 

@@ -27,7 +27,6 @@ const routes = [
       title: "Sky Hub: Dashboard"
     },
   },
-  
   {
     path: '/live',
     name: 'live',
