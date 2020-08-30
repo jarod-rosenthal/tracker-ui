@@ -3,7 +3,7 @@
         <v-row>
             <v-col cols="6">
                 <v-card outlined>
-                    <div class="ma-3 mb-0 title">System Status {{lat}},{{long}}</div>
+                    <div class="ma-3 mb-0 title">System Status {{lat}},{{lon}}</div>
                     <v-divider></v-divider>
                     <v-list>
                         <v-list-item-group v-model="item" color="primary">
@@ -104,7 +104,7 @@ export default {
         videos: [],
         status_item: 1,
         lat: 0,
-        long: 0,
+        lon: 0,
         status: [
             { status: "mdi-alert", status_color: "yellow", text: 'Tracking Event: No', icon: 'mdi-crosshairs-gps' },
             { status: "mdi-alert", status_color: "red", text: 'GPS', icon: 'mdi-crosshairs-gps' },
@@ -114,6 +114,7 @@ export default {
         ],
     }),
     mounted() {
+        this.PollSensors();
         this.$store.dispatch('controller/GetVideoEvents', { page: this.page, limit: 4 })
         this.$store.dispatch('controller/GetEvents', { page: 1, limit: 15 })
         this.status.push({ status: "mdi-checkbox-blank-circle", status_color: "green", text: `UI Version: ${this.$store.getters.appVersion}`, icon: '' });
@@ -130,6 +131,9 @@ export default {
         //         }
         //     });
         // }, 5000);
+        // var self = this;
+        // console.log(self);
+
 
     },
     watch: {
@@ -214,6 +218,23 @@ export default {
         }                   
     },
     methods: {
+        PollSensors() {
+            var self = this;
+            window.setInterval(function() {
+                try {
+                    console.log(self);
+                    self.$store.dispatch('controller/GetSensorReport').then(function() {
+                        var r = self.$store.state.controller.StatusReport;
+                        if(r) {
+                            self.$data.lat = r.LonLat.Lat
+                            self.$data.lon = r.LonLat.Lon
+                        }
+                    });
+                } catch(e) { 
+                    console.log(e); 
+                }
+            }, 1000);
+        },
         GetVideos() {
             var videos = this.$store.state.controller.GetVideoEventsResp.videoList[10]
             if (videos === undefined) videos = [];

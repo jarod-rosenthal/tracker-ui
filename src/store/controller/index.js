@@ -209,7 +209,7 @@ export default {
             })
         },
         GetSensorReport(store) {
-            var request = new this.GetSensorReportReq();
+            var request = new SensorReportReq();
             client.getSensorReport(request, function(err, response) {
                 if (err) {
                     store.commit('SensorReport', null)

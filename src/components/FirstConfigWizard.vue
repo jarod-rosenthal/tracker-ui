@@ -167,9 +167,9 @@
                 </v-card>
             </v-stepper-content>
             -->
-    
+
             <!-- Finished -->
-            <v-stepper-content step="4">
+            <v-stepper-content step="5">
                 <v-card>
                     <v-card-text class="text-center">
                         <v-col offset="3" align="center" justify="center" cols="6">
