@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid>
+    <v-container fluid v-cloak >
         <v-card flat>
             <v-card-title>
                 Video Library

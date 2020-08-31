@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// import Blank from '../views/Blank.vue'
+import Blank from '../views/Blank.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Settings from '../views/Settings.vue'
 import Library from '../views/Library.vue'
@@ -14,7 +14,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: Dashboard,
+    component: Blank,
     meta: {
       title: "Sky Hub: Dashboard"
     },
@@ -27,7 +27,6 @@ const routes = [
       title: "Sky Hub: Dashboard"
     },
   },
-  
   {
     path: '/live',
     name: 'live',

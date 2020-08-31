@@ -1,5 +1,5 @@
 <template>
-	<v-container fluid>
+	<v-container fluid v-cloak>
 		You are viewing Event {{ id }}
 		<v-col cols="12">
 			<v-divider></v-divider>

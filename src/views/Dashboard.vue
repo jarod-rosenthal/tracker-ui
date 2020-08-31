@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid>
+    <v-container fluid v-cloak>
         <v-row>
             <v-col cols="6">
                 <v-card outlined>
