@@ -210,16 +210,15 @@ export default {
 		},
         GetSensorReport(store, obj) {
             var request = new SensorReportReq()
+            var metadata = {}
 
-            client.getSensorReport(request, function(err, response) {
+            client.getSensorReport(request, metadata, function(err, response) {
                 if (err) {
                     store.commit('GetSensorReportResp', null)
-					console.log('error')
                 } else {
                     var res = response.toObject()
                     /* eslint-disable */
                     console.log(res)
-					console.log('test')
                     store.commit('GetSensorReportResp', res)
                 }
             })
