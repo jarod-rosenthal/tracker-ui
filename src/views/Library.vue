@@ -60,7 +60,7 @@ export default {
                         fullThumbPath: v.fullThumbPath,
                         thumb: v.thumb,
                         time: d.toLocaleDateString() + ' ' + d.toLocaleTimeString(),
-                        uri: v.uri,
+                        uri: v.web_uri,
                         options: {
                             poster: v.fullThumbPath,
                             controls: true,
