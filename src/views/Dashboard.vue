@@ -164,7 +164,7 @@ export default {
                         fullThumbPath: v.fullThumbPath,
                         thumb: v.thumb,
                         time: d.toLocaleDateString() + ' ' + d.toLocaleTimeString(),
-                        uri: v.uri,
+                        uri: v.webUri,
                         options: {
                             poster: v.fullThumbPath,
                             controls: true,
@@ -190,7 +190,7 @@ export default {
                     this.videos[i].fullThumbPath = v.fullThumbPath;
                     this.videos[i].thumb = v.thumb;
                     this.videos[i].time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
-                    this.videos[i].uri = v.uri;
+                    this.videos[i].uri = v.webUri;
                     this.videos[i].options = {
                         poster: v.fullThumbPath,
                         controls: true,
@@ -217,7 +217,7 @@ export default {
             if (videos === undefined) videos = [];
             videos.forEach(function(v) {
                 var d = new Date(v.createdAt.seconds * 1000)
-                v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.uri;
+                v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.webUri;
                 v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumb;
                 v.time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
             });
@@ -243,7 +243,7 @@ export default {
             if (videos === undefined) videos = [];
             videos.forEach(function(v) {
                 var d = new Date(v.createdAt.seconds * 1000)
-                v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.uri;
+                v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.webUri;
                 v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumb;
                 v.time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
             });
