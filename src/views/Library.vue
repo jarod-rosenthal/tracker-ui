@@ -60,7 +60,7 @@ export default {
                         fullThumbPath: v.fullThumbPath,
                         thumb: v.thumb,
                         time: d.toLocaleDateString() + ' ' + d.toLocaleTimeString(),
-                        uri: v.web_uri,
+                        uri: v.webUri,
                         options: {
                             poster: v.fullThumbPath,
                             controls: true,
@@ -85,7 +85,7 @@ export default {
                     this.videos[i].fullThumbPath = v.fullThumbPath;
                     this.videos[i].thumb = v.thumb;
                     this.videos[i].time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
-                    this.videos[i].uri = v.uri;
+                    this.videos[i].uri = v.webUri;
                     this.videos[i].options = {
                         poster: v.fullThumbPath,
                         controls: true,
@@ -128,7 +128,7 @@ export default {
                 // while(this.videos.length>0) { this.videos.splice(0, 1); }
                 for(var i = 0; i < r.videoList.length; i++) {
                     var v = r.videoList[i];
-                    v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.uri;
+                    v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.webUri;
                     v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumb;
                 }
                 return r.videoList
