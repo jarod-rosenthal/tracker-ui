@@ -1,5 +1,5 @@
 const { ControllerClient } = require('proto-tracker-controller-web/Tracker-controllerServiceClientPb')
-const { GetConfigReq, GetEventsReq, GetVideoEventsReq, SetConfigReq, LoginReq, Config, CameraConfig, StorageConfig, IssueCommandReq } = require('proto-tracker-controller-web/tracker-controller_pb')
+const { GetConfigReq, GetEventsReq, GetVideoEventsReq, SetConfigReq, SensorReportReq, LoginReq, Config, CameraConfig, StorageConfig, IssueCommandReq } = require('proto-tracker-controller-web/tracker-controller_pb')
 import settings from '../../plugins/settings'
 
 // var client = new ControllerClient("http://" + location.hostname + ":9090")
@@ -24,6 +24,7 @@ export default {
         GetVideoEventsResp: {},
         LoginResp: {},
         IssueCommandResp: {},
+		GetSensorReportResp: {},
         PackageVersion: process.env.VUE_APP_VERSION || '0'
     },
     getters: {
@@ -55,6 +56,9 @@ export default {
         },
         IssueCommandResp(store, IssueCommandResp) {
             store.IssueCommandResp = IssueCommandResp;
+        },
+        GetSensorReportResp(store, GetSensorReportResp) {
+            store.GetSensorReportResp = GetSensorReportResp 
         }
     },
     actions: {
@@ -201,6 +205,21 @@ export default {
                     /* eslint-disable */
                     console.log(res)
                     store.commit('GetEventsResp', res)
+                }
+            })
+		},
+        GetSensorReport(store, obj) {
+            var request = new SensorReportReq()
+            var metadata = {}
+
+            client.getSensorReport(request, metadata, function(err, response) {
+                if (err) {
+                    store.commit('GetSensorReportResp', null)
+                } else {
+                    var res = response.toObject()
+                    /* eslint-disable */
+                    console.log(res)
+                    store.commit('GetSensorReportResp', res)
                 }
             })
 		},

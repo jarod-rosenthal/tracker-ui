@@ -113,6 +113,7 @@ export default {
     }),
     mounted() {
         this.$store.dispatch('controller/GetVideoEvents', { page: this.page, limit: 4 })
+        this.$store.dispatch('controller/GetSensorReport')
         this.$store.dispatch('controller/GetEvents', { page: 1, limit: 15 })
         this.status.push({ status: "mdi-checkbox-blank-circle", status_color: "green", text: `UI Version: ${this.$store.getters.appVersion}`, icon: '' });
         // window.setTimeout(function() {
