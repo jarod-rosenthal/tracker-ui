@@ -26,26 +26,15 @@
             <v-col cols="6">
                 <v-card outlined>
                     <google-map ref="gmap" :center="location" :zoom="zoom" style="width: 100%; height: 350px">
-                    <!--
-                    <ground-overlay source="./overlay.png" :bounds="{
-                            north: 1.502,
-                            south: 1.185,
-                            east: 104.0262,
-                            west: 103.5998,
-                        }" :opacity="0.5">
-                    </ground-overlay>
-                    -->
+                         <google-marker :position="location" />
                     </google-map>
                 </v-card>
             </v-col>
 
-
-    
-
         </v-row>
         <v-row>
             <v-col cols="6">
-            <v-card outlined>
+            <v-card outlined >
                 <div class="ma-3 mb-0 title">Last {{events.length}} Events</div>
                 <v-divider></v-divider>
                 <v-list height="300">
@@ -73,26 +62,28 @@
             </v-card>
             </v-col>        
             <v-col cols="6">
-                <v-card outlined height="350">
+                <v-card outlined height="100%">
                 <div class="ma-3 mb-0 title">Latest Video</div>
                 <v-divider></v-divider>
-                <v-row>
-                    <v-col v-for="v in videos" :key="v.id">
-                        <v-card width="300" height="200" >
-                            <v-card-text>{{v.time}}</v-card-text>
-                            <video-player ref="video"
-                                class="video-js video-player-box"
-                                webkit-playsinline
-                                playsinline
-                                x-webkit-airplay="allow"
-                                x5-video-player-type="h5"
-                                x5-video-player-fullscreen="true"
-                                x5-video-orientation="portrait"
-                                controls 
-                                :options="v.options" />
-                        </v-card>
-                    </v-col>
-                </v-row>
+                <v-card-text>
+                    <v-row>
+                        <v-col v-for="v in videos" :key="v.id">
+                            <v-card width="300" height="200" >
+                                <v-card-text>{{v.time}}</v-card-text>
+                                <video-player ref="video"
+                                    class="video-js video-player-box"
+                                    webkit-playsinline
+                                    playsinline
+                                    x-webkit-airplay="allow"
+                                    x5-video-player-type="h5"
+                                    x5-video-player-fullscreen="true"
+                                    x5-video-orientation="portrait"
+                                    controls 
+                                    :options="v.options" />
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                </v-card-text>
                 </v-card>
             </v-col>
                     
@@ -116,7 +107,7 @@ export default {
     data: () => ({
         item: 1,
         page: 0,
-        zoom: 6,
+        zoom: 10,
         playOpts: {
             options: {
                 controls: true,
@@ -127,8 +118,7 @@ export default {
         apikey: "AIzaSyBOjsllC4FN05HiOAPKJrw-eTHM-KGx0aM",
         gpslocked:false,
         temperatureAvailable: false,
-        location2: {lat: 30.4084893, lng: -95.6566088},
-        location: {lat:38.8976998, lng:-77.0365535},
+        location: {lat:104.5230, lng:33.3943},
         events: [],
         videos: [],
         status_item: 1,
@@ -179,11 +169,10 @@ export default {
                         idItem[0].text = "Device Id: " + viewModel.$store.state.controller.GetSensorReportResp.tracker.uuid;
                         idItem[0].status = "mdi-checkbox-blank-circle";
 
-                        var dateObj = new Date();
-                        dateObj.setSeconds(viewModel.$store.state.controller.GetSensorReportResp.tracker.time.seconds / 1000);
+                        var dateObj = new Date(viewModel.$store.state.controller.GetSensorReportResp.tracker.time.seconds * 1000);
                         timeItem = viewModel.$data.status.filter(x => x.text.startsWith("Time:"));
                         timeItem[0].status_color = "green"; 
-                        timeItem[0].text = "Time: " + dateObj.toString() + " "+ viewModel.$store.state.controller.GetSensorReportResp.tracker.time.seconds;
+                        timeItem[0].text = "Time: " + dateObj.toString();
                         timeItem[0].status = "mdi-checkbox-blank-circle";
 
                     } else {

@@ -18,25 +18,15 @@ Vue.use(VueGoogleMaps, {
     load: {
       key: 'AIzaSyBOjsllC4FN05HiOAPKJrw-eTHM-KGx0aM',
       v: '3.42',
+      libraries: ""
     },
     installComponents: false,
 });
 
+
 document.addEventListener('DOMContentLoaded', function() {
     Vue.component('google-map', VueGoogleMaps.Map);
-    Vue.component('ground-overlay', VueGoogleMaps.MapElementFactory({
-      mappedProps: {
-        'opacity': {}
-      },
-      props: {
-        'source': {type: String},
-        'bounds': {type: Object},
-      },
-      events: ['click', 'dblclick'],
-      name: 'groundOverlay',
-      ctr: () => google.maps.GroundOverlay,
-      ctrArgs: (options, {source, bounds}) => [source, bounds, options],
-    }));
+    Vue.component('google-marker', VueGoogleMaps.Marker)
 });
 
 new Vue({
