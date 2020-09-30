@@ -25,7 +25,7 @@
 
             <v-col cols="6">
                 <v-card outlined>
-                    <google-map :center="location2" :zoom="zoom" style="width: 100%; height: 350px">
+                    <google-map ref="gmap" :center="location" :zoom="zoom" style="width: 100%; height: 350px">
                     <!--
                     <ground-overlay source="./overlay.png" :bounds="{
                             north: 1.502,
@@ -127,8 +127,8 @@ export default {
         apikey: "AIzaSyBOjsllC4FN05HiOAPKJrw-eTHM-KGx0aM",
         gpslocked:false,
         temperatureAvailable: false,
-        location2: {lat: 1.38, lng: 103.8},
-        location: {lat:0, long:0},
+        location2: {lat: 30.4084893, lng: -95.6566088},
+        location: {lat:38.8976998, lng:-77.0365535},
         events: [],
         videos: [],
         status_item: 1,
@@ -148,8 +148,8 @@ export default {
                 viewModel.$store.dispatch('controller/GetSensorReport').then(function() {
                     if(viewModel.$store.state.controller.GetSensorReportResp && viewModel.$store.state.controller.GetSensorReportResp.lonlat) {
                     viewModel.$data.location.lat = viewModel.$store.state.controller.GetSensorReportResp.lonlat.lat;
-                    viewModel.$data.location.lon = viewModel.$store.state.controller.GetSensorReportResp.lonlat.lon;
-                        if(viewModel.$data.location.lat != 0 && viewModel.$data.location.lon != 0) {
+                    viewModel.$data.location.lng = viewModel.$store.state.controller.GetSensorReportResp.lonlat.lon;
+                        if(viewModel.$data.location.lat != 0 && viewModel.$data.location.lng != 0) {
                             viewModel.$data.gpslocked = true;
                         } else {
                             viewModel.$data.gpslocked = false;
@@ -167,7 +167,7 @@ export default {
                         gpsItem = viewModel.$data.status.filter(x => x.text.startsWith("GPS:"));
                         gpsItem[0].status_color = "green";
                         gpsItem[0].status = "mdi-checkbox-blank-circle";
-                        gpsItem[0].text = "GPS: (" + viewModel.$data.location.lat + ", " + viewModel.$data.location.lon + ")";
+                        gpsItem[0].text = "GPS: (" + viewModel.$data.location.lat + ", " + viewModel.$data.location.lng + ")";
 
                         hostnameItem = viewModel.$data.status.filter(x => x.text.startsWith("Hostname:"));
                         hostnameItem[0].text = "Hostname: " + viewModel.$store.state.controller.GetSensorReportResp.tracker.hostname;
