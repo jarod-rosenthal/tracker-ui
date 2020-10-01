@@ -10,6 +10,7 @@
   "dependencies": {
     "babel-runtime": "^6.26.0",
     "core-js": "^3.6.5",
+    "gmap-vue": "^1.4.0",
     "google-protobuf": "^3.13.0",
     "grpc-web": "^1.2.1",
     "proto-tracker-controller-web": "gitlab:skyhuborg/proto-tracker-controller-web",

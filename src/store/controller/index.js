@@ -199,12 +199,12 @@ export default {
 
             client.getEvents(request, metadata, function(err, response) {
                 if (err) {
-                    store.commit('GetEventsResp', null)
+                    store.commit('GetEventsResp', null);
                 } else {
-                    var res = response.toObject()
+                    var res = response.toObject();
                     /* eslint-disable */
-                    console.log(res)
-                    store.commit('GetEventsResp', res)
+                    console.log(res);
+                    store.commit('GetEventsResp', res);
                 }
             })
 		},
@@ -214,12 +214,12 @@ export default {
 
             client.getSensorReport(request, metadata, function(err, response) {
                 if (err) {
-                    store.commit('GetSensorReportResp', null)
+                    store.commit('GetSensorReportResp', null);
                 } else {
                     var res = response.toObject()
                     /* eslint-disable */
-                    console.log(res)
-                    store.commit('GetSensorReportResp', res)
+                    console.log("GetSensorReport", res);
+                    store.commit('GetSensorReportResp', res);
                 }
             })
 		},
