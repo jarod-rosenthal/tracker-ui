@@ -1,5 +1,5 @@
 const { ControllerClient } = require('proto-tracker-controller-web/Tracker-controllerServiceClientPb')
-const { GetConfigReq, GetEventsReq, GetVideoEventsReq, SetConfigReq, SensorReportReq, LoginReq, Config, CameraConfig, StorageConfig, IssueCommandReq } = require('proto-tracker-controller-web/tracker-controller_pb')
+const { GetConfigReq, GetEventsReq, GetVideoEventsReq, SetConfigReq, SensorReportReq, GetContainerListReq, GetContainerLogReq, LoginReq, Config, CameraConfig, StorageConfig, IssueCommandReq } = require('proto-tracker-controller-web/tracker-controller_pb')
 import settings from '../../plugins/settings'
 
 // var client = new ControllerClient("http://" + location.hostname + ":9090")
@@ -24,7 +24,8 @@ export default {
         GetVideoEventsResp: {},
         LoginResp: {},
         IssueCommandResp: {},
-		GetSensorReportResp: {},
+        GetSensorReportResp: {},
+        GetContainerListResp: {},
         PackageVersion: process.env.VUE_APP_VERSION || '0'
     },
     getters: {
@@ -43,10 +44,10 @@ export default {
             store.GetEventsResp = GetEventsResp 
         },
         GetVideoEventsResp(store, GetVideoEventsResp) {
-            store.GetVideoEventsResp = GetVideoEventsResp 
+            store.GetVideoEventsResp = GetVideoEventsResp;
         },
 		IsConfigured(store, IsConfigured) {
-			store.IsConfigured = IsConfigured
+			store.IsConfigured = IsConfigured;
         },
         LoginResp(store, LoginResp) {
             store.LoginResp = LoginResp;
@@ -58,7 +59,13 @@ export default {
             store.IssueCommandResp = IssueCommandResp;
         },
         GetSensorReportResp(store, GetSensorReportResp) {
-            store.GetSensorReportResp = GetSensorReportResp 
+            store.GetSensorReportResp = GetSensorReportResp;
+        },
+        GetContainerListResp(store, GetContainerListResp) {
+            store.GetContainerListResp = GetContainerListResp;
+        },
+        GetContainerLogResp(store, GetContainerLogResp) {
+            store.GetContainerLogResp = GetContainerLogResp;
         }
     },
     actions: {
@@ -222,7 +229,44 @@ export default {
                     store.commit('GetSensorReportResp', res);
                 }
             })
-		},
+        },
+        getProducts({commit}, type) {
+            return axios.get(`/api/products/${type}`)
+                .then(res => {
+                    let products = res.data;
+                    commit('SET_PRODUCTS', {products, type})
+                }).catch(err => {
+                console.log(err);
+            })
+        },        
+        async GetContainerList(store, obj) {
+            var request = new GetContainerListReq();
+            var metadata = {}
+
+            try {
+                var response = await client.getContainerList(request, metadata);
+                var res = response.toObject()
+                /* eslint-disable */
+                console.log("GetContainerList", res);
+                store.commit('GetContainerListResp', res);
+            } catch (err) {
+                store.commit('GetContainerListResp', null);
+            }
+        },
+        async GetContainerLog(store, obj) {
+            var request = new GetContainerLogReq();
+            request.setContainerid(obj.containerid);
+            var metadata = {}
+            try {
+                var response = await client.getContainerLog(request, metadata)
+                var res = response.toObject()
+                /* eslint-disable */
+                console.log("GetContainerLog", res);
+                store.commit('GetContainerLogResp', res);
+            } catch(err) {
+                store.commit('GetContainerLogResp', null);
+            }
+        },
         GetVideoEvents(store, obj) {
             var request = new GetVideoEventsReq()
             var metadata = {}

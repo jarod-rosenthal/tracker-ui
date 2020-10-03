@@ -1,6 +1,9 @@
 <template>
     <v-container fluid v-cloak>
         <v-row>
+                <v-btn depressed color="primary" >Private</v-btn>
+        </v-row>
+        <v-row>
             <v-col cols="6">
                 <v-card outlined>
                     <div class="ma-3 mb-0 title">System Status</div>
@@ -97,6 +100,12 @@
 .v-list {
   height: 300px;
   overflow-y: auto;
+}
+.private {
+    filter: blur(1.5rem);
+}
+.public {
+    filter: blur(0);
 }
 </style>
 

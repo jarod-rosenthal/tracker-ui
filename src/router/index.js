@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Blank from '../views/Blank.vue'
+import Logs from '../views/Logs.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Settings from '../views/Settings.vue'
 import Library from '../views/Library.vue'
@@ -49,6 +50,14 @@ const routes = [
     component: Library,
     meta: {
       title: "Sky Hub: Video Library"
+    },
+  },
+  {
+    path: '/logs',
+    name: 'logs',
+    component: Logs,
+    meta: {
+      title: "Sky Hub: Container Logs"
     },
   },
   {
