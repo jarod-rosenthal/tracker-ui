@@ -26,7 +26,10 @@ export default {
         IssueCommandResp: {},
         GetSensorReportResp: {},
         GetContainerListResp: {},
-        PackageVersion: process.env.VUE_APP_VERSION || '0'
+        PackageVersion: process.env.VUE_APP_VERSION || '0',
+        IsPrivate: false,
+        IsPublic: true,
+        SnackBar: {},
     },
     getters: {
         appVersion: (state) => {
@@ -66,9 +69,21 @@ export default {
         },
         GetContainerLogResp(store, GetContainerLogResp) {
             store.GetContainerLogResp = GetContainerLogResp;
-        }
+        },
+        IsPrivate(store, IsPrivate) {
+            store.IsPrivate = IsPrivate;
+        },
+        SnackBar(store, skackBar) {
+            store.SnackBar = skackBar;
+        },
     },
     actions: {
+        TogglePrivacy(store) {
+            store.commit('IsPrivate', !this.state.controller.IsPrivate);
+        },
+        ShowMessage(store, obj) {
+            store.commit('SnackBar', {color: obj.color, message: obj.message, enabed:true, timeout: 5});
+        },
         IssueCommand(store, obj) {
             var request = new IssueCommandReq();
             var authToken = localStorage.getItem("authtoken");
@@ -225,7 +240,7 @@ export default {
                 } else {
                     var res = response.toObject()
                     /* eslint-disable */
-                    console.log("GetSensorReport", res);
+                    //console.log("GetSensorReport", res);
                     store.commit('GetSensorReportResp', res);
                 }
             })

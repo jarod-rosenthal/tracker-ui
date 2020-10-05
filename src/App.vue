@@ -32,7 +32,7 @@
             <v-app-bar-nav-icon @click="miniVariant = !miniVariant" align-right></v-app-bar-nav-icon>
             -->
             <v-spacer></v-spacer>
-
+            <v-switch :value="IsPrivate" label="Toggle Privacy" color="#2b68a8" @click="togglePrivate()" hide-details></v-switch>
             <v-menu right bottom>
                 <template v-slot:activator="{ on }">
                     <v-btn icon v-on="on">
@@ -41,7 +41,7 @@
                 </template>
                 <v-list>
                 <v-list-item @click="logout()">
-                    <v-list-item-title>Logout</v-list-item-title>
+                    <v-list-item-title>Sign Out</v-list-item-title>
                 </v-list-item>
                 </v-list>
             </v-menu>    
@@ -107,8 +107,14 @@
     
             </v-list>
         </v-navigation-drawer>
-    
-    
+        <v-snackbar v-model="snackbar">
+            {{ snackbartext }}
+            <template v-slot:action="{ attrs }">
+                <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+                Close
+                </v-btn>
+            </template>
+        </v-snackbar>        
         <v-main>
             <router-view />
         </v-main>
@@ -122,6 +128,12 @@
 <style scoped>
 .nova {
     font-family: 'Nova Round', cursive;
+}
+.private {
+    filter: blur(.3rem);
+}
+.public {
+    filter: blur(0);
 }
 </style>
 
@@ -139,6 +151,9 @@ export default {
     methods: {
         logout: function() {
             this.$store.dispatch('controller/Logout');
+        },
+        togglePrivate: function() {
+            this.$store.dispatch('controller/TogglePrivacy');
         }
     },
     watch: {},
@@ -147,12 +162,28 @@ export default {
     },
     /* eslint-disable */
     computed: {
+        IsPrivate() {
+            return this.$store.state.controller.IsPrivate;
+        },        
         IsConfigured: function() {
             return this.$store.state.controller.IsConfigured
         },
         IsAuthenticated: function() {
             return this.$store.state.controller.IsAuthenticated
-        }
+        },
+        snackbar: function() {
+            return this.$store.state.controller.SnackBar.Enabled
+        },
+        snackbartext: function() {
+            return this.$store.state.controller.SnackBar.Message
+        },
+        snackbarcolor: function() {
+            return this.$store.state.controller.SnackBar.Color
+        },
+        snackbartimeout: function() {
+            return this.$store.state.controller.SnackBar.Timeout
+        },
+
     },
     data: () => ({
         drawer: true,
@@ -171,7 +202,7 @@ export default {
         miniVariant: true,
         expandOnHover: false,
         background: false,
-        mini: false
+        mini: false,
     }),
 };
 </script>

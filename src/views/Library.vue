@@ -9,7 +9,7 @@
             <v-row>
                 <v-col v-for="v in videos" :key="v.id">
                     <v-card width="300" height="250" >
-                        <v-card-text>{{v.time}}</v-card-text>
+                        <v-card-text>{{v.time}} {{v.uri}}</v-card-text>
                         <video-player ref="video"
                             class="video-js video-player-box"
                              playsinline

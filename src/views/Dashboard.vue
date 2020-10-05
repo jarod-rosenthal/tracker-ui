@@ -1,12 +1,12 @@
 <template>
     <v-container fluid v-cloak>
         <v-row>
-                <v-btn depressed color="primary" >Private</v-btn>
+                
         </v-row>
         <v-row>
-            <v-col cols="6">
+            <v-col cols="12" md="6">
                 <v-card outlined>
-                    <div class="ma-3 mb-0 title">System Status</div>
+                    <div class="ma-3 mb-0 title">System Status </div>
                     <v-divider></v-divider>
                     <v-list>
                         <v-list-item-group v-model="item" color="primary">
@@ -15,7 +15,7 @@
                                     <v-icon v-text="item.icon"></v-icon>
                                 </v-list-item-icon>
                                 <v-list-item-content>
-                                    <v-list-item-title v-text="item.text"></v-list-item-title>
+                                    <v-list-item-title v-text="item.text" v-bind:class="{private:IsPrivate && item.supportprivacy}"></v-list-item-title>
                                 </v-list-item-content>
                                 <v-list-item-icon>
                                     <v-icon :color="item.status_color" v-text="item.status"></v-icon>
@@ -26,9 +26,9 @@
                 </v-card>
             </v-col>
 
-            <v-col cols="6">
+            <v-col cols="12" md="6">
                 <v-card outlined>
-                    <google-map ref="gmap" :center="location" :zoom="zoom" style="width: 100%; height: 350px">
+                    <google-map ref="gmap" :center="location" :zoom="zoom" style="width: 100%; height: 350px" v-bind:class="{private:IsPrivate }">
                          <google-marker :position="location" />
                     </google-map>
                 </v-card>
@@ -36,7 +36,7 @@
 
         </v-row>
         <v-row>
-            <v-col cols="6">
+            <v-col cols="12" md="6">
             <v-card outlined >
                 <div class="ma-3 mb-0 title">Last {{events.length}} Events</div>
                 <v-divider></v-divider>
@@ -64,7 +64,7 @@
                 </v-list>
             </v-card>
             </v-col>        
-            <v-col cols="6">
+            <v-col cols="12" md="6">
                 <v-card outlined height="100%">
                 <div class="ma-3 mb-0 title">Latest Video</div>
                 <v-divider></v-divider>
@@ -72,7 +72,7 @@
                     <v-row>
                         <v-col v-for="v in videos" :key="v.id">
                             <v-card width="300" height="200" >
-                                <v-card-text>{{v.time}}</v-card-text>
+                                <v-card-text><v-btn icon :to="getEventUrl(v.eventId)"><v-icon>mdi-launch</v-icon></v-btn>{{v.time}}</v-card-text>
                                 <video-player ref="video"
                                     class="video-js video-player-box"
                                     webkit-playsinline
@@ -102,7 +102,7 @@
   overflow-y: auto;
 }
 .private {
-    filter: blur(1.5rem);
+    filter: blur(.3rem);
 }
 .public {
     filter: blur(0);
@@ -134,7 +134,7 @@ export default {
         status: [
             { status: "mdi-alert", status_color: "green", text: 'Hostname: Loading...', icon: 'mdi-desktop-mac' },
             { status: "mdi-alert", status_color: "green", text: 'Device Id: Loading...', icon: 'mdi-account-key' },
-            { status: "mdi-alert", status_color: "green", text: 'GPS: Loading...', icon: 'mdi-crosshairs-gps' },
+            { status: "mdi-alert", status_color: "green", text: 'GPS: Loading...', icon: 'mdi-crosshairs-gps', supportprivacy: true},
             // { status: "mdi-alert", status_color: "green", text: 'Temperature: Loading...', icon: 'mdi-thermometer' }
             { status: "mdi-alert", status_color: "green", text: 'Time: Loading...', icon: 'mdi-clock' }
         ],
@@ -185,7 +185,7 @@ export default {
                         timeItem[0].status = "mdi-checkbox-blank-circle";
 
                     } else {
-                        gpsItem = viewModel.$data.status.filter(x => x.text == "GPS");
+                        gpsItem = viewModel.$data.status.filter(x => x.text.startsWith("GPS:"));
                         gpsItem[0].status_color = "red";
                         gpsItem[0].status = "mdi-alert";
 
@@ -201,7 +201,7 @@ export default {
 
                         timeItem = viewModel.$data.status.filter(x => x.text.startsWith("Time:"));
                         timeItem[0].status_color = "red"; 
-                        timeItem[0].text = "Time Id: Unavailable";
+                        timeItem[0].text = "Time: Unavailable";
                         timeItem[0].status = "mdi-alert";
 
 
@@ -324,9 +324,12 @@ export default {
         },
         getEventUrl: function(id) {
             return "/event/" + id
-        }
+        },
     },
     computed: {
+        IsPrivate() {
+            return this.$store.state.controller.IsPrivate;
+        },
         Videos: function() {
             var videos = this.$store.state.controller.GetVideoEventsResp.videoList
             if (videos === undefined) videos = [];

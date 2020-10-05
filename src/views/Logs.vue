@@ -8,7 +8,7 @@
     align="center"
     
   >
-    <v-col cols="4">
+    <v-col cols="6" md="6">
         <v-select
           v-model="select"
           :hint="`${select.name}, ${select.id}`"
@@ -22,24 +22,15 @@
         ></v-select>
         
     </v-col>
-    <v-col cols="1"><v-btn color="primary" v-on:click="loadSelectedLog">Refresh</v-btn></v-col>
-    <v-col cols="1"><v-btn color="primary" v-on:click="copyText">Copy</v-btn></v-col>
-    <v-col cols="3">     
-      <v-alert type="success" :value="copysucess">
-        Successful coppied to clipboard.
-      </v-alert>  
-      <v-alert type="error" :value="copyerror">
-        Unable to copy to clipboard.
-      </v-alert>  
-</v-col>
+    <v-col cols="3" md="2"><v-btn color="primary" v-on:click="loadSelectedLog">Refresh</v-btn></v-col>
+    <v-col cols="3" md="2"><v-btn color="primary" v-on:click="copyText">Copy</v-btn></v-col>
   </v-row>
   <v-row>
-    <v-col cols="10">
+    <v-col cols="12">
         <div class="logs">
           <div v-for="(line, index) in logLines" :key="line"><span class="linenumber">{{index}}:</span><span>{{line}}</span></div>
         </div>
     </v-col>
-    <v-col cols="2"></v-col>
   </v-row>
     
    </v-container>

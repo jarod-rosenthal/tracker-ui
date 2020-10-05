@@ -5,16 +5,22 @@
                 Settings
             </v-card-title>
             <v-card-text>
-            <v-expand-transition>
-                <v-card-actions flat v-show="HasChanges" fixed top right>
-                    <v-btn style="margin-bottom:40px;" color="primary"  @click="resetConfigChanges()">Cancel Changes</v-btn>
-                    <v-btn style="margin-bottom:40px;" :readonly="saving" color="red" dark @click="saveConfig()">Save Change</v-btn>
+                <v-card-actions flat fixed top right>
+                    <v-row>
+                        <v-col cols="12" md="3">
+                            <v-btn :disabled="!HasChanges" color="primary"  @click="resetConfigChanges()">Cancel</v-btn>
+                            <v-btn :disabled="!HasChanges" :readonly="saving" color="red" dark @click="saveConfig()">Save Change</v-btn>
+                        </v-col>
+                        <v-col cols="12" md="4">
+                            <v-btn color="primary" @click="restartTracker()">Restart Tracker Service</v-btn>
+                            <v-btn color="error" @click="reboot()">Reboot Tracker</v-btn>
+                        </v-col>
+                    </v-row>
                 </v-card-actions>
-            </v-expand-transition>
                 <v-row wrap>
-                    <v-col cols="4">
+                    <v-col cols="12" md="6">
                         <v-hover>
-                            <v-card width="100%" height="300px" elevation="2">
+                            <v-card width="100%" height="250px" elevation="2">
                                 <v-card-title>
                                     General
                                 </v-card-title>
@@ -25,65 +31,44 @@
                             </v-card>
                         </v-hover>
                     </v-col>
-                    <v-col cols="4">
+                    <v-col cols="12" md="6"></v-col>
+                </v-row>
+                <v-row>
+                    <v-col cols="12" md="6">
                         <v-hover>
-                            <v-card width="100%" height="300px" elevation="2">
+                            <v-card width="100%" height="350px" elevation="2">
                                 <v-card-title>
-                                    Utilities
+                                    Cameras
+                                    <v-divider class="ma-5"></v-divider>
+                                    <v-btn class="primary" @click="addCameraRow()">Add Camera</v-btn>
                                 </v-card-title>
-                                <v-col alignment="center">
-                                    <!--
-                                                <div class="my-2">
-                                                    <v-btn class="primary">Change Password</v-btn>
-                                                </div>
-                                                -->
-                                    <div class="my-2">
-                                        <v-btn color="primary" @click="updateTracker()">Upate Software</v-btn>
-                                    </div>
-                                    <div class="my-2">
-                                        <v-btn color="primary" @click="resetConfig()">Reset Config</v-btn>
-                                    </div>
-                                    <div class="my-2">
-                                        <v-btn color="primary" @click="restartTracker()">Restart Tracker Service</v-btn>
-                                    </div>
-                                    <div class="my-2">
-                                        <v-btn color="error" @click="reboot()">Reboot Tracker</v-btn>
-                                    </div>
+                                <v-col cols="6" v-for="(c,i) in config.cameraList" :key="i" row="1">
+                                    <v-hover v-slot:default="{ hover }">
+                                        <v-card width="220 " height="220" :elevation="hover ? 16 : 2">
+                                            <v-card-title class="justify-center">{{c.name}}</v-card-title>
+                                            <v-card-text class="text-center">
+                                                <v-img height="80" contain src="../assets/ptz.png"></v-img>
+                                            </v-card-text>
+                                            <v-card-actions>
+                                                <v-spacer></v-spacer>
+                                                <v-btn icon v-show="c.enabled">
+                                                    <v-icon>mdi-check</v-icon>
+                                                </v-btn>                                    
+                                                <v-btn icon @click="editCamera(i)">
+                                                    <v-icon>mdi-pencil</v-icon>
+                                                </v-btn>
+                                                <v-btn icon @click="delCameraRow(i)">
+                                                    <v-icon>mdi-delete</v-icon>
+                                                </v-btn>
+                                            </v-card-actions>
+                                        </v-card>
+                                    </v-hover>
                                 </v-col>
                             </v-card>
                         </v-hover>
                     </v-col>
                 </v-row>
-                <v-divider class="ma-5"></v-divider>
-                <v-subheader>
-                    Cameras
-                </v-subheader>
-                <v-row wrap>
-                    <v-col cols="2" v-for="(c,i) in config.cameraList" :key="i" row="1">
-                        <v-hover v-slot:default="{ hover }">
-                            <v-card width="220 " height="220" :elevation="hover ? 16 : 2">
-                                <v-card-title class="justify-center">{{c.name}}</v-card-title>
-                                <v-card-text class="text-center">
-                                    <v-img height="80" contain src="../assets/ptz.png"></v-img>
-                                </v-card-text>
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <!--<v-card-text>Enabled: {{c.enabled.toString()}}</v-card-text>-->
-                                    <v-btn icon v-show="c.enabled">
-                                        <v-icon>mdi-check</v-icon>
-                                    </v-btn>                                    
-                                    <v-btn icon @click="editCamera(i)">
-                                        <v-icon>mdi-pencil</v-icon>
-                                    </v-btn>
-                                    <v-btn icon @click="delCameraRow(i)">
-                                        <v-icon>mdi-delete</v-icon>
-                                    </v-btn>
-                                </v-card-actions>
-                            </v-card>
-                        </v-hover>
-                    </v-col>
-                </v-row>
-                <v-btn class="primary" @click="addCameraRow()">Add Camera</v-btn>
+                
                 <!--
                 <v-divider class="ma-5"></v-divider>
                 <v-subheader>
@@ -280,7 +265,7 @@ export default {
         },
         delCameraRow(i) {
             var c = null
-            if (this.config.cameraList[i].enabled) {
+            if (this.config.cameraList[i].enabled && this.config.cameraList.length > 1) {
                 if (i > 0) this.config.cameraList[i - 1].enabled = true;
                 if (i == 0 && this.config.cameraList.length > 0) this.config.cameraList[i + 1].enabled = true;
             }
