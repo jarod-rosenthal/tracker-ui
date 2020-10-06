@@ -10,7 +10,8 @@
 </style>
 <template>
     <v-app>
-        <v-dialog :value="!IsConfigured" hide-overlay fullscreen>
+        <!--
+        <v-dialog :value="IsConnected && !IsConfigured" hide-overlay fullscreen  v-show="AuthStatus != 'preauth'">
             <v-card flat>
                 <FirstConfigWizard>
                 </FirstConfigWizard>
@@ -22,6 +23,7 @@
                 </Login>
             </v-card>
         </v-dialog>
+        -->
         <v-app-bar elevation="5" fixed dense app dark v-show="IsAuthenticated">
             <div class="d-flex">
                 <router-link to="/">
@@ -115,7 +117,7 @@
                 </v-btn>
             </template>
         </v-snackbar>        
-        <v-main>
+        <v-main v-show="AuthStatus != 'preauth'">
             <router-view />
         </v-main>
         <v-footer>
@@ -138,15 +140,14 @@
 </style>
 
 <script>
-import Login from './components/Login.vue';
-import FirstConfigWizard from './components/FirstConfigWizard.vue';
+//import FirstConfigWizard from './components/FirstConfigWizard.vue';
 
 export default {
     name: 'App',
     
     components: {
-        Login,
-        FirstConfigWizard
+        //Login,
+        //FirstConfigWizard
     },
     methods: {
         logout: function() {
@@ -156,9 +157,26 @@ export default {
             this.$store.dispatch('controller/TogglePrivacy');
         }
     },
-    watch: {},
+    watch: {
+        IsConnected: function() {
+            if(!this.IsConnected) {
+                this.$router.push('connection');
+            }
+            //alert('connectionchanged');
+        },
+        IsAuthenticated: function(newstate) {
+            if(newstate) {
+                if(this.$route.name == 'login') {
+                    this.$router.push({'path':'/dashboard'});
+                }
+            } else {
+                this.$router.push({'path':'/login'});
+            }
+        }
+    },
     created() {
-        this.$store.dispatch('controller/AutoLogin')
+        var self = this;
+        self.$store.dispatch('controller/AutoLogin');
     },
     /* eslint-disable */
     computed: {
@@ -168,8 +186,14 @@ export default {
         IsConfigured: function() {
             return this.$store.state.controller.IsConfigured
         },
+        IsConnected: function() {
+            return this.$store.state.controller.IsConnected
+        },        
         IsAuthenticated: function() {
             return this.$store.state.controller.IsAuthenticated
+        },
+        AuthStatus: function() {
+            return this.$store.state.controller.AuthStatus
         },
         snackbar: function() {
             return this.$store.state.controller.SnackBar.Enabled

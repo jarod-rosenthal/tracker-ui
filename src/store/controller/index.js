@@ -19,6 +19,7 @@ export default {
 		SetConfigResp: {},
 		GetConfigResp: {},
         IsConfigured: false,
+        AuthStatus: 'preauth',
         IsAuthenticated: false,
 		GetEventsResp: {},
         GetVideoEventsResp: {},
@@ -28,7 +29,7 @@ export default {
         GetContainerListResp: {},
         PackageVersion: process.env.VUE_APP_VERSION || '0',
         IsPrivate: false,
-        IsPublic: true,
+        IsConnected: true,
         SnackBar: {},
     },
     getters: {
@@ -58,6 +59,9 @@ export default {
         IsAuthenticated(store, IsAuthenticated) {
             store.IsAuthenticated = IsAuthenticated;
         },
+        AuthStatus(store, AuthStatus) {
+            store.AuthStatus = AuthStatus;
+        },
         IssueCommandResp(store, IssueCommandResp) {
             store.IssueCommandResp = IssueCommandResp;
         },
@@ -72,6 +76,9 @@ export default {
         },
         IsPrivate(store, IsPrivate) {
             store.IsPrivate = IsPrivate;
+        },
+        IsConnected(store, IsConnected) {
+            store.IsConnected = IsConnected;
         },
         SnackBar(store, skackBar) {
             store.SnackBar = skackBar;
@@ -159,13 +166,23 @@ export default {
             var metadata = {};
             client.login(request, metadata, function(err, response) {
                 if(err) {
+                    store.commit('IsConnected', false);
+                    store.commit('AuthStatus', 'failed');
                     store.commit('LoginResp', null);
                     return;
                 } else {
+                    store.commit('IsConnected', true);
                     var res = response.toObject()
                     store.commit('LoginResp', res);
                     store.commit('IsAuthenticated', res.success);
                     store.dispatch("GetConfig");
+                    if(res.success) {
+                        store.commit('AuthStatus', 'success');
+                        this.$router.push({'path':'/dashboard'});
+                    } else {
+                        store.commit('AuthStatus', 'failed');
+                        this.$router.push({'path':'/login'});
+                    }
                 }
             });
         },
@@ -178,6 +195,7 @@ export default {
             client.login(request, metadata, function(err, response) {
                 
                 if(err) {
+                    store.commit('IsConnected', false);
                     store.commit('LoginResp', null);
                 } else {
                     var res = response.toObject()
@@ -186,6 +204,12 @@ export default {
                     localStorage.setItem("authtoken", res.authtoken);
                     store.dispatch("GetConfig");
                     console.log(res);
+                    if(res.success) {
+                        this.$router.push({'path':'/dashboard'});
+                    } else {
+                        this.$router.push({'path':'/login'});
+                    }
+
                 }
             });
         },
@@ -236,6 +260,7 @@ export default {
 
             client.getSensorReport(request, metadata, function(err, response) {
                 if (err) {
+                    store.commit('IsConnected', false);
                     store.commit('GetSensorReportResp', null);
                 } else {
                     var res = response.toObject()

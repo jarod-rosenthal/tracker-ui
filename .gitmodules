@@ -1,0 +1,3 @@
+[submodule "protorepo"]
+	path = protorepo
+	url = https://gitlab.com/skyhuborg/protorepo.git

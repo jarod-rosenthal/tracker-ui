@@ -8,6 +8,9 @@ import Library from '../views/Library.vue'
 import LiveView from '../views/LiveView.vue'
 import Events from '../views/Events.vue'
 import EventView from '../views/EventView.vue'
+import Connection from '../views/Connection.vue'
+import Login from '../views/Login.vue'
+import FirstConfigWizard from '../views/FirstConfigWizard.vue'
 
 Vue.use(VueRouter)
 
@@ -20,6 +23,30 @@ const routes = [
       title: "Sky Hub: Dashboard"
     },
   },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login,
+    meta: {
+      title: "Sky Hub: Login"
+    },
+  },
+  {
+    path: '/configwizard',
+    name: 'configwizard',
+    component: FirstConfigWizard,
+    meta: {
+      title: "Sky Hub: First Config Wizard"
+    },
+  },    
+  {
+    path: '/connection',
+    name: 'connection',
+    component: Connection,
+    meta: {
+      title: "Sky Hub: Connection Problem"
+    },
+  },  
   {
     path: '/dashboard',
     name: 'dashboard',
