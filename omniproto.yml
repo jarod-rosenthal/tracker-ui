@@ -1,0 +1,18 @@
+rootdir: protorepo
+sources: 
+  - controller.proto
+  - trackerd.proto
+  - event.proto
+  - sensor.proto
+  - info.proto
+  - measure.proto
+output: internal/proto
+plugins:
+- name: js
+  args: import_style=commonjs
+descriptors:
+  output: internal/proto/descriptors.pb
+  enabled: true
+  include_imports: true
+  include_source_info: true
+debug: true
