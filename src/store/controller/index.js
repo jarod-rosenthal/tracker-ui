@@ -27,6 +27,7 @@ export default {
         IssueCommandResp: {},
         GetSensorReportResp: {},
         GetContainerListResp: {},
+        GetContainerLogResp: {},
         PackageVersion: process.env.VUE_APP_VERSION || '0',
         IsPrivate: false,
         IsConnected: true,
@@ -155,6 +156,7 @@ export default {
             })
         },
         AutoLogin(store) {
+            var self = this;
             var authToken = localStorage.getItem("authtoken");
             if(authToken === undefined  || authToken === null || authToken === "") {
                 store.dispatch("GetConfig");
@@ -176,24 +178,24 @@ export default {
                     store.commit('LoginResp', res);
                     store.commit('IsAuthenticated', res.success);
                     store.dispatch("GetConfig");
-                    if(res.success) {
+                    // if(res.success) {
                         store.commit('AuthStatus', 'success');
-                        this.$router.push({'path':'/dashboard'});
-                    } else {
+                    //     navigator.push({'path':'/dashboard'});
+                    // } else {
                         store.commit('AuthStatus', 'failed');
-                        this.$router.push({'path':'/login'});
-                    }
+                    //     navigator.push({'path':'/login'});
+                    // }
                 }
             });
         },
         Login(store, obj) {
+            var self = this;
             var request = new LoginReq();
             request.setUsername(obj.username);
             request.setPassword(obj.password);
             request.setAuthtoken("");
             var metadata = {};
             client.login(request, metadata, function(err, response) {
-                
                 if(err) {
                     store.commit('IsConnected', false);
                     store.commit('LoginResp', null);
@@ -204,12 +206,11 @@ export default {
                     localStorage.setItem("authtoken", res.authtoken);
                     store.dispatch("GetConfig");
                     console.log(res);
-                    if(res.success) {
-                        this.$router.push({'path':'/dashboard'});
-                    } else {
-                        this.$router.push({'path':'/login'});
-                    }
-
+                    // if(res.success) {
+                    //     navigator.push({'path':'/dashboard'});
+                    // } else {
+                    //     navigator.push({'path':'/login'});
+                    // }
                 }
             });
         },
@@ -279,33 +280,35 @@ export default {
                 console.log(err);
             })
         },        
-        async GetContainerList(store, obj) {
+        GetContainerList(store, obj) {
             var request = new GetContainerListReq();
             var metadata = {}
 
-            try {
-                var response = await client.getContainerList(request, metadata);
-                var res = response.toObject()
-                /* eslint-disable */
-                console.log("GetContainerList", res);
-                store.commit('GetContainerListResp', res);
-            } catch (err) {
-                store.commit('GetContainerListResp', null);
-            }
+            return client.getContainerList(request, metadata, function(err, response) {
+                if(err) {
+                    store.commit('GetContainerListResp', null);
+                } else {
+                    var res = response.toObject()
+                    /* eslint-disable */
+                    console.log("GetContainerList", res);
+                    store.commit('GetContainerListResp', res);
+                }
+            });
         },
-        async GetContainerLog(store, obj) {
+        GetContainerLog(store, obj) {
             var request = new GetContainerLogReq();
             request.setContainerid(obj.containerid);
             var metadata = {}
-            try {
-                var response = await client.getContainerLog(request, metadata)
-                var res = response.toObject()
-                /* eslint-disable */
-                console.log("GetContainerLog", res);
-                store.commit('GetContainerLogResp', res);
-            } catch(err) {
-                store.commit('GetContainerLogResp', null);
-            }
+            return client.getContainerLog(request, metadata, function(err, response) {
+                if(err) {
+                    store.commit('GetContainerLogResp', null);
+                } else {
+                    var res = response.toObject()
+                    /* eslint-disable */
+                    console.log("GetContainerLog", res);
+                    store.commit('GetContainerLogResp', res);
+                }
+            });
         },
         GetVideoEvents(store, obj) {
             var request = new GetVideoEventsReq()

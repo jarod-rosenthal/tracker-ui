@@ -12,7 +12,7 @@
         <v-select
           v-model="select"
           :hint="`${select.name}, ${select.id}`"
-          :items="items"
+          :items="ContainerList"
           item-text="name"
           item-value="id"
           label="Select"
@@ -28,7 +28,7 @@
   <v-row>
     <v-col cols="12">
         <div class="logs">
-          <div v-for="(line, index) in logLines" :key="line"><span class="linenumber">{{index}}:</span><span>{{line}}</span></div>
+          <div v-for="(line, index) in logLines" :key="index"><span class="linenumber">{{index}}:</span><span>{{line}}</span></div>
         </div>
     </v-col>
   </v-row>
@@ -80,27 +80,15 @@ export default {
       this.initialLoad();
     },
     methods:{
-      async initialLoad() {
+      initialLoad() {
         var self = this;
         //console.log("GetContainerList");
-        await self.$store.dispatch('controller/GetContainerList', {});
-        if(self.$store.state.controller.GetContainerListResp && self.$store.state.controller.GetContainerListResp.containersList) {
-          var containerList = self.$store.state.controller.GetContainerListResp.containersList;
-          for(var key in containerList) {
-            var container = containerList[key];
-            self.$data.items.push({ name: container.name , id: container.id});
-          }
-          if(self.$data.items.length > 0) self.$data.select = self.$data.items[0]; 
-        }
+        self.$store.dispatch('controller/GetContainerList', {});
       },
-      async loadSelectedLog() {
+      loadSelectedLog() {
         var self = this;
-        await self.$store.dispatch('controller/GetContainerLog', {containerid: self.$data.select.id});
-        if(self.$store.state.controller.GetContainerLogResp && self.$store.state.controller.GetContainerLogResp.log) {
-          self.$data.log = self.$store.state.controller.GetContainerLogResp.log;
-          var loglines = self.$store.state.controller.GetContainerLogResp.log.split('\n');
-          self.$data.logLines = loglines;
-        }
+        if(this.ContainerList.length > 0 && !self.$data.select) { return; }
+        self.$store.dispatch('controller/GetContainerLog', {containerid: self.$data.select.id});
       },
       copyText() {
         const el = document.createElement('textarea');
@@ -126,8 +114,37 @@ export default {
       }  
     },
     watch: {
-      async select() {
+      select() {
         this.loadSelectedLog();
+      },
+      ContainerList() {
+        var self = this;
+        if(!self.$store.state.controller.GetContainerListResp || !self.$store.state.controller.GetContainerListResp.containersList) {
+          return;
+        }
+        self.$data.select = self.$store.state.controller.GetContainerListResp.containersList[0]; 
+
+      },
+      ContainerLog() {
+        var self = this;
+        var loglines = self.$store.state.controller.GetContainerLogResp.log.split('\n');
+        self.$data.logLines = loglines;
+      }
+    },
+    computed: {
+      ContainerList: function() {
+        if(this.$store.state.controller.GetContainerListResp) {
+          return this.$store.state.controller.GetContainerListResp.containersList;
+        } else {
+          return [];
+        }       
+      },
+      ContainerLog: function() {
+        if(this.$store.state.controller.GetContainerLogResp) {
+          return this.$store.state.controller.GetContainerLogResp.log;
+        } else {
+          return "";
+        }     
       }
     },
     components: {},
