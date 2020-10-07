@@ -145,9 +145,9 @@ export default {
         window.setInterval(function(viewModel) {
             return function() {
                 viewModel.$store.dispatch('controller/GetSensorReport').then(function() {
-                    if(viewModel.$store.state.controller.GetSensorReportResp && viewModel.$store.state.controller.GetSensorReportResp.lonlat) {
-                    viewModel.$data.location.lat = viewModel.$store.state.controller.GetSensorReportResp.lonlat.lat;
-                    viewModel.$data.location.lng = viewModel.$store.state.controller.GetSensorReportResp.lonlat.lon;
+                    if(viewModel.$store.state.controller.GetSensorReportResp && viewModel.$store.state.controller.GetSensorReportResp.tracker) {
+                    viewModel.$data.location.lat = viewModel.$store.state.controller.GetSensorReportResp.tracker.latitude;
+                    viewModel.$data.location.lng = viewModel.$store.state.controller.GetSensorReportResp.tracker.longitude;
                         if(viewModel.$data.location.lat != 0 && viewModel.$data.location.lng != 0) {
                             viewModel.$data.gpslocked = true;
                         } else {
