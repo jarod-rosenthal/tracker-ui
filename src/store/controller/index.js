@@ -1,5 +1,5 @@
-const { ControllerClient } = require('proto-tracker-controller-web/Tracker-controllerServiceClientPb')
-const { GetConfigReq, GetEventsReq, GetVideoEventsReq, SetConfigReq, SensorReportReq, GetContainerListReq, GetContainerLogReq, LoginReq, Config, CameraConfig, StorageConfig, IssueCommandReq } = require('proto-tracker-controller-web/tracker-controller_pb')
+const { ControllerClient } = require('../../proto/controller_grpc_web_pb')
+const { GetConfigReq, GetEventsReq, GetVideoEventsReq, SetConfigReq, SensorReportReq, GetContainerListReq, GetContainerLogReq, LoginReq, Config, CameraConfig, StorageConfig, IssueCommandReq } = require('../../proto/controller_pb')
 import settings from '../../plugins/settings'
 
 // var client = new ControllerClient("http://" + location.hostname + ":9090")

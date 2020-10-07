@@ -6,12 +6,14 @@ sources:
   - sensor.proto
   - info.proto
   - measure.proto
-output: internal/proto
+output: src/proto
 plugins:
 - name: js
   args: import_style=commonjs
+- name: grpc-web
+  args: import_style=commonjs,mode=grpcwebtext
 descriptors:
-  output: internal/proto/descriptors.pb
+  output: src/proto/descriptors.pb
   enabled: true
   include_imports: true
   include_source_info: true
