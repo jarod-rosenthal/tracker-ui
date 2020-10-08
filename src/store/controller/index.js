@@ -1,6 +1,7 @@
 const { ControllerClient } = require('../../proto/controller_grpc_web_pb')
 const { GetConfigReq, GetEventsReq, GetVideoEventsReq, SetConfigReq, SensorReportReq, GetContainerListReq, GetContainerLogReq, LoginReq, Config, CameraConfig, StorageConfig, IssueCommandReq } = require('../../proto/controller_pb')
 import settings from '../../plugins/settings'
+import router from '../../router/index';
 
 // var client = new ControllerClient("http://" + location.hostname + ":9090")
 var client = new ControllerClient(settings.controllerServer)
@@ -178,13 +179,13 @@ export default {
                     store.commit('LoginResp', res);
                     store.commit('IsAuthenticated', res.success);
                     store.dispatch("GetConfig");
-                    // if(res.success) {
+                    if(res.success) {
                         store.commit('AuthStatus', 'success');
-                    //     navigator.push({'path':'/dashboard'});
-                    // } else {
+                        router.push({'path':'/dashboard'});
+                    } else {
                         store.commit('AuthStatus', 'failed');
-                    //     navigator.push({'path':'/login'});
-                    // }
+                        router.push({'path':'/login'});
+                    }
                 }
             });
         },
@@ -206,11 +207,11 @@ export default {
                     localStorage.setItem("authtoken", res.authtoken);
                     store.dispatch("GetConfig");
                     console.log(res);
-                    // if(res.success) {
-                    //     navigator.push({'path':'/dashboard'});
-                    // } else {
-                    //     navigator.push({'path':'/login'});
-                    // }
+                    if(res.success) {
+                        router.push({'path':'/dashboard'});
+                    } else {
+                        router.push({'path':'/login'});
+                    }
                 }
             });
         },

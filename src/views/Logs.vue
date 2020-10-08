@@ -19,6 +19,7 @@
           persistent-hint
           return-object
           single-line
+          :dense="true"
         ></v-select>
         
     </v-col>
