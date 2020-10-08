@@ -90,7 +90,9 @@ export default {
       loadSelectedLog() {
         var self = this;
         if(this.ContainerList.length > 0 && !self.$data.select) { return; }
-        self.$store.dispatch('controller/GetContainerLog', {containerid: self.$data.select.id});
+        self.$store.dispatch('controller/GetContainerLog', {containerid: self.$data.select.id}).then(function() {
+          document.querySelector("#logs").innerHTML = self.$store.state.controller.GetContainerLogResp.log.replace(/\n/g, '<br>');
+        })
       },
       copyText() {
         const el = document.createElement('textarea');
@@ -100,7 +102,7 @@ export default {
         el.style.left = '-9999px';
         document.body.appendChild(el);
         el.select();
-        document.execCommand('copy');
+        // document.execCommand('copy');
             var successful = document.execCommand('copy');
             if(successful) {
               this.$data.copysucess = true;
@@ -125,11 +127,6 @@ export default {
           return;
         }
         self.$data.select = self.$store.state.controller.GetContainerListResp.containersList[0]; 
-
-      },
-      ContainerLog() {
-        var self = this;
-        document.querySelector("#logs").innerHTML = self.$store.state.controller.GetContainerLogResp.log.replace(/\n/g, '<br>');
       }
     },
     computed: {
@@ -139,13 +136,6 @@ export default {
         } else {
           return [];
         }       
-      },
-      ContainerLog: function() {
-        if(this.$store.state.controller.GetContainerLogResp) {
-          return this.$store.state.controller.GetContainerLogResp.log;
-        } else {
-          return "";
-        }     
       }
     },
     components: {},
