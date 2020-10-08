@@ -28,8 +28,8 @@
   </v-row>
   <v-row>
     <v-col cols="12">
-        <div class="logs">
-          <div v-for="(line, index) in logLines" :key="index"><span class="linenumber">{{index}}:</span><span>{{line}}</span></div>
+        <div id="logs" class="logs">
+
         </div>
     </v-col>
   </v-row>
@@ -40,6 +40,7 @@
     .logs {
         width: 100%;
         height: 100%;
+        max-height:500px;
         min-height: 400px;
         color:#FFF;
         background-color: #000;
@@ -128,8 +129,7 @@ export default {
       },
       ContainerLog() {
         var self = this;
-        var loglines = self.$store.state.controller.GetContainerLogResp.log.split('\n');
-        self.$data.logLines = loglines;
+        document.querySelector("#logs").innerHTML = self.$store.state.controller.GetContainerLogResp.log.replace(/\n/g, '<br>');
       }
     },
     computed: {
