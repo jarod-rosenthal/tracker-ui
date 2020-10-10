@@ -73,7 +73,11 @@
                         <v-col v-for="v in videos" :key="v.id">
                             <v-card width="300" height="200" >
                                 <v-card-text><v-btn icon :to="getEventUrl(v.eventId)"><v-icon>mdi-launch</v-icon></v-btn>{{v.time}}</v-card-text>
-                                <video-player ref="video"
+                                <video width="300" height="200" controls setup="{}" :poster="v.fullThumbPath" >
+                                    <source :src="v.fullPath" type="video/webm">
+                                    Your browser does not support the video tag.
+                                </video>                                  
+                                <!--<video-player ref="video"
                                     class="video-js video-player-box"
                                     webkit-playsinline
                                     playsinline
@@ -82,7 +86,7 @@
                                     x5-video-player-fullscreen="true"
                                     x5-video-orientation="portrait"
                                     controls 
-                                    :options="v.options" />
+                                    :options="v.options" />-->
                             </v-card>
                         </v-col>
                     </v-row>
@@ -226,13 +230,12 @@ export default {
             }
             for (var i = 0; i < this.Events.length; i++) {
                 var e = this.Events[i]
-                var d = new Date(e.createdAt.seconds * 1000)
+                var d = new Date(e.starttime.seconds * 1000)
                 this.events.push({
-                    id: e.id,
+                    id: e.uuid,
                     time: d.toLocaleDateString() + ' ' + d.toLocaleTimeString(),
                     type: e.type,
-                    source: e.source,
-                    sensor: e.sensor,
+                    source: e.source.name,
                     duration: (e.duration / 1000).toFixed(2),
                 })
             }
@@ -244,10 +247,10 @@ export default {
             }
             for (var i = 0; i < this.Videos.length; i++) {
                 var v = this.Videos[i];
-                var d = new Date(v.createdAt.seconds * 1000)
+                var d = new Date(v.starttime.seconds * 1000)
                 if(this.videos[i] === undefined) {
                     this.videos.push({
-                        createdAt: v.createdAt,
+                        createdAt: v.starttime,
                         eventId: v.eventId,
                         fullPath: v.fullPath,
                         fullThumbPath: v.fullThumbPath,
@@ -301,17 +304,17 @@ export default {
         }                   
     },
     methods: {
-        GetVideos() {
-            var videos = this.$store.state.controller.GetVideoEventsResp.videoList[10]
-            if (videos === undefined) videos = [];
-            videos.forEach(function(v) {
-                var d = new Date(v.createdAt.seconds * 1000)
-                v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.webUri;
-                v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumb;
-                v.time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
-            });
-            return videos;
-        },
+        // GetVideos() {
+        //     var videos = this.$store.state.controller.GetVideoEventsResp.videoList[10]
+        //     if (videos === undefined) videos = [];
+        //     videos.forEach(function(v) {
+        //         var d = new Date(v.createdAt.seconds * 1000)
+        //         v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.webUri;
+        //         v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumb;
+        //         v.time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
+        //     });
+        //     return videos;
+        // },
         getEventIcon(event){
             switch (event.type) {
                 case "VideoMotion": {
@@ -334,9 +337,9 @@ export default {
             var videos = this.$store.state.controller.GetVideoEventsResp.videoList
             if (videos === undefined) videos = [];
             videos.forEach(function(v) {
-                var d = new Date(v.createdAt.seconds * 1000)
-                v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.webUri;
-                v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumb;
+                var d = new Date(v.starttime.seconds * 1000)
+                v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.weburi;
+                v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumbnail;
                 v.time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
             });
             return videos;

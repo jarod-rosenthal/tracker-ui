@@ -50,13 +50,12 @@ export default {
             }
             for (var i = 0; i < this.Events.length; i++) {
                 var e = this.Events[i]
-                var d = new Date(e.createdAt.seconds * 1000)
+                var d = new Date(e.starttime.seconds * 1000)
                 this.events.push({
-                    id: e.id,
+                    id: e.uuid,
                     time: d.toLocaleDateString() + ' ' + d.toLocaleTimeString(),
+                    source: e.source.name,
                     type: e.type,
-                    source: e.source,
-                    sensor: e.sensor,
                     duration: (e.duration / 1000).toFixed(2),
                 })
             }
@@ -92,7 +91,7 @@ export default {
                 { text: 'Time', align: 'left', sortable: true, value: 'time', },
                 { text: 'Type', align: 'left', sortable: false, value: 'type', },
                 { text: 'Source', value: 'source' },
-                { text: 'Sensor', value: 'sensor' },
+                // { text: 'Sensor', value: 'sensor' },
                 { text: 'Duration (s)', value: 'duration' },
                 { text: 'View Details', value: 'id' },
             ],

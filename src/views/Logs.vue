@@ -91,7 +91,11 @@ export default {
         var self = this;
         if(this.ContainerList.length > 0 && !self.$data.select) { return; }
         self.$store.dispatch('controller/GetContainerLog', {containerid: self.$data.select.id}).then(function() {
-          document.querySelector("#logs").innerHTML = self.$store.state.controller.GetContainerLogResp.log.replace(/\n/g, '<br>');
+          if(self.$store.state.controller.GetContainerLogResp && self.$store.state.controller.GetContainerLogResp.log !== undefined) {
+            document.querySelector("#logs").innerHTML = self.$store.state.controller.GetContainerLogResp.log.replace(/\n/g, '<br>');
+          } else {
+            document.querySelector("#logs").innerHTML = "Error pulling logs";  
+          }
         })
       },
       copyText() {

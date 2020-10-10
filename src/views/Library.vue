@@ -8,8 +8,13 @@
             <v-pagination v-model="page" :length="NPages"  total-visible="6" :value="0"></v-pagination>
             <v-row>
                 <v-col v-for="v in videos" :key="v.id">
-                    <v-card width="300" height="250" >
-                        <v-card-text>{{v.time}} {{v.uri}}</v-card-text>
+                    <v-card width="300" height="270" >
+                        <v-card-text><v-btn icon :to="getEventUrl(v.eventId)"><v-icon>mdi-launch</v-icon></v-btn>{{v.time}}</v-card-text>
+                        <video width="300" height="200" controls setup="{}" :poster="v.fullThumbPath" >
+                            <source :src="v.fullPath" type="video/webm">
+                            Your browser does not support the video tag.
+                        </video>  
+                        <!--                      
                         <video-player ref="video"
                             class="video-js video-player-box"
                              playsinline
@@ -18,13 +23,20 @@
                             x5-video-player-fullscreen="true"
                             x5-video-orientation="portrait"
                             controls 
-                            :options="v.options" />
+                            setup='{}'
+                            :options="v.options" />-->
                     </v-card>
                 </v-col>
             </v-row>
         </v-card>
     </v-container>
 </template>
+
+<style>
+video {
+    background-color: #000;
+}
+</style>
 
 <script>
 
@@ -41,6 +53,8 @@ export default {
     },
     watch: {
         page: function() {
+            this.$data.videos.splice(0, this.$data.videos.length)
+            
             this.$store.dispatch("controller/GetVideoEvents", { page: this.page, limit: this.limit })
             //window.scrollTo(0, 0);
         },
@@ -51,16 +65,16 @@ export default {
             }
             for (var i = 0; i < this.Videos.length; i++) {
                 var v = this.Videos[i];
-                var d = new Date(v.createdAt.seconds * 1000)
+                var d = new Date(v.starttime.seconds * 1000)
                 if(this.videos[i] === undefined) {
                     this.videos.push({
-                        createdAt: v.createdAt,
-                        eventId: v.eventId,
+                        createdAt: d,
+                        eventId: v.eventuuid,
                         fullPath: v.fullPath,
                         fullThumbPath: v.fullThumbPath,
-                        thumb: v.thumb,
+                        thumb: v.thumbnail,
                         time: d.toLocaleDateString() + ' ' + d.toLocaleTimeString(),
-                        uri: v.webUri,
+                        uri: v.weburi,
                         options: {
                             poster: v.fullThumbPath,
                             controls: true,
@@ -79,13 +93,13 @@ export default {
                         }
                     })
                 } else {
-                    this.videos[i].createdAt = v.createdAt;
-                    this.videos[i].eventId = v.eventId;
+                    this.videos[i].createdAt = d;
+                    this.videos[i].eventId = v.eventuuid;
                     this.videos[i].fullPath = v.fullPath;
                     this.videos[i].fullThumbPath = v.fullThumbPath;
-                    this.videos[i].thumb = v.thumb;
+                    this.videos[i].thumb = v.thumbnail;
                     this.videos[i].time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
-                    this.videos[i].uri = v.webUri;
+                    this.videos[i].uri = v.weburi;
                     this.videos[i].options = {
                         poster: v.fullThumbPath,
                         controls: true,
@@ -108,7 +122,7 @@ export default {
     },
     data() {
         return {
-            page: 0,
+            page: 1,
             limit: 9,
             search_limits: [9, 12, 20, 50],
             playOpts: {
@@ -121,19 +135,22 @@ export default {
             videos: []
         }
     },
+    methods: {
+        getEventUrl: function(id) {
+            return "/event/" + id
+        },
+    },
     computed: {
         Videos: function() {
-            var r = this.$store.state.controller.GetVideoEventsResp
-            if (r && r.videoList) {
-                // while(this.videos.length>0) { this.videos.splice(0, 1); }
-                for(var i = 0; i < r.videoList.length; i++) {
-                    var v = r.videoList[i];
-                    v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.webUri;
-                    v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumb;
-                }
-                return r.videoList
-            }
-            return null            
+            var videos = this.$store.state.controller.GetVideoEventsResp.videoList
+            if (videos === undefined) videos = [];
+            videos.forEach(function(v) {
+                var d = new Date(v.starttime.seconds * 1000)
+                v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.weburi;
+                v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumbnail;
+                v.time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
+            });
+            return videos;
         },
         NPages: function() {
             try {
