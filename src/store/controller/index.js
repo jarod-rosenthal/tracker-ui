@@ -1,5 +1,5 @@
 const { ControllerClient } = require('../../proto/controller_grpc_web_pb')
-const { GetConfigReq, GetEventsReq, GetVideoEventsReq, SetConfigReq, SensorReportReq, GetContainerListReq, GetContainerLogReq, LoginReq, Config, CameraConfig, StorageConfig, IssueCommandReq } = require('../../proto/controller_pb')
+const { PingReq, GetConfigReq, GetEventsReq, GetEventReq, GetVideoEventsReq, SetConfigReq, SensorReportReq, GetContainerListReq, GetContainerLogReq, LoginReq, Config, CameraConfig, StorageConfig, IssueCommandReq } = require('../../proto/controller_pb')
 import settings from '../../plugins/settings'
 import router from '../../router/index';
 
@@ -22,7 +22,8 @@ export default {
         IsConfigured: false,
         AuthStatus: 'preauth',
         IsAuthenticated: false,
-		GetEventsResp: {},
+        GetEventsResp: {},
+		GetEventResp: {},
         GetVideoEventsResp: {},
         LoginResp: {},
         IssueCommandResp: {},
@@ -48,6 +49,9 @@ export default {
         },
         GetEventsResp(store, GetEventsResp) {
             store.GetEventsResp = GetEventsResp 
+        },
+        GetEventResp(store, GetEventResp) {
+            store.GetEventResp = GetEventResp 
         },
         GetVideoEventsResp(store, GetVideoEventsResp) {
             store.GetVideoEventsResp = GetVideoEventsResp;
@@ -87,6 +91,21 @@ export default {
         },
     },
     actions: {
+        Ping(store, obj) {
+            var pingReq = new PingReq();
+            pingReq.setInfo("PING");
+            return new Promise((resolve, reject) => {
+                client.ping(pingReq, {}, function(err, response) {
+                    if (err) {
+                        store.commit('IsConnected', false);
+                        reject(err);
+                    } else {
+                        store.commit('IsConnected', true);
+                        resolve(response);
+                    }
+                })
+            });            
+        },
         TogglePrivacy(store) {
             store.commit('IsPrivate', !this.state.controller.IsPrivate);
         },
@@ -217,9 +236,8 @@ export default {
         },
         Logout(store) {
             store.commit('LoginResp', null);
-            store.commit('IsAuthenticated', false)
+            store.commit('IsAuthenticated', false);
             localStorage.removeItem("authtoken");
-            this.$router.push('home')
         },        
         GetConfig(store) {
             var request = new GetConfigReq()
@@ -237,7 +255,7 @@ export default {
             })
 		},
         GetEvents(store, obj) {
-            var request = new GetEventsReq()
+            var request = new GetEventsReq();
             var metadata = {}
 			var limit = obj['limit']
 			var page = obj['page']
@@ -255,7 +273,23 @@ export default {
                     store.commit('GetEventsResp', res);
                 }
             })
-		},
+        },
+        GetEvent(store, obj) {
+            var request = new GetEventReq();
+            var metadata = {}
+            request.setEventid(obj.eventid);
+
+            client.getEvent(request, metadata, function(err, response) {
+                if (err) {
+                    store.commit('GetEventResp', null);
+                } else {
+                    var res = response.toObject();
+                    /* eslint-disable */
+                    console.log(res);
+                    store.commit('GetEventResp', res);
+                }
+            })
+		},        
         GetSensorReport(store, obj) {
             var request = new SensorReportReq()
             var metadata = {}
@@ -300,15 +334,18 @@ export default {
             var request = new GetContainerLogReq();
             request.setContainerid(obj.containerid);
             var metadata = {}
-            return client.getContainerLog(request, metadata, function(err, response) {
-                if(err) {
-                    store.commit('GetContainerLogResp', null);
-                } else {
-                    var res = response.toObject()
-                    /* eslint-disable */
+            return new Promise((resolve, reject) => {
+                client.getContainerLog(request, metadata, function(err, response) {
+                    if(err) {
+                        store.commit('GetContainerLogResp', null);
+                        reject(err);
+                        return;
+                    }
+                    var res = response.toObject();
                     console.log("GetContainerLog", res);
                     store.commit('GetContainerLogResp', res);
-                }
+                    resolve(res);
+                });
             });
         },
         GetVideoEvents(store, obj) {

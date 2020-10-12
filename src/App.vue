@@ -10,6 +10,10 @@
 </style>
 <template>
     <v-app>
+      <v-overlay :absolute="absolute" :value="!IsConnected">
+        <v-alert>Unable to communicate with tracker.   Please wait while connection is re-esablished.</v-alert>
+      </v-overlay>    
+
         <!--
         <v-dialog :value="IsConnected && !IsConfigured" hide-overlay fullscreen  v-show="AuthStatus != 'preauth'">
             <v-card flat>
@@ -109,10 +113,10 @@
     
             </v-list>
         </v-navigation-drawer>
-        <v-snackbar v-model="snackbar">
-            {{ snackbartext }}
+        <v-snackbar v-model="snackbarenabled" :timeout="SnackBar.timeout">
+            {{ SnackBar.message }}
             <template v-slot:action="{ attrs }">
-                <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+                <v-btn color="pink" text v-bind="attrs" @click="SnackBar.enabled = false">
                 Close
                 </v-btn>
             </template>
@@ -141,6 +145,7 @@
 
 <script>
 //import FirstConfigWizard from './components/FirstConfigWizard.vue';
+import settings from './plugins/settings.js'
 
 export default {
     name: 'App',
@@ -158,12 +163,12 @@ export default {
         }
     },
     watch: {
-        IsConnected: function() {
-            if(!this.IsConnected) {
-                this.$router.push('connection');
-            }
+        // IsConnected: function() {
+            // if(!this.IsConnected) {
+                // this.$router.push('connection');
+            // }
             //alert('connectionchanged');
-        },
+        // },
         IsAuthenticated: function(newstate) {
             if(newstate) {
                 if(this.$route.name == 'login') {
@@ -176,6 +181,15 @@ export default {
     },
     created() {
         var self = this;
+        if(self.$data.pinging) { return; }
+        window.setInterval(function(controller) { 
+            return function() {
+                controller.$data.pinging = true;
+                controller.$store.dispatch('controller/Ping').then(function() {
+                    controller.$data.pinging = false;
+                });
+            };
+        }(self), this.settings.pingPollRate);
         self.$store.dispatch('controller/AutoLogin');
     },
     /* eslint-disable */
@@ -184,30 +198,20 @@ export default {
             return this.$store.state.controller.IsPrivate;
         },        
         IsConfigured: function() {
-            return this.$store.state.controller.IsConfigured
+            return this.$store.state.controller.IsConfigured;
         },
         IsConnected: function() {
-            return this.$store.state.controller.IsConnected
+            return this.$store.state.controller.IsConnected;
         },        
         IsAuthenticated: function() {
-            return this.$store.state.controller.IsAuthenticated
+            return this.$store.state.controller.IsAuthenticated;
         },
         AuthStatus: function() {
-            return this.$store.state.controller.AuthStatus
+            return this.$store.state.controller.AuthStatus;
         },
-        snackbar: function() {
-            return this.$store.state.controller.SnackBar.Enabled
-        },
-        snackbartext: function() {
-            return this.$store.state.controller.SnackBar.Message
-        },
-        snackbarcolor: function() {
-            return this.$store.state.controller.SnackBar.Color
-        },
-        snackbartimeout: function() {
-            return this.$store.state.controller.SnackBar.Timeout
-        },
-
+        SnackBar: function() {
+            return this.$store.state.controller.SnackBar;
+        }
     },
     data: () => ({
         drawer: true,
@@ -227,6 +231,9 @@ export default {
         expandOnHover: false,
         background: false,
         mini: false,
+        snackbarenabled: false,
+        absolute: false,
+        settings: settings
     }),
 };
 </script>

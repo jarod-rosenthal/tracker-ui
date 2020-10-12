@@ -9,6 +9,7 @@ import router from './router'
 import 'vue-video-player/node_modules/video.js/dist/video-js.min.css'
 import VueVideoPlayer from 'vue-video-player'
 import * as VueGoogleMaps from 'gmap-vue'
+import JsonViewer from 'vue-json-viewer'
 
 Vue.config.productionTip = false
 
@@ -22,6 +23,7 @@ Vue.use(VueGoogleMaps, {
     },
     installComponents: false,
 });
+Vue.use(JsonViewer);
 
 
 document.addEventListener('DOMContentLoaded', function() {

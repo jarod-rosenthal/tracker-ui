@@ -142,13 +142,20 @@ export default {
             // { status: "mdi-alert", status_color: "green", text: 'Temperature: Loading...', icon: 'mdi-thermometer' }
             { status: "mdi-alert", status_color: "green", text: 'Time: Loading...', icon: 'mdi-clock' }
         ],
+        pollingSensor: false,
+        pollingSetup: false,
+        settings: settings
     }),
     mounted() {
         var self = this;
         this.$store.dispatch('controller/GetVideoEvents', { page: this.page, limit: 2 })
+        if(self.$data.pollingSetup) { return; }
         window.setInterval(function(viewModel) {
             return function() {
+                if(viewModel.$data.pollingSensor) { return; }
+                viewModel.$data.pollingSensor = true;
                 viewModel.$store.dispatch('controller/GetSensorReport').then(function() {
+                    viewModel.$data.pollingSensor = false;
                     if(viewModel.$store.state.controller.GetSensorReportResp && viewModel.$store.state.controller.GetSensorReportResp.tracker) {
                     viewModel.$data.location.lat = viewModel.$store.state.controller.GetSensorReportResp.tracker.latitude;
                     viewModel.$data.location.lng = viewModel.$store.state.controller.GetSensorReportResp.tracker.longitude;
@@ -219,7 +226,8 @@ export default {
 
                 });
             }
-        }(self), 1000);
+        }(self), self.settings.sensorPollRate);
+        self.$data.pollingSetup = true;
         this.$store.dispatch('controller/GetEvents', { page: 1, limit: 15 })
         // this.status.push({ status: "mdi-checkbox-blank-circle", status_color: "green", text: `UI Version: ${this.$store.getters.appVersion}`, icon: '' });
     },
@@ -251,7 +259,7 @@ export default {
                 if(this.videos[i] === undefined) {
                     this.videos.push({
                         createdAt: v.starttime,
-                        eventId: v.eventId,
+                        eventId: v.eventuuid,
                         fullPath: v.fullPath,
                         fullThumbPath: v.fullThumbPath,
                         thumb: v.thumb,

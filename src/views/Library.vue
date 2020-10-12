@@ -149,6 +149,22 @@ export default {
                 v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.weburi;
                 v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumbnail;
                 v.time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
+                v.options = {
+                    poster: v.fullThumbPath,
+                    controls: true,
+                    preload: 'auto',
+                    height: '200',
+                    width: '300',
+                    language: 'en',
+                    techOrder: ['html5'],
+                    plugins: {
+
+                    },
+                    playbackRates: [0.1, 0.25, 0.5, 0.75, 1],
+                    sources: [{
+                        src: v.fullPath
+                    }]
+                };                
             });
             return videos;
         },

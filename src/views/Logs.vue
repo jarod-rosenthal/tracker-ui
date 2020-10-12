@@ -28,9 +28,10 @@
   </v-row>
   <v-row>
     <v-col cols="12">
-        <div id="logs" class="logs">
-
-        </div>
+      <div id="logs" class="logs"></div>
+      <v-overlay :absolute="absolute" :value="loadinglog">
+        <v-progress-circular indeterminate color="primary"></v-progress-circular>
+      </v-overlay>    
     </v-col>
   </v-row>
     
@@ -47,11 +48,8 @@
         border-radius: 5px;
         overflow: auto;
         padding-top: 10px;
-        padding-left: 10px;
-    }
-    .linenumber {
-      padding-right: 10px;
-      font-weight: bold;
+        padding-left: 20px;
+        white-space: nowrap;
     }
     .copytextinput {
       white-space: pre;
@@ -73,7 +71,9 @@ export default {
         logLines: [],
         log: "",
         copysucess: false,
-        copyerror: false
+        copyerror: false,
+        loadinglog: true,
+        absolute: false
     }),
     created() {
       
@@ -90,35 +90,43 @@ export default {
       loadSelectedLog() {
         var self = this;
         if(this.ContainerList.length > 0 && !self.$data.select) { return; }
+        this.$data.loadinglog = true;
         self.$store.dispatch('controller/GetContainerLog', {containerid: self.$data.select.id}).then(function() {
           if(self.$store.state.controller.GetContainerLogResp && self.$store.state.controller.GetContainerLogResp.log !== undefined) {
-            document.querySelector("#logs").innerHTML = self.$store.state.controller.GetContainerLogResp.log.replace(/\n/g, '<br>');
+            var logDiv = document.querySelector("#logs");
+            logDiv.innerHTML = self.$store.state.controller.GetContainerLogResp.log.replace(/\n/g, '<br>');
+            logDiv.scrollTop = logDiv.scrollHeight;
+            self.$data.loadinglog = false;
           } else {
-            document.querySelector("#logs").innerHTML = "Error pulling logs";  
+            document.querySelector("#logs").innerHTML = "Loading Logs...";  
+            self.$data.loadinglog = false;
           }
         })
       },
       copyText() {
-        const el = document.createElement('textarea');
-        el.value = this.$data.log;
-        el.setAttribute('readonly', '');
-        el.style.position = 'absolute';
-        el.style.left = '-9999px';
-        document.body.appendChild(el);
-        el.select();
-        // document.execCommand('copy');
-            var successful = document.execCommand('copy');
-            if(successful) {
-              this.$data.copysucess = true;
-            } else {
-              this.$data.copyerror = true;
-            }
-            
-            setTimeout(()=>{
-              this.copysucess=false
-              this.copyerror=false
-            },5000)
-        document.body.removeChild(el);
+        // var self = this;
+        // const el = document.createElement('textarea');
+        // if(self.$store.state.controller.GetContainerLogResp === undefined || self.$store.state.controller.GetContainerLogResp.log === undefined) {
+        //   return;
+        // }
+        // el.value = self.$store.state.controller.GetContainerLogResp.log;
+        // el.setAttribute('readonly', '');
+        // el.style.position = 'absolute';
+        // el.style.left = '0px';
+        // document.body.appendChild(el);
+        var logDiv = document.querySelector("#logs");
+        window.getSelection().selectAllChildren(logDiv);        
+        //logDiv.select();
+        var successful = document.execCommand('copy');
+        if(successful) {
+          self.$store.dispatch('controller/ShowMessage', {message: "Copy to clipboard suceeded"});
+          this.$data.copysucess = true;
+        } else {
+          self.$store.dispatch('controller/ShowMessage', {message: "Copy to clipboard failed"});
+          this.$data.copyerror = true;
+        }
+        document.body.select();
+        // document.body.removeChild(el);
       }  
     },
     watch: {
