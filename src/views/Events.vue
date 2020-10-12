@@ -55,7 +55,7 @@ export default {
                     id: e.uuid,
                     time: d.toLocaleDateString() + ' ' + d.toLocaleTimeString(),
                     source: e.source.name,
-                    type: e.type,
+                    //type: e.type,
                     duration: (e.duration / 1000).toFixed(2),
                 })
             }
@@ -89,7 +89,7 @@ export default {
             search: "",
             headers: [
                 { text: 'Time', align: 'left', sortable: true, value: 'time', },
-                { text: 'Type', align: 'left', sortable: false, value: 'type', },
+                //{ text: 'Type', align: 'left', sortable: false, value: 'type', },
                 { text: 'Source', value: 'source' },
                 // { text: 'Sensor', value: 'sensor' },
                 { text: 'Duration (s)', value: 'duration' },
