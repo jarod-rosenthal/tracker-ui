@@ -1,9 +1,23 @@
 stages:
+    - proto
     - build
     - deploy
 
 variables:
     HOSTNAME: "tracker"
+
+generate-proto:
+    stage: proto
+    before_script:
+        - docker info
+    script:
+        - git clean -ffdx
+        - git submodule update --init
+        - make proto
+    artifacts:
+        untracked: true
+    tags:
+        - swarm-node-01
 
 build-dev-image:
     stage: build

@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN make proto && npm run build
+RUN npm run build
 
 # production stage
 WORKDIR /app
