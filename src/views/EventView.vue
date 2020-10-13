@@ -4,10 +4,10 @@
 			<v-col>Event ID:</v-col><v-col>{{ Event.uuid }}</v-col>
 		</v-row>
 		<v-row>
-			<v-col>Event Start:</v-col><v-col>{{ Event.start.toLocaleDateString() + ' ' + Event.start.toLocaleTimeString() }}</v-col>
+			<v-col>Event Start:</v-col><v-col>{{ Event.start }}</v-col>
 		</v-row>
 		<v-row>
-			<v-col>Event End:</v-col><v-col>{{ Event.end.toLocaleDateString() + ' ' + Event.end.toLocaleTimeString() }}</v-col>
+			<v-col>Event End:</v-col><v-col>{{ Event.end }}</v-col>
 		</v-row>
 		<v-row>
 			<v-col cols="12">
@@ -127,8 +127,10 @@ export default {
 					end: "Undefined"
 				};
 			} else {
-				event.start = new Date(event.starttime.seconds * 1000);
-				event.end = new Date(event.starttime.seconds * 1000);
+				var sd = new Date(event.starttime.seconds * 1000);
+				var ed = new Date(event.endtime.seconds * 1000);
+				event.start = sd.toLocaleString()
+				event.end = ed.toLocaleString()
 			}
 			
 			return event;
