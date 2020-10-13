@@ -156,7 +156,6 @@ export default {
     name: 'Settings',
     data() {
         return {
-            configLoaded: false,
             config: {
                 password: "",
                 passwordagain: "",
@@ -237,7 +236,7 @@ export default {
         },
         saveConfig() {
             
-            self = this;
+            var self = this;
             this.config.configured = true;
             this.saving = true;
 
@@ -264,7 +263,6 @@ export default {
             }
         },
         delCameraRow(i) {
-            var c = null
             if (this.config.cameraList[i].enabled && this.config.cameraList.length > 1) {
                 if (i > 0) this.config.cameraList[i - 1].enabled = true;
                 if (i == 0 && this.config.cameraList.length > 0) this.config.cameraList[i + 1].enabled = true;
@@ -283,7 +281,6 @@ export default {
     },
     computed: {
         ConfigResp: function() {
-            this.configLoaded = true;
             var config = this.$store.state.controller.GetConfigResp
             return config
         },
