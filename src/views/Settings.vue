@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid v-cloak >
+    <v-container fluid >
         <v-card>
             <v-card-title>
                 Settings
@@ -236,7 +236,7 @@ export default {
             this.$forceUpdate();
         },
         saveConfig() {
-            /* eslint-disable */
+            
             self = this;
             this.config.configured = true;
             this.saving = true;

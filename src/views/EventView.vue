@@ -1,5 +1,5 @@
 <template>
-	<v-container fluid v-cloak>
+	<v-container fluid>
 		<v-row>
 			<v-col>Event ID:</v-col><v-col>{{ Event.uuid }}</v-col>
 		</v-row>

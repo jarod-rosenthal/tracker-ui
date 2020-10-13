@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid v-cloak>
+    <v-container fluid>
         <v-card flat>
             <v-card-title>
                 Events
@@ -44,7 +44,7 @@ export default {
     },
     watch: {
         Events: function() {
-            /* eslint-disable */
+            
             if (!this.Events) {
                 return
             }
@@ -65,7 +65,7 @@ export default {
             window.scrollTo(0, 0);
         },
         $route(to, from) {
-            /* eslint-disable */
+            
             console.log(to)
             if (to == from) {
                 return

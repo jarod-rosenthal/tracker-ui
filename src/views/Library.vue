@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid v-cloak >
+    <v-container fluid >
         <v-card flat>
             <v-card-title>
                 Video Library
@@ -59,7 +59,7 @@ export default {
             //window.scrollTo(0, 0);
         },
         Videos: function() {
-            /* eslint-disable */
+            
             if (!this.Videos) {
                 return
             }
