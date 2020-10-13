@@ -106,7 +106,7 @@
   overflow-y: auto;
 }
 .private {
-    filter: blur(.3rem);
+    filter: blur(.5rem);
 }
 .public {
     filter: blur(0);

@@ -91,15 +91,19 @@ export default {
             var pingReq = new PingReq();
             pingReq.setInfo("PING");
             return new Promise((resolve, reject) => {
+                try {
                 client.ping(pingReq, {}, function(err, response) {
-                    if (err) {
-                        store.commit('IsConnected', false);
-                        reject(err);
-                    } else {
-                        store.commit('IsConnected', true);
-                        resolve(response);
-                    }
-                })
+                        if (err) {
+                            store.commit('IsConnected', false);
+                            reject(err);
+                        } else {
+                            store.commit('IsConnected', true);
+                            resolve(response);
+                        }
+                    });
+                } catch (err) {
+                    console.log(err);
+                }
             });            
         },
         TogglePrivacy(store) {
