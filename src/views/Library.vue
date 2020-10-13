@@ -10,7 +10,7 @@
                 <v-col v-for="v in videos" :key="v.id">
                     <v-card width="300" height="270" >
                         <v-card-text><v-btn icon :to="getEventUrl(v.eventId)"><v-icon>mdi-launch</v-icon></v-btn>{{v.time}}</v-card-text>
-                        <video width="300" height="200" controls setup="{}" :poster="v.fullThumbPath" >
+                        <video width="300" height="200" controls setup="{}" playsinline :poster="v.fullThumbPath" >
                             <source :src="v.fullPath" type="video/webm">
                             Your browser does not support the video tag.
                         </video>  

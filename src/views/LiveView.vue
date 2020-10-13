@@ -9,7 +9,7 @@
                 <v-subheader>
                     Video Streams
                 </v-subheader>
-                <video id="test_video" controls autoplay>
+                <video id="test_video" controls autoplay playsinline>
                           <source src="rtsp://skyhub:skyhub123@192.168.1.64:554" />
                         </video>
             </v-card-text>

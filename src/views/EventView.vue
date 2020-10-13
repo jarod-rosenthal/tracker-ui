@@ -15,7 +15,7 @@
 				<v-row>
 					<v-col v-for="v in Videos" :key="v.id">
 						<v-card width="600" height="420" >
-							<video width="600" height="420" controls setup="{}" :poster="v.fullThumbPath" >
+							<video width="600" height="420" controls setup="{}" playsinline :poster="v.fullThumbPath" >
 								<source :src="v.fullPath" type="video/webm">
 								Your browser does not support the video tag.
 							</video>                                  
