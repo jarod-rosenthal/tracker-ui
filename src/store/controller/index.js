@@ -3,17 +3,13 @@ const { PingReq, GetConfigReq, GetEventsReq, GetEventReq, GetVideoEventsReq, Set
 import settings from '../../plugins/settings'
 import router from '../../router/index';
 
-// var client = new ControllerClient("http://" + location.hostname + ":9090")
-var client = new ControllerClient(settings.controllerServer)
+var client = new ControllerClient(settings.controllerServer);
 
 const enableDevTools = window.__GRPCWEB_DEVTOOLS__ || (() => { });
 if (settings.environment == "DEV") {
-  enableDevTools([
-    client,
-  ])
+  enableDevTools([client]);
 }
 
-/* eslint-disable */
 export default {
     namespaced: true,
     state: {
@@ -91,7 +87,7 @@ export default {
         },
     },
     actions: {
-        Ping(store, obj) {
+        Ping(store) {
             var pingReq = new PingReq();
             pingReq.setInfo("PING");
             return new Promise((resolve, reject) => {
@@ -120,7 +116,7 @@ export default {
             var metadata = {};
             client.issueCommand(request, metadata, function(err, response) {
                 if (err) {
-                    
+                    console.error(err);
                 } else {
                     var res = response.toObject();
                     store.commit('IssueCommandResp', res);
@@ -153,9 +149,9 @@ export default {
 				config.addCamera(cameraConfig);
 			}
 
-			for (var i = 0; i < obj.storageList.length; i++) {
+			for (var q = 0; q < obj.storageList.length; q++) {
 				var storageConfig = new StorageConfig();
-				var s = obj.storageList[i]
+				var s = obj.storageList[q]
 
 				storageConfig.setName(s.name)
 				storageConfig.setLocation(s.location)
@@ -176,11 +172,13 @@ export default {
             })
         },
         AutoLogin(store) {
-            var self = this;
+            // var self = this;
             var authToken = localStorage.getItem("authtoken");
             if(authToken === undefined  || authToken === null || authToken === "") {
-                store.dispatch("GetConfig");
-                return;
+                authToken = "";
+                //self.$router.push({"path": "/login"});
+                // store.dispatch("GetConfig");
+                //return;
             }
 
             var request = new LoginReq();
@@ -196,6 +194,8 @@ export default {
                     store.commit('IsConnected', true);
                     var res = response.toObject()
                     store.commit('LoginResp', res);
+                    /// Ignore login errors here because this is an auto login attempt
+                    res.message = "";
                     store.commit('IsAuthenticated', res.success);
                     store.dispatch("GetConfig");
                     if(res.success) {
@@ -209,7 +209,6 @@ export default {
             });
         },
         Login(store, obj) {
-            var self = this;
             var request = new LoginReq();
             request.setUsername(obj.username);
             request.setPassword(obj.password);
@@ -268,7 +267,6 @@ export default {
                     store.commit('GetEventsResp', null);
                 } else {
                     var res = response.toObject();
-                    /* eslint-disable */
                     console.log(res);
                     store.commit('GetEventsResp', res);
                 }
@@ -284,13 +282,12 @@ export default {
                     store.commit('GetEventResp', null);
                 } else {
                     var res = response.toObject();
-                    /* eslint-disable */
                     console.log(res);
                     store.commit('GetEventResp', res);
                 }
             })
 		},        
-        GetSensorReport(store, obj) {
+        GetSensorReport(store) {
             var request = new SensorReportReq()
             var metadata = {}
 
@@ -300,22 +297,11 @@ export default {
                     store.commit('GetSensorReportResp', null);
                 } else {
                     var res = response.toObject()
-                    /* eslint-disable */
-                    //console.log("GetSensorReport", res);
                     store.commit('GetSensorReportResp', res);
                 }
             })
-        },
-        getProducts({commit}, type) {
-            return axios.get(`/api/products/${type}`)
-                .then(res => {
-                    let products = res.data;
-                    commit('SET_PRODUCTS', {products, type})
-                }).catch(err => {
-                console.log(err);
-            })
-        },        
-        GetContainerList(store, obj) {
+        },     
+        GetContainerList(store) {
             var request = new GetContainerListReq();
             var metadata = {}
 
@@ -323,8 +309,7 @@ export default {
                 if(err) {
                     store.commit('GetContainerListResp', null);
                 } else {
-                    var res = response.toObject()
-                    /* eslint-disable */
+                    var res = response.toObject();
                     console.log("GetContainerList", res);
                     store.commit('GetContainerListResp', res);
                 }
@@ -349,22 +334,21 @@ export default {
             });
         },
         GetVideoEvents(store, obj) {
-            var request = new GetVideoEventsReq()
-            var metadata = {}
-			var limit = obj['limit']
-			var page = obj['page']
+            var request = new GetVideoEventsReq();
+            var metadata = {};
+			var limit = obj['limit'];
+			var page = obj['page'];
 
-			request.setLimit(limit)
-			request.setPage(page)
+			request.setLimit(limit);
+			request.setPage(page);
 
             client.getVideoEvents(request, metadata, function(err, response) {
                 if (err) {
-                    store.commit('GetVideoEventsResp', null)
+                    store.commit('GetVideoEventsResp', null);
                 } else {
-                    var res = response.toObject()
-                    /* eslint-disable */
-                    console.log(res)
-                    store.commit('GetVideoEventsResp', res)
+                    var res = response.toObject();
+                    console.log(res);
+                    store.commit('GetVideoEventsResp', res);
                 }
             })
 		},

@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid v-cloak>
+    <v-container fluid>
         <v-row>
                 
         </v-row>
@@ -249,7 +249,7 @@ export default {
             }
         },
         Videos: function() {
-            /* eslint-disable */
+            
             if (!this.Videos) {
                 return
             }

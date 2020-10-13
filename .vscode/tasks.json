@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
        {
-        "label": "Vue Develope",
+        "label": "Run Vue Develop",
         "command": "npm run serve",
         "type": "shell",
        }       

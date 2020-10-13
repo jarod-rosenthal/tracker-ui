@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid v-cloak>
+    <v-container fluid>
       <v-card-title>
           Tracker Logs
       </v-card-title>

@@ -360,7 +360,7 @@ export default {
             cameraTypes: ['PTZ', 'Fisheye'],
         }
     },
-    /* eslint-disable */
+    
     watch: {
         ConfigResp(val) {
             this.config = JSON.parse(JSON.stringify(val.config));
@@ -371,27 +371,22 @@ export default {
             this.config.uuid = val.config.uuid;
         }
     },
-    created() {
-        // this.$store.dispatch('controller/GetConfig')
-    },
     computed: {
         ConfigResp() {
-            var config = this.$store.state.controller.GetConfigResp
-            return config
+            var config = this.$store.state.controller.GetConfigResp;
+            return config;
         }
     },
     methods: {
         next() {
-            /* eslint-disable */
-            console.log(this.step)
-            this.e1++
+            console.log(this.step);
+            this.e1++;
         },
         prev() {
-            this.e1--
+            this.e1--;
         },
         saveConfig() {
-            /* eslint-disable */
-            self = this;
+            var self = this;
             this.config.configured = true;
             this.saving = true;
 
@@ -417,21 +412,20 @@ export default {
             }
         },
         delCameraRow(i) {
-            var c = null
             if(this.config.cameraList[i].enabled) {
                 if(i > 0) this.config.cameraList[i - 1].enabled = true;
                 if(i == 0 && this.config.cameraList.length > 0) this.config.cameraList[i + 1].enabled = true;
             }
-            this.config.cameraList.splice(i, 1)
+            this.config.cameraList.splice(i, 1);
             this.$forceUpdate();
         },
         addStorageRow() {
-            this.config.storageList.push({ name: "", location: "" })
-            this.config.storageList.push(0)
+            this.config.storageList.push({ name: "", location: "" });
+            this.config.storageList.push(0);
         },
         delStorageRow(i) {
-            this.config.storageList.splice(i, 1)
-            this.config.storageList.splice(i, 1)
+            this.config.storageList.splice(i, 1);
+            this.config.storageList.splice(i, 1);
         },
     }
 }

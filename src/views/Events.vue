@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid v-cloak>
+    <v-container fluid>
         <v-card flat>
             <v-card-title>
                 Events
@@ -44,7 +44,7 @@ export default {
     },
     watch: {
         Events: function() {
-            /* eslint-disable */
+            
             if (!this.Events) {
                 return
             }
@@ -55,7 +55,7 @@ export default {
                     id: e.uuid,
                     time: d.toLocaleDateString() + ' ' + d.toLocaleTimeString(),
                     source: e.source.name,
-                    type: e.type,
+                    //type: e.type,
                     duration: (e.duration / 1000).toFixed(2),
                 })
             }
@@ -65,7 +65,7 @@ export default {
             window.scrollTo(0, 0);
         },
         $route(to, from) {
-            /* eslint-disable */
+            
             console.log(to)
             if (to == from) {
                 return
@@ -89,7 +89,7 @@ export default {
             search: "",
             headers: [
                 { text: 'Time', align: 'left', sortable: true, value: 'time', },
-                { text: 'Type', align: 'left', sortable: false, value: 'type', },
+                //{ text: 'Type', align: 'left', sortable: false, value: 'type', },
                 { text: 'Source', value: 'source' },
                 // { text: 'Sensor', value: 'sensor' },
                 { text: 'Duration (s)', value: 'duration' },

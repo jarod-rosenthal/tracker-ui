@@ -1,42 +1,16 @@
-/* eslint-disable */
-<style>
- .eluabox {
-     overflow: auto;
-     height: 350px;
-     width:100%;
-     border: solid #ddd 1px;
-     border-radius: 4px;
- }
-</style>
+
 <template>
     <v-app>
       <v-overlay :absolute="absolute" :value="!IsConnected">
         <v-alert>Unable to communicate with tracker.   Please wait while connection is re-esablished.</v-alert>
       </v-overlay>    
 
-        <!--
-        <v-dialog :value="IsConnected && !IsConfigured" hide-overlay fullscreen  v-show="AuthStatus != 'preauth'">
-            <v-card flat>
-                <FirstConfigWizard>
-                </FirstConfigWizard>
-            </v-card>
-        </v-dialog>
-        <v-dialog :value="IsConfigured && !IsAuthenticated" hide-overlay fullscreen>
-            <v-card flat>
-                <Login>
-                </Login>
-            </v-card>
-        </v-dialog>
-        -->
         <v-app-bar elevation="5" fixed dense app dark v-show="IsAuthenticated">
             <div class="d-flex">
                 <router-link to="/">
                     <v-img alt="Sky Hub Logo" src="./assets/vector-letters-white.svg" transition="scale-transition" width="140" />
                 </router-link>
             </div>
-            <!--
-            <v-app-bar-nav-icon @click="miniVariant = !miniVariant" align-right></v-app-bar-nav-icon>
-            -->
             <v-spacer></v-spacer>
             <v-switch :value="IsPrivate" label="Toggle Privacy" color="#2b68a8" @click="togglePrivate()" hide-details></v-switch>
             <v-menu right bottom>
@@ -141,18 +115,21 @@
 .public {
     filter: blur(0);
 }
+.eluabox {
+    overflow: auto;
+    height: 350px;
+    width:100%;
+    border: solid #ddd 1px;
+    border-radius: 4px;
+}
 </style>
 
 <script>
-//import FirstConfigWizard from './components/FirstConfigWizard.vue';
 import settings from './plugins/settings.js'
 
 export default {
     name: 'App',
-    
     components: {
-        //Login,
-        //FirstConfigWizard
     },
     methods: {
         logout: function() {
@@ -163,12 +140,6 @@ export default {
         }
     },
     watch: {
-        // IsConnected: function() {
-            // if(!this.IsConnected) {
-                // this.$router.push('connection');
-            // }
-            //alert('connectionchanged');
-        // },
         IsAuthenticated: function(newstate) {
             if(newstate) {
                 if(this.$route.name == 'login') {
@@ -192,7 +163,6 @@ export default {
         }(self), this.settings.pingPollRate);
         self.$store.dispatch('controller/AutoLogin');
     },
-    /* eslint-disable */
     computed: {
         IsPrivate() {
             return this.$store.state.controller.IsPrivate;
@@ -216,7 +186,6 @@ export default {
     data: () => ({
         drawer: true,
         dialog: true,
-        // color: '#2b68a8',
         color: '#2b68a8',
         colors: [
             'primary',

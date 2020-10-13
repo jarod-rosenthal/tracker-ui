@@ -8,7 +8,7 @@ import Library from '../views/Library.vue'
 import LiveView from '../views/LiveView.vue'
 import Events from '../views/Events.vue'
 import EventView from '../views/EventView.vue'
-import Connection from '../views/Connection.vue'
+// import Connection from '../views/Connection.vue'
 import Login from '../views/Login.vue'
 import FirstConfigWizard from '../views/FirstConfigWizard.vue'
 
@@ -39,14 +39,14 @@ const routes = [
       title: "Sky Hub: First Config Wizard"
     },
   },    
-  {
-    path: '/connection',
-    name: 'connection',
-    component: Connection,
-    meta: {
-      title: "Sky Hub: Connection Problem"
-    },
-  },  
+  // {
+  //   path: '/connection',
+  //   name: 'connection',
+  //   component: Connection,
+  //   meta: {
+  //     title: "Sky Hub: Connection Problem"
+  //   },
+  // },  
   {
     path: '/dashboard',
     name: 'dashboard',
