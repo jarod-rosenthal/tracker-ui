@@ -149,8 +149,7 @@ export default {
     mounted() {
         var self = this;
         this.$store.dispatch('controller/GetVideoEvents', { page: this.page, limit: 2 })
-        if(self.$data.pollingSetup) { return; }
-        window.setInterval(function(viewModel) {
+        var sensorPolling = function(viewModel) {
             return function() {
                 if(viewModel.$data.pollingSensor) { return; }
                 viewModel.$data.pollingSensor = true;
@@ -226,10 +225,14 @@ export default {
 
                 });
             }
-        }(self), self.settings.sensorPollRate);
-        self.$data.pollingSetup = true;
+        }(self);
+        sensorPolling();
+        this.$data.getSensorHandle = setInterval(sensorPolling, self.settings.sensorPollRate);
         this.$store.dispatch('controller/GetEvents', { page: 1, limit: 15 })
         // this.status.push({ status: "mdi-checkbox-blank-circle", status_color: "green", text: `UI Version: ${this.$store.getters.appVersion}`, icon: '' });
+    },
+    beforeDestroy() {
+        clearInterval(this.$data.getSensorHandle);
     },
     watch: {
         Events: function() {
