@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Blank from '../views/Blank.vue'
+// import Blank from '../views/Blank.vue'
 import Logs from '../views/Logs.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Settings from '../views/Settings.vue'
@@ -15,14 +15,14 @@ import FirstConfigWizard from '../views/FirstConfigWizard.vue'
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: Blank,
-    meta: {
-      title: "Sky Hub: Dashboard"
-    },
-  },
+  // {
+  //   path: '/',
+  //   name: 'home',
+  //   component: Dashboard,
+  //   meta: {
+  //     title: "Sky Hub: Dashboard"
+  //   },
+  // },
   {
     path: '/login',
     name: 'login',

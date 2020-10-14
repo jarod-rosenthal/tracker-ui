@@ -331,7 +331,15 @@
         </v-stepper-items>
     </v-stepper>
 </template>
-
+<style>
+.eluabox {
+    overflow: auto;
+    height: 350px;
+    width:100%;
+    border: solid #ddd 1px;
+    border-radius: 4px;
+}
+</style>
 <script>
 export default {
     name: 'FirstConfigWizard',
@@ -373,8 +381,7 @@ export default {
     },
     computed: {
         ConfigResp() {
-            var config = this.$store.state.controller.GetConfigResp;
-            return config;
+            return this.$store.state.controller.GetConfigResp;
         }
     },
     methods: {
@@ -394,7 +401,8 @@ export default {
                 self.saving = false;
                 setTimeout(function() {
                     self.$store.dispatch('controller/GetConfig');
-                }, 3000);
+                    self.$store.dispatch('controller/AutoLogin');
+                }, 2000);
             })
         },
         addCameraRow() {

@@ -95,7 +95,7 @@
                 </v-btn>
             </template>
         </v-snackbar>        
-        <v-main v-show="AuthStatus != 'preauth'">
+        <v-main>
             <router-view />
         </v-main>
         <v-footer>
@@ -115,17 +115,12 @@
 .public {
     filter: blur(0);
 }
-.eluabox {
-    overflow: auto;
-    height: 350px;
-    width:100%;
-    border: solid #ddd 1px;
-    border-radius: 4px;
-}
 </style>
 
 <script>
 import settings from './plugins/settings.js'
+import router from './router/index';
+
 
 export default {
     name: 'App',
@@ -148,6 +143,11 @@ export default {
             } else {
                 this.$router.push({'path':'/login'});
             }
+        },
+        IsConfigured: function(newstate) {
+            if(newstate === false) { 
+                router.push({'path':'/configwizard'});
+            }
         }
     },
     created() {
@@ -161,7 +161,13 @@ export default {
                 });
             };
         }(self), this.settings.pingPollRate);
-        self.$store.dispatch('controller/AutoLogin');
+        self.$store.dispatch('controller/GetConfig').then(function() {
+            if(self.$store.state.controller.IsConfigured) {
+                self.$store.dispatch('controller/AutoLogin');
+            } else {
+                self.$router.push({'path':'/configwizard'});
+            }
+        });
     },
     computed: {
         IsPrivate() {

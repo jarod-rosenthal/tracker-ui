@@ -155,25 +155,30 @@ export default {
 
 			for (var q = 0; q < obj.storageList.length; q++) {
 				var storageConfig = new StorageConfig();
-				var s = obj.storageList[q]
+				var s = obj.storageList[q];
 
-				storageConfig.setName(s.name)
-				storageConfig.setLocation(s.location)
+				storageConfig.setName(s.name);
+				storageConfig.setLocation(s.location);
 
-				config.addStorage(storageConfig)
+				config.addStorage(storageConfig);
 			}
 
-			request.setConfig(config)
+			request.setConfig(config);
 
-            var metadata = {}
-            client.setConfig(request, metadata, function(err, response) {
-                if (err) {
-                    store.commit('SetConfigResp', null)
-                } else {
-                    var res = response.toObject()
-                    store.commit('SetConfigResp', res)
-                }
-            })
+            var metadata = {};
+
+            return new Promise((resolve, reject) => {
+                client.setConfig(request, metadata, function(err, response) {
+                    if (err) {
+                        store.commit('SetConfigResp', null);
+                        reject(err);
+                    } else {
+                        var res = response.toObject();
+                        store.commit('SetConfigResp', res);
+                        resolve(res);
+                    }
+                });
+            });
         },
         AutoLogin(store) {
             // var self = this;
@@ -246,16 +251,20 @@ export default {
             var request = new GetConfigReq()
             var metadata = {}
 
-            client.getConfig(request, metadata, function(err, response) {
-                if (err) {
-                    store.commit('GetConfigResp', null)
-                } else {
-                    var res = response.toObject()
-                    console.log(res);
-                    store.commit('GetConfigResp', res)
-					store.commit('IsConfigured', res.config.configured)
-                }
-            })
+            return new Promise((resolve, reject) => {
+                client.getConfig(request, metadata, function(err, response) {
+                    if (err) {
+                        store.commit('GetConfigResp', null)
+                        reject(err);
+                    } else {
+                        var res = response.toObject()
+                        console.log(res);
+                        store.commit('GetConfigResp', res)
+                        store.commit('IsConfigured', res.config.configured)
+                        resolve(res);
+                    }
+                });
+            });
 		},
         GetEvents(store, obj) {
             var request = new GetEventsReq();
