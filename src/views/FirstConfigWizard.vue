@@ -54,17 +54,23 @@
                         <v-form>
                             <v-row>
                                 <v-col cols="6">
-                                    <v-subheader>Your node name is your public ID for Sky Hub</v-subheader>
-                                    <v-text-field v-model="config.nodename" outlined label="Node Name"></v-text-field>
+                                    <v-subheader>Your tracker name for Sky Hub</v-subheader>
+                                    <v-text-field v-model="config.nodename" outlined label="Tracker Name"></v-text-field>
+                                    <!--
                                     <v-subheader>Set hostname for your node.</v-subheader>
-                                    <v-text-field v-model="config.hostname" outlined label="Hostname"></v-text-field>
-                                </v-col>
-                                <v-col cols="6">
+                                    <v-text-field readonly v-model="config.uuid" outlined label="Traker ID"></v-text-field>
+                                    -->
                                     <v-subheader>Set your email address.</v-subheader>
                                     <v-text-field v-model="config.username" outlined label="Email Address"></v-text-field>
-                                    <v-subheader>Set password for your node.</v-subheader>
+                                </v-col>
+                                <v-col cols="6">
+                                    <v-subheader>Set password for your tracker.</v-subheader>
                                     <v-text-field type="password" v-model="config.password" outlined label="Password"></v-text-field>
+                                    <v-subheader>Type your password again.</v-subheader>
                                     <v-text-field type="password" v-model="config.passwordagain" outlined label="Password Again"></v-text-field>
+                                    <v-alert border="top" color="red" dark v-show="config.password != config.passwordagain">Passwords do not match.</v-alert>
+                                    <v-alert border="top" color="red" dark v-show="config.password == ''">Password is required to proceed.</v-alert>
+                                    <v-alert border="top" color="green" dark v-show="config.password != '' && config.password == config.passwordagain">Password is valid.</v-alert>
                                 </v-col>
                             </v-row>
                         </v-form>
@@ -73,7 +79,7 @@
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn class="ma-5" dark color="primary" @click="prev()">Back</v-btn>
-                        <v-btn class="ma-5" dark color="primary" @click="next()">Next</v-btn>
+                        <v-btn class="ma-5" dark color="primary" :disabled="config.password == '' || config.password != config.passwordagain" @click="next()">Next</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-stepper-content>
@@ -368,20 +374,21 @@ export default {
             cameraTypes: ['PTZ', 'Fisheye'],
         }
     },
-    
-    watch: {
-        ConfigResp(val) {
-            this.config = JSON.parse(JSON.stringify(val.config));
-            if(this.config.cameraList.length === 0) {
-                this.config.cameraList.push({ name: "", location: "", uri: "", username: "", password: "", type:"PTX", enabled: true });
-            }
-            this.config.nodename = val.config.nodename;
-            this.config.uuid = val.config.uuid;
-        }
-    },
     computed: {
         ConfigResp() {
             return this.$store.state.controller.GetConfigResp;
+        }
+    },
+    watch: {
+        ConfigResp: function() {
+            this.updateConfigFromResponse();
+        }
+    },
+    mounted() {
+        if(this.$store.state.controller.GetConfigResp.config) {
+            this.updateConfigFromResponse();
+        } else {
+            this.$store.dispatch('controller/GetConfig');
         }
     },
     methods: {
@@ -391,6 +398,17 @@ export default {
         },
         prev() {
             this.e1--;
+        },
+        updateConfigFromResponse() {
+            var config =  this.$store.state.controller.GetConfigResp.config
+            if(this.$data.config.cameraList.length === 0) {
+                this.$data.config.cameraList.push({ name: "", location: "", uri: "", username: "", password: "", type:"PTX", enabled: true });
+            }
+            this.$data.config.nodename = config.nodename;
+            this.$data.config.uuid = config.uuid;
+            this.$data.config.username = config.username;
+            this.$data.config.hostname = config.hostname;
+
         },
         saveConfig() {
             var self = this;

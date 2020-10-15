@@ -136,8 +136,8 @@ export default {
         videos: [],
         status_item: 1,
         status: [
-            { status: "mdi-alert", status_color: "green", text: 'Hostname: Loading...', icon: 'mdi-desktop-mac' },
-            { status: "mdi-alert", status_color: "green", text: 'Device Id: Loading...', icon: 'mdi-account-key' },
+            { status: "mdi-alert", status_color: "green", text: 'Tracker Name: Loading...', icon: 'mdi-desktop-mac' },
+            { status: "mdi-alert", status_color: "green", text: 'Tracker Id: Loading...', icon: 'mdi-account-key' },
             { status: "mdi-alert", status_color: "green", text: 'GPS: Loading...', icon: 'mdi-crosshairs-gps', supportprivacy: true},
             // { status: "mdi-alert", status_color: "green", text: 'Temperature: Loading...', icon: 'mdi-thermometer' }
             { status: "mdi-alert", status_color: "green", text: 'Time: Loading...', icon: 'mdi-clock' }
@@ -178,14 +178,14 @@ export default {
                         gpsItem[0].status = "mdi-checkbox-blank-circle";
                         gpsItem[0].text = "GPS: (" + viewModel.$data.location.lat + ", " + viewModel.$data.location.lng + ")";
 
-                        hostnameItem = viewModel.$data.status.filter(x => x.text.startsWith("Hostname:"));
-                        hostnameItem[0].text = "Hostname: " + viewModel.$store.state.controller.GetSensorReportResp.tracker.hostname;
+                        hostnameItem = viewModel.$data.status.filter(x => x.text.startsWith("Tracker Name:"));
+                        hostnameItem[0].text = "Tracker Name: " + viewModel.$store.state.controller.GetSensorReportResp.tracker.name;
                         hostnameItem[0].status_color = "green";
                         hostnameItem[0].status = "mdi-checkbox-blank-circle";
 
-                        idItem = viewModel.$data.status.filter(x => x.text.startsWith("Device Id:"));
+                        idItem = viewModel.$data.status.filter(x => x.text.startsWith("Tracker Id:"));
                         idItem[0].status_color = "green"; 
-                        idItem[0].text = "Device Id: " + viewModel.$store.state.controller.GetSensorReportResp.tracker.uuid;
+                        idItem[0].text = "Tracker Id: " + viewModel.$store.state.controller.GetSensorReportResp.tracker.uuid;
                         idItem[0].status = "mdi-checkbox-blank-circle";
 
                         var dateObj = new Date(viewModel.$store.state.controller.GetSensorReportResp.tracker.time.seconds * 1000);
@@ -199,14 +199,14 @@ export default {
                         gpsItem[0].status_color = "red";
                         gpsItem[0].status = "mdi-alert";
 
-                        hostnameItem = viewModel.$data.status.filter(x => x.text.startsWith("Hostname:"));
+                        hostnameItem = viewModel.$data.status.filter(x => x.text.startsWith("Tracker Name:"));
                         hostnameItem[0].status_color = "red";
-                        hostnameItem[0].text = "Hostname:";
+                        hostnameItem[0].text = "Tracker Name: Unknown";
                         hostnameItem[0].status = "mdi-alert";
 
-                        idItem = viewModel.$data.status.filter(x => x.text.startsWith("Device Id:"));
+                        idItem = viewModel.$data.status.filter(x => x.text.startsWith("Tracker Id:"));
                         idItem[0].status_color = "red";
-                        idItem[0].text = "Device Id:";
+                        idItem[0].text = "Tracker Id: Unknown";
                         idItem[0].status = "mdi-alert";
 
                         timeItem = viewModel.$data.status.filter(x => x.text.startsWith("Time:"));
