@@ -360,9 +360,7 @@ export default {
                 passwordagain: "",
                 hostname: "",
                 nodename: "",
-                cameraList: [
-                    { name: "", location: "", uri: "", username: "", password: "", type:"PTX", enabled: true },
-                ],
+                cameraList: [],
                 storageList: [
                     { name: "", location: "" },
                 ],
@@ -401,14 +399,13 @@ export default {
         },
         updateConfigFromResponse() {
             var config =  this.$store.state.controller.GetConfigResp.config
-            if(this.$data.config.cameraList.length === 0) {
+            if(this.$data.config.cameraList.length == 0) {
                 this.$data.config.cameraList.push({ name: "", location: "", uri: "", username: "", password: "", type:"PTX", enabled: true });
             }
             this.$data.config.nodename = config.nodename;
             this.$data.config.uuid = config.uuid;
             this.$data.config.username = config.username;
             this.$data.config.hostname = config.hostname;
-
         },
         saveConfig() {
             var self = this;
