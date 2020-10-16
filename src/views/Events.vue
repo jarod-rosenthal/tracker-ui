@@ -35,7 +35,7 @@
 export default {
     type: 'Events',
     mounted() {
-        this.$store.dispatch('controller/GetEvents', { page: this.page, limit: 50 })
+        this.$store.dispatch('controller/GetEvents', { page: this.page, limit: 10000 })
     },
     methods: {
         getEventUrl: function(id) {
