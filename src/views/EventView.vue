@@ -1,31 +1,68 @@
 <template>
 	<v-container fluid>
 		<v-row>
-			<v-col>Event ID:</v-col><v-col>{{ Event.uuid }}</v-col>
-		</v-row>
-		<v-row>
-			<v-col>Event Start:</v-col><v-col>{{ Event.start }}</v-col>
-		</v-row>
-		<v-row>
-			<v-col>Event End:</v-col><v-col>{{ Event.end }}</v-col>
-		</v-row>
-		<v-row>
-			<v-col cols="12">
-				<v-divider></v-divider>
-				<v-row>
-					<v-col v-for="v in Videos" :key="v.id">
-						<v-card width="600" height="420" >
-							<video width="600" height="420" controls setup="{}" playsinline :poster="v.fullThumbPath" >
+			<v-col cols="12" md="6">
+                <v-card outlined>
+                    <v-card-title>
+                        Event Info
+                    </v-card-title>
+                    <v-card-text>
+						<v-divider></v-divider>
+						<v-list>
+							<v-list-item-group v-model="item" color="primary">
+								<v-list-item>
+									<v-list-item-content>
+										<b>Event ID:</b> {{ Event.uuid }}
+									</v-list-item-content>
+								</v-list-item>
+								<v-list-item>
+									<v-list-item-content>
+										<b>Event Start:</b> {{ Event.start }}
+									</v-list-item-content>
+								</v-list-item>
+								<v-list-item>
+									<v-list-item-content>
+										<b>Event End:</b> {{ Event.end }}
+									</v-list-item-content>
+								</v-list-item>
+							</v-list-item-group>
+						</v-list>					
+					</v-card-text>
+				</v-card>
+			</v-col>
+			<v-col cols="12" md="6">
+                <v-card outlined >
+                    <v-card-title>
+                        Videos
+                    </v-card-title>
+                    <v-card-text>
+						<v-row  v-for="v in Videos" :key="v.id">
+							<video width="100%" height="300" controls setup="{}" playsinline :poster="v.fullThumbPath" >
 								<source :src="v.fullPath" type="video/webm">
 								Your browser does not support the video tag.
-							</video>                                  
-						</v-card>
-					</v-col>
-				</v-row>
+							</video>
+						</v-row>
+					</v-card-text>
+				</v-card>
 			</v-col>
 		</v-row>
 		<v-row>
-			<json-viewer class="jsonviewer" :value="JsonData" :expand-depth="1" style="width:100%;" copyable boxed sort></json-viewer>
+			<!--
+			<v-col cols="12" md="6">
+				<vue-c3 :handler="handler"></vue-c3>
+			</v-col>
+			-->
+			<v-col cols="12" md="12">
+                <v-card outlined >
+                    <v-card-title>
+                        Event Data
+                    </v-card-title>
+                    <v-card-text>
+						<v-divider></v-divider>
+						<json-viewer class="jsonviewer" :value="JsonData" :expand-depth="1" style="width:100%;" copyable sort></json-viewer>
+					</v-card-text>
+				</v-card>
+			</v-col>
 		</v-row>
 	</v-container>
 </template>
@@ -85,19 +122,33 @@
 
 <script>
 import settings from "../plugins/settings.js";
+// import VueC3 from 'vue-c3'
 
 export default {
 	type: "EventView",
 	props: ["id"],
+	// components:{ VueC3 },
 	mounted() {
-		this.$store.dispatch("controller/GetEvent", { eventid:this.$route.params.id  }).then(function() {
-
-		});
+		this.$store.dispatch("controller/GetEvent", { eventid:this.$route.params.id });
+		this.initChart();
 	},
 	data() {
 		return {
 			checking: false,
 		};
+	},
+	methods: {
+		initChart() {
+			const options = {
+				data: {
+				columns: [
+					['data1', 2, 4, 1, 5, 2, 1],
+					['data2', 7, 2, 4, 6, 10, 1]
+				],
+				},
+			};
+			this.handler.$emit('init', options);
+		}
 	},
     computed: {
 		JsonData() {
@@ -114,6 +165,7 @@ export default {
             videos.forEach(function(v) {
                 var d = new Date(v.starttime.seconds * 1000)
                 v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.weburi;
+				v.mkvPath = "http://" + settings.videoServer + ":3000/video/" + v.uri;
                 v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumbnail;
                 v.time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
             });

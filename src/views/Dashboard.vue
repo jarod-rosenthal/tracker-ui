@@ -6,7 +6,7 @@
         <v-row>
             <v-col cols="12" md="6">
                 <v-card outlined>
-                    <div class="ma-3 mb-0 title">System Status </div>
+                    <div class="ma-3 mb-0 title">Latest System Status </div>
                     <v-divider></v-divider>
                     <v-list>
                         <v-list-item-group v-model="item" color="primary">
@@ -138,9 +138,11 @@ export default {
         status: [
             { status: "mdi-alert", status_color: "green", text: 'Tracker Name: Loading...', icon: 'mdi-desktop-mac' },
             { status: "mdi-alert", status_color: "green", text: 'Tracker Id: Loading...', icon: 'mdi-account-key' },
-            { status: "mdi-alert", status_color: "green", text: 'GPS: Loading...', icon: 'mdi-crosshairs-gps', supportprivacy: true},
+            
             // { status: "mdi-alert", status_color: "green", text: 'Temperature: Loading...', icon: 'mdi-thermometer' }
-            { status: "mdi-alert", status_color: "green", text: 'Time: Loading...', icon: 'mdi-clock' }
+            { status: "mdi-alert", status_color: "green", text: 'Event Recording: Loading...', icon: 'mdi-radiobox-marked' },
+            { status: "mdi-alert", status_color: "green", text: 'GPS Location: Loading...', icon: 'mdi-crosshairs-gps', supportprivacy: true},
+            { status: "mdi-alert", status_color: "green", text: 'GPS Time: Loading...', icon: 'mdi-clock' }
         ],
         pollingSensor: false,
         pollingSetup: false,
@@ -170,13 +172,24 @@ export default {
                     // if(viewModel.$store.state.controller.GetSensorReportResp && viewModel.$store.state.controller.GetSensorReportResp.lonlat) {
 
                     // }
+                    var gpsItem, hostnameItem, idItem, timeItem, eventItem
+                    if(viewModel.$store.state.controller.GetSensorReportResp.eventid != "") {
+                        eventItem = viewModel.$data.status.filter(x => x.text.startsWith("Event Recording:"));
+                        eventItem[0].status_color = "red";
+                        eventItem[0].status = "mdi-checkbox-blank-circle";
+                        eventItem[0].text = "Event Recording: " + viewModel.$store.state.controller.GetSensorReportResp.eventid;
+                    } else {
+                        eventItem = viewModel.$data.status.filter(x => x.text.startsWith("Event Recording:"));
+                        eventItem[0].status_color = "green";
+                        eventItem[0].status = "mdi-checkbox-blank-circle";
+                        eventItem[0].text = "Event Recording: Not Recording";
+                    }
 
-                    var gpsItem, hostnameItem, idItem, timeItem
                     if(viewModel.$data.gpslocked) {
-                        gpsItem = viewModel.$data.status.filter(x => x.text.startsWith("GPS:"));
+                        gpsItem = viewModel.$data.status.filter(x => x.text.startsWith("GPS Location:"));
                         gpsItem[0].status_color = "green";
                         gpsItem[0].status = "mdi-checkbox-blank-circle";
-                        gpsItem[0].text = "GPS: (" + viewModel.$data.location.lat + ", " + viewModel.$data.location.lng + ")";
+                        gpsItem[0].text = "GPS Location: (" + viewModel.$data.location.lat + ", " + viewModel.$data.location.lng + ")";
 
                         hostnameItem = viewModel.$data.status.filter(x => x.text.startsWith("Tracker Name:"));
                         hostnameItem[0].text = "Tracker Name: " + viewModel.$store.state.controller.GetSensorReportResp.tracker.name;
@@ -189,15 +202,16 @@ export default {
                         idItem[0].status = "mdi-checkbox-blank-circle";
 
                         var dateObj = new Date(viewModel.$store.state.controller.GetSensorReportResp.tracker.time.seconds * 1000);
-                        timeItem = viewModel.$data.status.filter(x => x.text.startsWith("Time:"));
+                        timeItem = viewModel.$data.status.filter(x => x.text.startsWith("GPS Time:"));
                         timeItem[0].status_color = "green"; 
-                        timeItem[0].text = "Time: " + dateObj.toString();
+                        timeItem[0].text = "GPS Time: " + dateObj.toString();
                         timeItem[0].status = "mdi-checkbox-blank-circle";
 
                     } else {
-                        gpsItem = viewModel.$data.status.filter(x => x.text.startsWith("GPS:"));
+                        gpsItem = viewModel.$data.status.filter(x => x.text.startsWith("GPS Location:"));
                         gpsItem[0].status_color = "red";
                         gpsItem[0].status = "mdi-alert";
+                        gpsItem[0].text = "GPS Location: Unknown";
 
                         hostnameItem = viewModel.$data.status.filter(x => x.text.startsWith("Tracker Name:"));
                         hostnameItem[0].status_color = "red";
@@ -209,9 +223,9 @@ export default {
                         idItem[0].text = "Tracker Id: Unknown";
                         idItem[0].status = "mdi-alert";
 
-                        timeItem = viewModel.$data.status.filter(x => x.text.startsWith("Time:"));
+                        timeItem = viewModel.$data.status.filter(x => x.text.startsWith("GPS Time:"));
                         timeItem[0].status_color = "red"; 
-                        timeItem[0].text = "Time: Unavailable";
+                        timeItem[0].text = "GPS Time: Unavailable";
                         timeItem[0].status = "mdi-alert";
 
 
