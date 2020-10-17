@@ -8,7 +8,7 @@
                 <v-card class="elevation-12">
                     <v-card-text>
                         <v-form>
-                            <v-text-field v-model="username" label="Login" name="login" prepend-icon="mdi-account" type="text" />
+                            <v-text-field ref="loginusername" v-model="username" label="Login" name="login" prepend-icon="mdi-account" type="text" />
                             <v-text-field v-model="password" id="password" label="Password" name="password" prepend-icon="mdi-lock" type="password" v-on:keyup.enter="loginClicked" />
                             <v-alert type="error" v-if="hasloginerror">
                                 {{ loginmessage }}
@@ -45,7 +45,11 @@ export default {
                 this.color = state.color
                 this.show = true
             }
-        })
+        });
+        
+    },
+    mounted() {
+        this.$nextTick(() => this.$refs.loginusername.focus());
     },
     computed: {
         authenticated() {
