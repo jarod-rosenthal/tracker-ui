@@ -329,17 +329,6 @@ export default {
         }                   
     },
     methods: {
-        // GetVideos() {
-        //     var videos = this.$store.state.controller.GetVideoEventsResp.videoList[10]
-        //     if (videos === undefined) videos = [];
-        //     videos.forEach(function(v) {
-        //         var d = new Date(v.createdAt.seconds * 1000)
-        //         v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.webUri;
-        //         v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumb;
-        //         v.time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
-        //     });
-        //     return videos;
-        // },
         getEventIcon(event){
             switch (event.type) {
                 case "VideoMotion": {
@@ -363,8 +352,8 @@ export default {
             if (videos === undefined) videos = [];
             videos.forEach(function(v) {
                 var d = new Date(v.starttime.seconds * 1000)
-                v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.weburi;
-                v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumbnail;
+                v.fullPath = location.protocol + "//" + settings.videoServer + ":3000/video/" + v.weburi;
+                v.fullThumbPath = location.protocol + "//" + settings.videoServer + ":3000/thumbnail/" + v.thumbnail;
                 v.time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
             });
             return videos;
