@@ -148,6 +148,13 @@ export default {
             if(newstate === false) { 
                 router.push({'path':'/configwizard'});
             }
+        },
+        IsConnected: function(newstate) {
+            if(newstate === true) {
+                if(this.$route.name === null || this.$route.name === "") {
+                    this.$router.push({'path':'/login'});
+                }
+            }
         }
     },
     created() {
