@@ -10,7 +10,7 @@ import Events from '../views/Events.vue'
 import EventView from '../views/EventView.vue'
 // import Connection from '../views/Connection.vue'
 import Login from '../views/Login.vue'
-import Terminal from '../views/Terminal.vue'
+// import Terminal from '../views/Terminal.vue'
 import FirstConfigWizard from '../views/FirstConfigWizard.vue'
 
 Vue.use(VueRouter)
@@ -94,14 +94,6 @@ const routes = [
     component: Settings,
     meta: {
       title: "Sky Hub: Settings"
-    },
-  },
-  {
-    path: '/terminal',
-    name: 'terminal',
-    component: Terminal,
-    meta: {
-      title: "Sky Hub: Terminal"
     },
   },
   {
