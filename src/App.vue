@@ -71,6 +71,13 @@
                     <v-list-item-title class="text--darken-1">Video Library</v-list-item-title>
                 </v-list-item>
 
+                <v-list-item link to="/terminal">
+                    <v-list-item-action>
+                        <v-icon color="darken-1">mdi-ssh</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-title class="text--darken-1">SSH</v-list-item-title>
+                </v-list-item>
+
                 <v-list-item link to="/logs">
                     <v-list-item-action>
                         <v-icon color="darken-1">mdi-note</v-icon>
@@ -114,6 +121,9 @@
 }
 .public {
     filter: blur(0);
+}
+.v-list {
+    height:auto !important;
 }
 </style>
 
