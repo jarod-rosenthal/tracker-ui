@@ -8,9 +8,9 @@
                 <v-card outlined>
                     <div class="ma-3 mb-0 title">Latest System Status </div>
                     <v-divider></v-divider>
-                    <v-list>
+                    <v-list dense>
                         <v-list-item-group v-model="item" color="primary">
-                            <v-list-item v-for="(item, i) in status" :key="i">
+                            <v-list-item v-for="(item, k) in status" :key="k">
                                 <v-list-item-icon>
                                     <v-icon v-text="item.icon"></v-icon>
                                 </v-list-item-icon>
@@ -40,17 +40,17 @@
             <v-card outlined >
                 <div class="ma-3 mb-0 title">Last {{events.length}} Events</div>
                 <v-divider></v-divider>
-                <v-list height="300">
+                <v-list height="300" dense>
                     <v-list-item-group v-model="item" color="primary">
                         <v-list-item v-for="(item, i) in events" :key="i">
                             <v-list-item-icon>
                                 <v-icon v-text="getEventIcon(item)"></v-icon>
                             </v-list-item-icon>
                             <v-list-item-content>
-                                <v-row cold="3">
+                                <v-row>
                                     <v-col>{{item.source}}</v-col>
                                     <v-col>{{item.type}}</v-col>
-                                    <v-col>{{item.time}}</v-col>
+                                    <v-col cols="8">{{item.time}}</v-col>
                                 </v-row>
                                 <!--
                                 <v-list-item-title v-text="`${item.source} - ${item.type} - ${item.time}`"></v-list-item-title>
@@ -329,17 +329,6 @@ export default {
         }                   
     },
     methods: {
-        // GetVideos() {
-        //     var videos = this.$store.state.controller.GetVideoEventsResp.videoList[10]
-        //     if (videos === undefined) videos = [];
-        //     videos.forEach(function(v) {
-        //         var d = new Date(v.createdAt.seconds * 1000)
-        //         v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.webUri;
-        //         v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumb;
-        //         v.time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
-        //     });
-        //     return videos;
-        // },
         getEventIcon(event){
             switch (event.type) {
                 case "VideoMotion": {
@@ -363,8 +352,8 @@ export default {
             if (videos === undefined) videos = [];
             videos.forEach(function(v) {
                 var d = new Date(v.starttime.seconds * 1000)
-                v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.weburi;
-                v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumbnail;
+                v.fullPath = location.protocol + "//" + settings.videoServer + ":3000/video/" + v.weburi;
+                v.fullThumbPath = location.protocol + "//" + settings.videoServer + ":3000/thumbnail/" + v.thumbnail;
                 v.time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
             });
             return videos;

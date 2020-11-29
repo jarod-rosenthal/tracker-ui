@@ -164,9 +164,9 @@ export default {
             if (videos === undefined) videos = [];
             videos.forEach(function(v) {
                 var d = new Date(v.starttime.seconds * 1000)
-                v.fullPath = "http://" + settings.videoServer + ":3000/video/" + v.weburi;
-				v.mkvPath = "http://" + settings.videoServer + ":3000/video/" + v.uri;
-                v.fullThumbPath = "http://" + settings.videoServer + ":3000/thumbnail/" + v.thumbnail;
+                v.fullPath = location.protocol + "//" + settings.videoServer + ":3000/video/" + v.weburi;
+				v.mkvPath = location.protocol + "//" + settings.videoServer + ":3000/video/" + v.uri;
+                v.fullThumbPath = location.protocol + "//" + settings.videoServer + ":3000/thumbnail/" + v.thumbnail;
                 v.time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
             });
             return videos;

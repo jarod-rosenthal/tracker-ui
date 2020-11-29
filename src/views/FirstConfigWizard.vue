@@ -56,6 +56,7 @@
                                 <v-col cols="6">
                                     <v-subheader>Your tracker name for Sky Hub</v-subheader>
                                     <v-text-field v-model="config.nodename" outlined label="Tracker Name"></v-text-field>
+                                    <v-alert border="top" color="red" dark v-show="!ValidHostName">Invalid tracker name.</v-alert>
                                     <!--
                                     <v-subheader>Set hostname for your node.</v-subheader>
                                     <v-text-field readonly v-model="config.uuid" outlined label="Traker ID"></v-text-field>
@@ -347,6 +348,7 @@
 }
 </style>
 <script>
+const validHostNameRegex = /^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9])$/;
 export default {
     name: 'FirstConfigWizard',
     data() {
@@ -375,6 +377,9 @@ export default {
     computed: {
         ConfigResp() {
             return this.$store.state.controller.GetConfigResp;
+        },
+        ValidHostName() {
+            return validHostNameRegex.test(this.$data.config.nodename);           
         }
     },
     watch: {

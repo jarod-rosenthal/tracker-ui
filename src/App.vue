@@ -115,6 +115,9 @@
 .public {
     filter: blur(0);
 }
+.v-list {
+    height:auto !important;
+}
 </style>
 
 <script>
@@ -147,6 +150,13 @@ export default {
         IsConfigured: function(newstate) {
             if(newstate === false) { 
                 router.push({'path':'/configwizard'});
+            }
+        },
+        IsConnected: function(newstate) {
+            if(newstate === true) {
+                if(this.$route.name === null || this.$route.name === "") {
+                    this.$router.push({'path':'/login'});
+                }
             }
         }
     },

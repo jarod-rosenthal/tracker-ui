@@ -23,8 +23,9 @@
         ></v-select>
         
     </v-col>
-    <v-col cols="3" md="2"><v-btn color="primary" v-on:click="loadSelectedLog">Refresh</v-btn></v-col>
-    <v-col cols="3" md="2"><v-btn color="primary" v-on:click="copyText">Copy</v-btn></v-col>
+    <v-col cols="2" md="2"><v-btn color="primary" v-on:click="loadSelectedLog">Refresh</v-btn></v-col>
+    <v-col cols="2" md="2"><v-btn color="primary" v-on:click="copyText">Copy</v-btn></v-col>
+    <v-col cols="2" md="2"><v-btn color="primary" @click="openTerminal()">Open Terminal</v-btn></v-col>
   </v-row>
   <v-row>
     <v-col cols="12">
@@ -127,7 +128,10 @@ export default {
         }
         document.body.select();
         // document.body.removeChild(el);
-      }  
+      },
+      openTerminal() {
+          window.open(location.protocol + "//" + location.hostname + ":4000");
+      }
     },
     watch: {
       select() {
