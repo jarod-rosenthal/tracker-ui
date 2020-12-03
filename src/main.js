@@ -19,17 +19,13 @@ Vue.use(VueGoogleMaps, {
     load: {
       key: 'AIzaSyBOjsllC4FN05HiOAPKJrw-eTHM-KGx0aM',
       v: '3.42',
-      libraries: ""
     },
     installComponents: false,
 });
 Vue.use(JsonViewer);
 
-
-document.addEventListener('DOMContentLoaded', function() {
-    Vue.component('google-map', VueGoogleMaps.Map);
-    Vue.component('google-marker', VueGoogleMaps.Marker)
-});
+Vue.component('google-map', VueGoogleMaps.Map);
+Vue.component('google-marker', VueGoogleMaps.Marker);
 
 new Vue({
     vuetify,
