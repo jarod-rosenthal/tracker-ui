@@ -1,8 +1,7 @@
-
 <template>
     <v-app>
       <v-overlay :absolute="absolute" :value="!IsConnected">
-        <v-alert>Unable to communicate with tracker.   Please wait while connection is re-esablished.</v-alert>
+        <v-alert>Unable to communicate with tracker.   Please wait while connection is re-established.</v-alert>
       </v-overlay>    
 
         <v-app-bar elevation="5" fixed dense app dark v-show="IsAuthenticated">
