@@ -17,7 +17,7 @@ Vue.use(VueVideoPlayer);
 Vue.use(lineClamp, {})
 Vue.use(VueGoogleMaps, {
     load: {
-      key: 'AIzaSyBOjsllC4FN05HiOAPKJrw-eTHM-KGx0aM',
+      key: 'AIzaSyDGLC_jw0ovNaml5ARawncOlSB9FF2GtzA',
       v: '3.42',
       libraries: ""
     },
